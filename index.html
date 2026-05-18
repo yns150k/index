@@ -197,8 +197,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   bar.style.width = "40%";
   status.textContent = "VERIFICATION DES ACCÈS...";
 
-  try {
-    const res = await fetch(`${PYTHON_BACKEND}/check_access?user_id=${userId}`);
+try {
+    // On ajoute un header spécial pour sauter la page bleue de ngrok
+    const res = await fetch(`${PYTHON_BACKEND}/check_access?user_id=${userId}`, {
+      headers: {
+        "ngrok-skip-browser-warning": "true"
+      }
+    });
     const check = await res.json();
     
     bar.style.width = "100%";
@@ -214,7 +219,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (e) {
     status.innerHTML = `<span style="color:var(--accent)">PC HORS-LIGNE (NGROK ÉTEINT)</span>`;
   }
-});
 
 async function buyPlan(planName) {
   alert("Une facture officielle vient de vous être envoyée dans votre chat Telegram par le Bot !");
