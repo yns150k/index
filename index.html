@@ -228,40 +228,59 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 .card-sources { padding: 6px 14px 10px; display: flex; flex-wrap: wrap; gap: 4px; }
 .source-tag { font-size: 8px; font-weight: 700; padding: 1px 4px; background: #000; border: 1px solid var(--border); color: var(--muted); }
 
-/* 🌳 DESIGN DU SYSTEME D'ARBRE GENEALOGIQUE */
+/* 🌳 ARBRE GÉNÉALOGIQUE ULTRA DESIGN */
 .tree-section {
-  padding: 12px 14px;
+  padding: 14px;
   border-top: 1px dashed var(--border);
-  background: rgba(0,0,0,0.2);
+  background: rgba(255, 30, 86, 0.01);
 }
 .tree-title {
   font-family: var(--font-display);
   font-size: 9px; color: var(--accent);
-  margin-bottom: 12px; letter-spacing: 1px;
+  margin-bottom: 14px; letter-spacing: 1px;
 }
 .tree-wrapper {
-  display: flex; flex-direction: column; gap: 10px;
-  position: relative; padding-left: 10px;
+  display: flex; flex-direction: column; gap: 8px;
+  position: relative; padding-left: 4px;
 }
 .tree-node {
-  position: relative; padding-left: 18px;
-  font-size: 11px; margin-bottom: 4px;
+  position: relative; padding-left: 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  min-height: 28px;
 }
-/* Les lignes connectrices de l'arbre */
 .tree-node::before {
-  content: ''; position: absolute; left: 0; top: -6px;
-  width: 12px; height: 14px;
-  border-left: 1px solid var(--muted);
-  border-bottom: 1px solid var(--muted);
+  content: ''; position: absolute; left: 0; top: -4px;
+  width: 14px; height: 18px;
+  border-left: 1px solid rgba(255, 30, 86, 0.2);
+  border-bottom: 1px solid rgba(255, 30, 86, 0.2);
 }
 .tree-node::after {
-  content: ''; position: absolute; left: 0; top: 8px;
+  content: ''; position: absolute; left: 0; top: 14px;
   width: 1px; height: 100%;
-  border-left: 1px solid var(--muted);
+  border-left: 1px solid rgba(255, 30, 86, 0.2);
 }
 .tree-node:last-child::after { display: none; }
-.tree-role { color: var(--muted); font-size: 9px; text-transform: uppercase; margin-right: 6px; font-weight: bold; }
-.tree-name { color: #fff; }
+
+.tree-meta { display: flex; align-items: center; gap: 6px; }
+.tree-role { color: var(--muted); font-size: 9px; text-transform: uppercase; font-weight: bold; background: #000; padding: 2px 5px; border: 1px solid var(--border); }
+.tree-name { color: #fff; font-size: 11px; cursor: pointer; font-weight: 700; transition: color 0.1s; }
+.tree-name:hover { color: var(--accent); }
+
+/* Bouton d'approfondissement ultra stylisé */
+.tree-pivot-btn {
+  background: rgba(255, 30, 86, 0.05);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 8px; font-weight: 700;
+  padding: 4px 8px; cursor: pointer;
+  text-transform: uppercase; transition: all 0.1s;
+}
+.tree-pivot-btn:block { display: inline-block; }
+.tree-pivot-btn:hover {
+  background: var(--accent); color: #fff;
+  border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow);
+}
 
 .loader { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 30px 0; color: var(--accent); font-size: 10px; font-weight: bold; }
 .spinner { width: 20px; height: 20px; border: 2px solid rgba(255, 30, 86, 0.1); border-top-color: var(--accent); animation: spin 0.4s linear infinite; }
@@ -543,6 +562,30 @@ function clearAll() {
   updateUI();
 }
 
+// 🧭 FONCTION DE PIVOT ET DE RECHERCHE DIRECTE SUR UN PROCHE
+function pivotSearch(fullName) {
+  if (!fullName) return;
+  
+  // On vide les anciens filtres pour éviter les conflits
+  criteria = {};
+  
+  // On découpe grossièrement pour isoler le nom de famille si possible
+  const parts = fullName.trim().split(" ");
+  if (parts.length > 1) {
+    criteria["prenom"] = parts[0];
+    criteria["nom_famille"] = parts.slice(1).join(" ");
+  } else {
+    criteria["prenom"] = fullName;
+  }
+  
+  // On bascule visuellement sur l'onglet identité
+  activeCat = "identite";
+  
+  // On met à jour l'interface générale et on force la recherche
+  updateUI();
+  launchSearch();
+}
+
 async function launchSearch() {
   const sec = document.getElementById("resultsSection");
   sec.style.display = "block";
@@ -578,6 +621,19 @@ async function launchSearch() {
   }
 }
 
+function createTreeNode(role, nameValue) {
+  if (!nameValue) return "";
+  const cleanedName = nameValue.replace(/["']/g, "").trim();
+  return `
+    <div class="tree-node">
+      <div class="tree-meta">
+        <span class="tree-role">${role}</span>
+        <span class="tree-name" onclick="pivotSearch('${cleanedName}')">${cleanedName.toUpperCase()}</span>
+      </div>
+      <button class="tree-pivot-btn" onclick="pivotSearch('${cleanedName}')">Approfondir ➔</button>
+    </div>`;
+}
+
 function renderResults(results) {
   const sec = document.getElementById("resultsSection");
   if (!results || !results.length) {
@@ -595,7 +651,6 @@ function renderResults(results) {
     const conf = p._confidence ?? 0;
     const sources = (p._sources||[]).map(s=>`<span class="source-tag">${s}</span>`).join("");
 
-    // 1. Liste classique des infos
     const rows = Object.entries(p)
       .filter(([k,v]) => !skip.has(k) && v)
       .map(([k,v]) => {
@@ -606,21 +661,21 @@ function renderResults(results) {
         </div>`;
       }).join("");
 
-    // 2. Extraction dynamique de la généalogie (BrixHub API standard)
-    let familyNodes = [];
-    if (p.pere) familyNodes.push(`<div class="tree-node"><span class="tree-role">PÈRE:</span><span class="tree-name">${p.pere.toUpperCase()}</span></div>`);
-    if (p.mere) familyNodes.push(`<div class="tree-node"><span class="tree-role">MÈRE:</span><span class="tree-name">${p.mere.toUpperCase()}</span></div>`);
-    if (p.parents) familyNodes.push(`<div class="tree-node"><span class="tree-role">PARENTS:</span><span class="tree-name">${p.parents}</span></div>`);
-    if (p.freres) familyNodes.push(`<div class="tree-node"><span class="tree-role">FRÈRE(S):</span><span class="tree-name">${p.freres}</span></div>`);
-    if (p.soeurs) familyNodes.push(`<div class="tree-node"><span class="tree-role">SŒUR(S):</span><span class="tree-name">${p.soeurs}</span></div>`);
-    if (p.enfants) familyNodes.push(`<div class="tree-node"><span class="tree-role">ENFANT(S):</span><span class="tree-name">${p.enfants}</span></div>`);
-    if (p.famille) familyNodes.push(`<div class="tree-node"><span class="tree-role">LIEN STRUCTURAL:</span><span class="tree-name">${p.famille}</span></div>`);
+    // Génération dynamique de l'arbre généalogique interactif
+    let treeNodesHTML = "";
+    treeNodesHTML += createTreeNode("PÈRE", p.pere);
+    treeNodesHTML += createTreeNode("MÈRE", p.mere);
+    treeNodesHTML += createTreeNode("PARENT", p.parents);
+    treeNodesHTML += createTreeNode("FRÈRE", p.freres);
+    treeNodesHTML += createTreeNode("SŒUR", p.soeurs);
+    treeNodesHTML += createTreeNode("ENFANT", p.enfants);
+    treeNodesHTML += createTreeNode("PROCHE", p.famille);
 
-    const treeHTML = familyNodes.length > 0 ? `
+    const treeHTML = treeNodesHTML ? `
       <div class="tree-section">
-        <div class="tree-title">ARBRE GÉNÉALOGIQUE EXTENSION</div>
+        <div class="tree-title">RÉSEAU GÉNÉALOGIQUE CIBLE</div>
         <div class="tree-wrapper">
-          ${familyNodes.join("")}
+          ${treeNodesHTML}
         </div>
       </div>
     ` : "";
