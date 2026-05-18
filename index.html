@@ -304,9 +304,9 @@ async function launchSearch() {
     
     const textResponse = await r.text();
     
-    // Si localtunnel bloque avec son écran bleu
-    if (textResponse.includes("<!DOCTYPE") || textResponse.includes("Bypass")) {
-      sec.innerHTML = `<div class="no-results"><h3>TUNNEL BLOQUÉ</h3><p>Ouvre ton lien localtunnel dans ton navigateur et clique sur 'Continue' pour débloquer l'accès.</p></div>`;
+    // Si Ngrok bloque avec sa page de garde (il contient le mot ngrok-skip-browser-warning ou DOCTYPE)
+    if (textResponse.includes("ngrok-skip-browser-warning") || textResponse.includes("Ngrok")) {
+      sec.innerHTML = `<div class="no-results"><h3>TUNNEL NGROK BLOQUÉ</h3><p>Prends ton téléphone, ouvre ton navigateur (Safari/Chrome), va sur ton lien Ngrok et clique sur le gros bouton bleu <b>"Visit Site"</b> pour débloquer l'accès.</p></div>`;
       return;
     }
 
