@@ -8,15 +8,15 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root {
-  --bg:      #000000; /* Noir pur OLED pour économiser la batterie sur tel */
+  --bg:      #000000;
   --surface: #0a0a0f;
   --card:    #11111a;
   --border:  #26192c;
-  --accent:  #ff1e56; /* Rouge Néon / Gang */
+  --accent:  #ff1e56;
   --accent-glow: rgba(255, 30, 86, 0.3);
   --text:    #f5f5f7;
   --muted:   #525266;
-  --success: #00ff66; /* Vert Matrix */
+  --success: #00ff66;
   --font-mono: 'JetBrains Mono', monospace;
   --font-display: 'Orbitron', sans-serif;
 }
@@ -34,10 +34,9 @@ body {
   font-family: var(--font-mono);
   min-height: 100vh;
   overflow-x: hidden;
-  padding-bottom: env(safe-area-inset-bottom); /* Fix pour les barres du bas sur iPhone/Android */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* Grille radar en arrière-plan (Légère pour ne pas faire lagger le scroll mobile) */
 .grid-bg {
   position: fixed; inset: 0;
   opacity: 0.05;
@@ -48,7 +47,6 @@ body {
   background-size: 45px 45px;
 }
 
-/* ── Écran d'initialisation (Flash rapide spécial Mobile) ── */
 #boot {
   position: fixed; inset: 0;
   background: var(--bg);
@@ -72,7 +70,6 @@ body {
 .boot-bar { height: 100%; background: var(--accent); width: 0%; animation: bootBarFill 0.5s ease-in-out 0.1s both; }
 @keyframes bootBarFill { to { width: 100%; } }
 
-/* ── Header fixe ── */
 header {
   position: sticky; top: 0; z-index: 10;
   background: rgba(0, 0, 0, 0.9);
@@ -98,17 +95,6 @@ header h1 {
 }
 header h1 span { color: var(--accent); }
 
-.quota-badge {
-  margin-left: auto;
-  font-size: 9px; font-weight: 700;
-  color: #fff;
-  border: 1px solid var(--accent);
-  padding: 4px 8px;
-  background: rgba(255, 30, 86, 0.1);
-}
-.quota-badge b { color: var(--accent); }
-
-/* ── Status bar ── */
 .status-bar {
   font-size: 9px; color: var(--muted);
   padding: 6px 16px;
@@ -123,7 +109,6 @@ header h1 span { color: var(--accent); }
   box-shadow: 0 0 6px var(--accent); margin-right: 4px;
 }
 
-/* ── Layout Mobile ── */
 main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 
 .section-title {
@@ -134,7 +119,6 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 }
 .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
 
-/* ── Tabs ── */
 .tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .tabs::-webkit-scrollbar { display: none; }
 .tab {
@@ -149,7 +133,6 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
   background: rgba(255, 30, 86, 0.12);
 }
 
-/* ── Grille de champs ── */
 .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 15px; }
 .field-btn {
   position: relative; padding: 12px 10px;
@@ -169,7 +152,6 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 .field-icon { display: flex; align-items: center; color: var(--muted); }
 .field-btn.filled .field-icon { color: var(--accent); }
 
-/* ── Filtres en cours ── */
 .criteria-bar { background: var(--surface); border: 1px solid var(--border); padding: 10px; margin-bottom: 15px; display: none; }
 .criteria-bar.visible { display: block; }
 .criteria-bar h3 { font-size: 8px; color: var(--muted); margin-bottom: 6px; }
@@ -181,7 +163,6 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 .criteria-tag .key { color: var(--accent); }
 .criteria-tag .remove { cursor: pointer; color: var(--muted); font-size: 13px; margin-left: 4px; padding: 0 2px; }
 
-/* ── Modale Bas d'Écran ── */
 .overlay {
   position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); z-index: 100;
@@ -208,7 +189,6 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 .btn-cancel { flex: 1; background: transparent; border: 1px solid var(--border); color: var(--muted); }
 .btn-confirm { flex: 2; background: var(--accent); border: none; color: #fff; font-weight: 900; box-shadow: 0 0 15px var(--accent-glow); }
 
-/* ── Boutons d'Action Principaux ── */
 .search-btn {
   width: 100%; padding: 16px; border: none; background: var(--accent);
   color: #fff; font-family: var(--font-display); font-weight: 900;
@@ -223,7 +203,6 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
   cursor: pointer; margin-top: 6px; text-transform: uppercase;
 }
 
-/* ── Fiches Résultats Confidentielles ── */
 .results-section { margin-top: 25px; }
 .results-section h2 {
   font-family: var(--font-display); font-size: 10px; color: var(--muted);
@@ -250,7 +229,6 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 .card-sources { padding: 6px 14px 10px; display: flex; flex-wrap: wrap; gap: 4px; }
 .source-tag { font-size: 8px; font-weight: 700; padding: 1px 4px; background: #000; border: 1px solid var(--border); color: var(--muted); }
 
-/* Loader compact */
 .loader { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 30px 0; color: var(--accent); font-size: 10px; font-weight: bold; }
 .spinner { width: 20px; height: 20px; border: 2px solid rgba(255, 30, 86, 0.1); border-top-color: var(--accent); animation: spin 0.4s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -276,7 +254,6 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
     </svg>
   </div>
   <h1>TRACEUR<span>_PRO</span></h1>
-  <div class="quota-badge" id="quotaBadge">- REQ</div>
 </header>
 
 <div class="status-bar">
@@ -319,7 +296,7 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 
 <script>
 const API_KEY = "brix_THsqasPfIgm1LaxhboLcyckTlaxUfxuqnfb6RreTHe9P0ETM";
-const BASE    = "/api/brix";
+const BASE    = "/api/brix"; // Proxy Vercel configuré
 
 function updateClock() {
   const now = new Date();
@@ -400,7 +377,6 @@ window.Telegram?.WebApp?.expand();
 document.addEventListener("DOMContentLoaded", () => {
   buildTabs();
   renderFields();
-  loadQuota();
 });
 
 document.getElementById("sheetInput").addEventListener("keydown", e => {
@@ -521,7 +497,6 @@ async function launchSearch() {
   try {
     const payload = {...criteria, flexible: true, per_page: 10};
     
-    // ⚡ MODIFICATION MAJEURE ICI : Ajout du mode cors et de l'en-tête Accept requis par BrixHub
     const r = await fetch(`${BASE}/search`, {
       method: "POST",
       mode: "cors",
@@ -535,7 +510,6 @@ async function launchSearch() {
     const data = await r.json();
     const results = data?.data?.results || [];
     renderResults(results);
-    loadQuota();
   } catch(e) {
     sec.innerHTML = `
       <div class="no-results">
@@ -589,23 +563,6 @@ function renderResults(results) {
   sec.innerHTML = `
     <h2>DOSSIERS EXTRAITS <span class="count">${results.length}</span></h2>
     ${cards}`;
-}
-
-async function loadQuota() {
-  try {
-    // ⚡ AJOUT DU REQUÊTAGE CORRECT ICI AUSSI POUR LE QUOTA
-    const r = await fetch(`${BASE}/me`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Accept": "application/json, text/plain, */*",
-        "X-API-Key": API_KEY
-      }
-    });
-    const d = (await r.json())?.data || {};
-    const badge = document.getElementById("quotaBadge");
-    badge.innerHTML = `<b>${d.daily_remaining ?? "?"}</b> FLUX RESTANTS`;
-  } catch { }
 }
 </script>
 </body>
