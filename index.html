@@ -298,15 +298,20 @@ async function launchSearch() {
   try {
     const r = await fetch(`${BASE}/search`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        // 💡 FORCE NGROK À LAISSER PASSER LA REQUÊTE SANS ÉCRAN BLEU
+        "ngrok-skip-browser-warning": "true" 
+      },
       body: JSON.stringify(criteria)
     });
     
     const textResponse = await r.text();
-    
-    // Si Ngrok bloque avec sa page de garde (il contient le mot ngrok-skip-browser-warning ou DOCTYPE)
-    if (textResponse.includes("ngrok-skip-browser-warning") || textResponse.includes("Ngrok")) {
-      sec.innerHTML = `<div class="no-results"><h3>TUNNEL NGROK BLOQUÉ</h3><p>Prends ton téléphone, ouvre ton navigateur (Safari/Chrome), va sur ton lien Ngrok et clique sur le gros bouton bleu <b>"Visit Site"</b> pour débloquer l'accès.</p></div>`;
+    console.log("RÉPONSE DU SERVEUR :", textResponse); // Pour voir le retour dans la console
+
+    // Si malgré tout un HTML revient
+    if (textResponse.includes("<!DOCTYPE")) {
+      sec.innerHTML = `<div class="no-results"><h3>CONFLIT DE FORMAT</h3><p>Le serveur a renvoyé du texte HTML au lieu de données. Vérifie ton terminal Node.js.</p></div>`;
       return;
     }
 
