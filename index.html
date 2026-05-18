@@ -587,6 +587,7 @@ function renderResults(results) {
 async function loadQuota() {
   try {
     const r = await fetch(`${BASE}/me`, {headers:{"X-API-Key": API_KEY}});
+    mode: 'cors',
     const d = (await r.json())?.data || {};
     const badge = document.getElementById("quotaBadge");
     badge.innerHTML = `<b>${d.daily_remaining ?? "?"}</b> FLUX RESTANTS`;
