@@ -129,21 +129,11 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 </header>
 
 <div class="status-bar">
-  <span><span class="dot"></span>ACCÈS RESTREINT</span>
+  <span><span class="dot"></span>ACCÈS DIRECT SÉCURISÉ</span>
   <span id="statusTime">SYS: --:--:--</span>
 </div>
 
 <main>
-  <div style="background: var(--surface); border: 1px solid var(--border); padding: 14px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
-    <div>
-      <div style="font-size: 9px; color: var(--muted); text-transform: uppercase;">Crédits Sessions</div>
-      <div id="creditCount" style="font-size: 13px; font-weight: bold; color: #ff1e56;">ACCÈS VERROUILLÉ (0)</div>
-    </div>
-    <button onclick="declencherPaiement()" style="background: var(--accent); border: none; color: #fff; font-family: var(--font-mono); font-size: 11px; padding: 10px 14px; font-weight: bold; cursor: pointer; box-shadow: 0 0 10px var(--accent-glow);">
-      INJECTER 1 🌟
-    </button>
-  </div>
-
   <div class="section-title">SECTEURS DE RECHERCHE</div>
   <div class="tabs" id="tabs"></div>
 
@@ -177,10 +167,9 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 </div>
 
 <script>
-// LIEN VERS TON SERVEUR NODE.JS (Modifie si hébergé en ligne)
-const BASE = "https://fast-chicken-take.loca.lt";
+// LIEN DE TON TUNNEL LOCAL TUNNEL (Ajoute bien le /api à la fin)
+const BASE = "https://METS-TON-LIEN-LOCAL-TUNNEL-ICI.loca.lt/api"; 
 
-let userCredits = 0;
 let activeCat    = "identite";
 let criteria     = {};
 let currentField = null;
@@ -234,20 +223,13 @@ window.Telegram?.WebApp?.expand();
 
 document.addEventListener("DOMContentLoaded", () => {
   const bar = document.getElementById("bootBar");
-  const status = document.getElementById("bootStatus");
-  bar.style.width = "40%";
+  bar.style.width = "100%";
   setTimeout(() => {
-    bar.style.width = "85%";
-    setTimeout(() => {
-      bar.style.width = "100%";
-      setTimeout(() => {
-        document.getElementById("boot").style.opacity = "0";
-        setTimeout(() => document.getElementById("boot").style.display = "none", 200);
-      }, 300);
-      buildTabs();
-      renderFields();
-    }, 400);
-  }, 400);
+    document.getElementById("boot").style.opacity = "0";
+    setTimeout(() => document.getElementById("boot").style.display = "none", 200);
+  }, 300);
+  buildTabs();
+  renderFields();
 });
 
 document.getElementById("sheetInput").addEventListener("keydown", e => { if (e.key === "Enter") confirmValue(); });
@@ -285,7 +267,7 @@ function confirmValue() {
 }
 
 function getPlaceholder(k) {
-  const map = { telephone:"0612345678", email:"cible@email.com", code_postal:"75001", date_naissance:"15/03/1990" };
+  const map = { telephone:"0612345678", email:"cible@email.com", code_postal:"75001" };
   return map[k] || "Saisir la cible...";
 }
 
@@ -306,74 +288,30 @@ function renderCriteriaBar() {
 function removeCriteria(k) { delete criteria[k]; updateUI(); }
 function clearAll() { criteria = {}; document.getElementById("resultsSection").style.display = "none"; updateUI(); }
 
-// ==========================================
-// FONCTION PAIEMENT STARS NATIVE TELEGRAM
-// ==========================================
-async function declencherPaiement() {
-  try {
-    const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
-    if (!userId) return alert("Veuillez lancer l'application depuis Telegram.");
-
-    // Appel de TON serveur backend pour générer la facture officielle
-    const r = await fetch(`${BASE}/create-invoice`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId })
-    });
-    const data = await r.json();
-
-    if (data.invoiceLink) {
-      // Ouvre l'interface de paiement native Telegram
-      window.Telegram.WebApp.openInvoice(data.invoiceLink, function(status) {
-        if (status === 'paid') {
-          userCredits += 1;
-          document.getElementById("creditCount").textContent = `ACCÈS ACCORDÉ (${userCredits})`;
-          document.getElementById("creditCount").style.color = "var(--success)";
-          alert("Achat validé ! 1 crédit ajouté.");
-        } else {
-          alert("Paiement non finalisé.");
-        }
-      });
-    }
-  } catch (error) {
-    alert("Erreur passerelle de paiement: " + error.message);
-  }
-}
-
-// ==========================================
-// ACTION DE RECHERCHE PASSANT PAR LE BACKEND
-// ==========================================
+// ACTION DE RECHERCHE DIRECTE VIA TON SERVEUR
 async function launchSearch() {
-  if (userCredits <= 0) {
-    alert("ERREUR : Solde insuffisant. Injectez 1 Star pour déverrouiller.");
-    return;
-  }
-
   const sec = document.getElementById("resultsSection");
   sec.style.display = "block";
   sec.innerHTML = `<div class="loader"><div class="spinner"></div><div>EXTRACTION SÉCURISÉE EN COURS...</div></div>`;
   sec.scrollIntoView({behavior:"smooth", block:"start"});
 
   try {
-    // Requete adressée à TON serveur proxy (pas de clé API exposée ici)
     const r = await fetch(`${BASE}/search`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(criteria)
     });
     
-    const data = await r.json();
-    const results = data?.data?.results || [];
+    const textResponse = await r.text();
     
-    // Consommation du crédit si la requête aboutit
-    userCredits--;
-    if(userCredits <= 0) {
-      document.getElementById("creditCount").textContent = "ACCÈS VERROUILLÉ (0)";
-      document.getElementById("creditCount").style.color = "#ff1e56";
-    } else {
-      document.getElementById("creditCount").textContent = `ACCÈS ACCORDÉ (${userCredits})`;
+    // Si localtunnel bloque avec son écran bleu
+    if (textResponse.includes("<!DOCTYPE") || textResponse.includes("Bypass")) {
+      sec.innerHTML = `<div class="no-results"><h3>TUNNEL BLOQUÉ</h3><p>Ouvre ton lien localtunnel dans ton navigateur et clique sur 'Continue' pour débloquer l'accès.</p></div>`;
+      return;
     }
-    
+
+    const data = JSON.parse(textResponse);
+    const results = data?.data?.results || [];
     renderResults(results);
   } catch(e) {
     sec.innerHTML = `<div class="no-results"><h3>CONFLIT DE LIAISON</h3><p>${e.message}</p></div>`;
