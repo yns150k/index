@@ -228,6 +228,41 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 .card-sources { padding: 6px 14px 10px; display: flex; flex-wrap: wrap; gap: 4px; }
 .source-tag { font-size: 8px; font-weight: 700; padding: 1px 4px; background: #000; border: 1px solid var(--border); color: var(--muted); }
 
+/* 🌳 DESIGN DU SYSTEME D'ARBRE GENEALOGIQUE */
+.tree-section {
+  padding: 12px 14px;
+  border-top: 1px dashed var(--border);
+  background: rgba(0,0,0,0.2);
+}
+.tree-title {
+  font-family: var(--font-display);
+  font-size: 9px; color: var(--accent);
+  margin-bottom: 12px; letter-spacing: 1px;
+}
+.tree-wrapper {
+  display: flex; flex-direction: column; gap: 10px;
+  position: relative; padding-left: 10px;
+}
+.tree-node {
+  position: relative; padding-left: 18px;
+  font-size: 11px; margin-bottom: 4px;
+}
+/* Les lignes connectrices de l'arbre */
+.tree-node::before {
+  content: ''; position: absolute; left: 0; top: -6px;
+  width: 12px; height: 14px;
+  border-left: 1px solid var(--muted);
+  border-bottom: 1px solid var(--muted);
+}
+.tree-node::after {
+  content: ''; position: absolute; left: 0; top: 8px;
+  width: 1px; height: 100%;
+  border-left: 1px solid var(--muted);
+}
+.tree-node:last-child::after { display: none; }
+.tree-role { color: var(--muted); font-size: 9px; text-transform: uppercase; margin-right: 6px; font-weight: bold; }
+.tree-name { color: #fff; }
+
 .loader { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 30px 0; color: var(--accent); font-size: 10px; font-weight: bold; }
 .spinner { width: 20px; height: 20px; border: 2px solid rgba(255, 30, 86, 0.1); border-top-color: var(--accent); animation: spin 0.4s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -374,7 +409,6 @@ let currentField = null;
 window.Telegram?.WebApp?.ready();
 window.Telegram?.WebApp?.expand();
 
-// 🔒 ANIMATION DE CHARGEMENT PROPRE ET ULTRA FLUIDE SANS RELAIS LOCAL
 document.addEventListener("DOMContentLoaded", () => {
   const bar = document.getElementById("bootBar");
   const status = document.getElementById("bootStatus");
@@ -555,12 +589,13 @@ function renderResults(results) {
     return;
   }
 
-  const skip = new Set(["_sources","_confidence","_id"]);
+  const skip = new Set(["_sources","_confidence","_id", "pere", "mere", "parents", "enfants", "freres", "soeurs", "famille"]);
   const cards = results.map((p) => {
     const name = [p.prenom, p.nom_famille].filter(Boolean).join(" ").toUpperCase() || "CIBLE INCONNUE";
     const conf = p._confidence ?? 0;
     const sources = (p._sources||[]).map(s=>`<span class="source-tag">${s}</span>`).join("");
 
+    // 1. Liste classique des infos
     const rows = Object.entries(p)
       .filter(([k,v]) => !skip.has(k) && v)
       .map(([k,v]) => {
@@ -570,6 +605,25 @@ function renderResults(results) {
           <span class="info-val">${v}</span>
         </div>`;
       }).join("");
+
+    // 2. Extraction dynamique de la généalogie (BrixHub API standard)
+    let familyNodes = [];
+    if (p.pere) familyNodes.push(`<div class="tree-node"><span class="tree-role">PÈRE:</span><span class="tree-name">${p.pere.toUpperCase()}</span></div>`);
+    if (p.mere) familyNodes.push(`<div class="tree-node"><span class="tree-role">MÈRE:</span><span class="tree-name">${p.mere.toUpperCase()}</span></div>`);
+    if (p.parents) familyNodes.push(`<div class="tree-node"><span class="tree-role">PARENTS:</span><span class="tree-name">${p.parents}</span></div>`);
+    if (p.freres) familyNodes.push(`<div class="tree-node"><span class="tree-role">FRÈRE(S):</span><span class="tree-name">${p.freres}</span></div>`);
+    if (p.soeurs) familyNodes.push(`<div class="tree-node"><span class="tree-role">SŒUR(S):</span><span class="tree-name">${p.soeurs}</span></div>`);
+    if (p.enfants) familyNodes.push(`<div class="tree-node"><span class="tree-role">ENFANT(S):</span><span class="tree-name">${p.enfants}</span></div>`);
+    if (p.famille) familyNodes.push(`<div class="tree-node"><span class="tree-role">LIEN STRUCTURAL:</span><span class="tree-name">${p.famille}</span></div>`);
+
+    const treeHTML = familyNodes.length > 0 ? `
+      <div class="tree-section">
+        <div class="tree-title">ARBRE GÉNÉALOGIQUE EXTENSION</div>
+        <div class="tree-wrapper">
+          ${familyNodes.join("")}
+        </div>
+      </div>
+    ` : "";
 
     return `
       <div class="result-card">
@@ -581,6 +635,7 @@ function renderResults(results) {
           </div>
         </div>
         <div class="card-body">${rows || '<span style="color:var(--muted)">PAS DE DONNÉES ENREGISTRÉES</span>'}</div>
+        ${treeHTML}
         ${sources ? `<div class="card-sources">${sources}</div>` : ""}
       </div>`;
   }).join("");
