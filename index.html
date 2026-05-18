@@ -1,71 +1,115 @@
-import random
-import string
-from telegram import Update, LabeledPrice
-from telegram.ext import Application, CommandHandler, PreCheckoutQueryHandler, SuccessfulPaymentHandler, ContextTypes
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Traceur Pro</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg: #0a0f1d;
+      --surface: #131a30;
+      --accent: #00ff66;
+      --text: #ffffff;
+      --text-muted: #6b7c96;
+      --border: rgba(255, 255, 255, 0.08);
+    }
 
-# Mets ton token de bot ici
-TOKEN = "TON_TOKEN_TELEGRAM_ICI"
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 16px; padding-bottom: 90px; }
+    
+    .header { margin-bottom: 24px; }
+    .title { font-size: 20px; font-weight: 700; }
+    .subtitle { color: var(--text-muted); font-size: 13px; }
 
-# Fonction pour générer une clé de licence aléatoire
-def generate_license_key():
-    random_str = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-    return f"PRO-{random_str}"
+    .search-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 8px 12px; display: flex; gap: 8px; margin-bottom: 20px; }
+    .search-box input { background: transparent; border: none; color: #fff; flex: 1; font-size: 15px; outline: none; }
 
-# Commande /start
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "👋 Bienvenue sur Traceur Pro.\n\n"
-        "Pour utiliser la Mini App, cliquez sur le bouton ci-dessous.\n"
-        "Si vous n'avez pas de licence, tapez la commande /buy pour acheter un accès."
-    )
+    .btn { background: var(--accent); color: #000; border: none; padding: 12px 20px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; }
+    
+    .box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+    .field-title { font-size: 11px; color: var(--accent); text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+    .field-value { font-size: 15px; font-family: monospace; }
 
-# Commande /buy (Envoie de la facture d'Étoiles)
-async def buy(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    chat_id = update.message.chat_id
-    title = "Licence Traceur Pro"
-    description = "Clé d'activation unique pour débloquer l'accès complet à la console de recherche."
-    payload = f"payload_user_{chat_id}"
-    currency = "XTR" # XTR = Étoiles Telegram
-    prices = [LabeledPrice("Clé de licence", 500)] # 500 Étoiles
+    /* Pop-up de restriction */
+    .lock-overlay { background: rgba(19, 26, 48, 0.95); border: 1px dashed var(--accent); border-radius: 12px; padding: 20px; text-align: center; margin-top: 20px; }
+  </style>
+</head>
+<body>
 
-    await context.bot.send_invoice(
-        chat_id=chat_id,
-        title=title,
-        description=description,
-        payload=payload,
-        provider_token="", # Laisser vide pour les Étoiles Telegram
-        currency=currency,
-        prices=prices
-    )
+  <div class="header">
+    <div class="title">CONSOLE DE RECHERCHE</div>
+    <div class="subtitle">Système autonome activé</div>
+  </div>
 
-# Validation obligatoire avant le paiement
-async def precheckout_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    query = update.pre_checkout_query
-    if query.invoice_payload.startswith("payload_user_"):
-      await query.answer(ok=True)
-    else:
-      await query.answer(ok=False, error_message="Une erreur est survenue lors de la validation.")
+  <div class="search-box">
+    <input type="text" id="targetInput" placeholder="Entrer un ID, pseudo ou numéro...">
+    <button class="btn" onclick="startTracking()">Lancer</button>
+  </div>
 
-# Message après un paiement réussi : Envoi de la clé !
-async def successful_payment_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    key = generate_license_key()
-    await update.message.reply_text(
-        f"✅ **Paiement validé avec succès !** Merci pour votre achat.\n\n"
-        f"Voici votre clé d'activation unique :\n"
-        f"`{key}`\n\n"
-        f"Copiez cette clé, ouvrez la Mini App, collez-la dans la zone d'activation et cliquez sur Activer pour débloquer toutes les fonctionnalités !"
-    )
+  <div class="box" id="licenseBox">
+    <div class="field-title">Activation du système</div>
+    <div style="display: flex; gap: 8px; margin-top: 8px;">
+      <input type="text" id="licenseInput" placeholder="Coller votre clé PRO-XXXX ici" style="background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: #fff; padding: 8px; border-radius: 8px; flex: 1; font-family: monospace;">
+      <button class="btn" style="padding: 8px 16px;" onclick="verifyLicense()">Activer</button>
+    </div>
+  </div>
 
-def main():
-    app = Application.builder().token(TOKEN).build()
+  <div id="trackingResults"></div>
 
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("buy", buy))
-    app.add_handler(PreCheckoutQueryHandler(precheckout_callback))
-    app.add_handler(MessageHandler(filters.SUCCESSFUL_PAYMENT, successful_payment_callback))
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    tg.ready();
 
-    print("Le Bot est en ligne et prêt à encaisser dans le chat !")
-    app.run_polling()
+    let isActivated = localStorage.getItem("isActivated") === "true";
 
-if __name__ == '__main__':
-    main()
+    if (isActivated) {
+      document.getElementById("licenseBox").innerHTML = `<div class="field-title">Statut Licence</div><div class="field-value" style="color: var(--accent);">✔ MODE PRO ACTIVÉ</div>`;
+    }
+
+    function verifyLicense() {
+      const key = document.getElementById("licenseInput").value.trim();
+      // On fait une vérification simple ou un format requis (ex: commence par PRO-)
+      if (key.toUpperCase().startsWith("PRO-") && key.length > 6) {
+        localStorage.setItem("isActivated", "true");
+        isActivated = true;
+        alert("Licence activée avec succès !");
+        document.getElementById("licenseBox").innerHTML = `<div class="field-title">Statut Licence</div><div class="field-value" style="color: var(--accent);">✔ MODE PRO ACTIVÉ</div>`;
+        location.reload();
+      } else {
+        alert("Clé invalide. Achetez une clé valide dans le chat du bot.");
+      }
+    }
+
+    function startTracking() {
+      const input = document.getElementById("targetInput").value.trim();
+      if(!input) return alert("Veuillez entrer une cible");
+
+      const results = document.getElementById("trackingResults");
+      
+      if (!isActivated) {
+        results.innerHTML = `
+          <div class="lock-overlay">
+            <div class="field-title" style="color: #ff3333;">[ ACCÈS RESTREINT ]</div>
+            <p style="font-size: 14px; margin: 10px 0; color: var(--text-muted);">Les résultats complets pour <b>${input}</b> sont chiffrés.</p>
+            <p style="font-size: 13px; margin-bottom: 15px;">Pour obtenir votre clé d'accès, retournez dans le chat du bot et tapez la commande <b>/buy</b>.</p>
+            <button class="btn" onclick="tg.close()">Retourner au Bot</button>
+          </div>
+        `;
+        return;
+      }
+
+      // Si activé, on affiche les résultats directement !
+      results.innerHTML = `<div class="box"><div class="field-title">Analyse...</div><div class="field-value">Interception en cours...</div></div>`;
+      setTimeout(() => {
+        results.innerHTML = `
+          <div class="box"><div class="field-title">Adresse IP</div><div class="field-value">194.254.120.${Math.floor(Math.random() * 254)}</div></div>
+          <div class="box"><div class="field-title">ISP</div><div class="field-value">Orange S.A.</div></div>
+          <div class="box"><div class="field-title">Localisation</div><div class="field-value">Paris, France</div></div>
+        `;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
