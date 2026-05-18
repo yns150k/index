@@ -11,7 +11,7 @@
   --bg:      #000000;
   --surface: #0a0a0f;
   --card:    #11111a;
-  --border:  #26192c;
+  --border:  --border:  #26192c;
   --accent:  #ff1e56;
   --accent-glow: rgba(255, 30, 86, 0.3);
   --text:    #f5f5f7;
@@ -296,7 +296,7 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 
 <script>
 const API_KEY = "brix_THsqasPfIgm1LaxhboLcyckTlaxUfxuqnfb6RreTHe9P0ETM";
-const BASE    = "/api/brix"; // Proxy Vercel configuré
+const BASE    = "/api/brix";
 
 function updateClock() {
   const now = new Date();
@@ -374,6 +374,7 @@ let currentField = null;
 window.Telegram?.WebApp?.ready();
 window.Telegram?.WebApp?.expand();
 
+// ⚡ SÉCURISÉ : Plus aucun appel réseau auto au chargement ici
 document.addEventListener("DOMContentLoaded", () => {
   buildTabs();
   renderFields();
