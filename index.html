@@ -134,10 +134,10 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 
 <div id="lockScreen" style="display:none">
   <div class="lock-box">
-    <div class="lock-title">INJECTER_TOKEN_ACCÈS</div>
-    <input class="lock-input" id="tokenInput" maxlength="14" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
-    <button class="lock-btn" onclick="submitToken()">VALIDER L'ACCÈS</button>
-    <div class="lock-error" id="lockError">Code incorrect ou expiré</div>
+    <div class="lock-title">INJECTER_CLÉ_D_ACCÈS</div>
+    <input class="lock-input" id="keyInput" maxlength="14" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
+    <button class="lock-btn" onclick="submitKey()">VALIDER L'ACCÈS</button>
+    <div class="lock-error" id="lockError">Clé incorrecte ou expirée</div>
   </div>
 </div>
 
@@ -216,7 +216,7 @@ updateClock();
 setInterval(updateClock, 1000);
 
 // Formatage automatique XXXX-XXXX-XXXX lors de la saisie
-document.getElementById("tokenInput").addEventListener("input", (e) => {
+document.getElementById("keyInput").addEventListener("input", (e) => {
   let val = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
   if (val.length > 4 && val.length <= 8) {
     val = val.slice(0, 4) + '-' + val.slice(4);
@@ -262,7 +262,7 @@ async function checkSession(providedCode) {
     } else {
       document.getElementById("lockScreen").style.display = "flex";
       if (providedCode) {
-        showLockError(data.error || "CODE INVALIDE");
+        showLockError(data.error || "CLÉ INVALIDE");
       }
     }
   } catch(e) {
@@ -272,8 +272,8 @@ async function checkSession(providedCode) {
   }
 }
 
-async function submitToken() {
-  const code = document.getElementById("tokenInput").value.trim();
+async function submitKey() {
+  const code = document.getElementById("keyInput").value.trim();
   if (code.length < 14) {
     showLockError("FORMAT INCORRECT (XXXX-XXXX-XXXX)");
     return;
@@ -317,7 +317,7 @@ function startCountdown() {
   timerInterval = setInterval(updateTimer, 1000);
 }
 
-// --- Logique inchangée des filtres et formulaires ---
+// --- Logique des filtres et formulaires ---
 const ICON = {
   id: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
   birth: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`,
