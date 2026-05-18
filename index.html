@@ -37,7 +37,7 @@ body {
   padding-bottom: env(safe-area-inset-bottom); /* Fix pour les barres du bas sur iPhone/Android */
 }
 
-/* Grille Cyber Cyberpunk */
+/* Grille radar en arrière-plan (Légère pour ne pas faire lagger le scroll mobile) */
 .grid-bg {
   position: fixed; inset: 0;
   opacity: 0.05;
@@ -48,7 +48,7 @@ body {
   background-size: 45px 45px;
 }
 
-/* ── Écran d'initialisation (Boot) ── */
+/* ── Écran d'initialisation (Flash rapide spécial Mobile) ── */
 #boot {
   position: fixed; inset: 0;
   background: var(--bg);
@@ -134,7 +134,7 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 }
 .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
 
-/* ── Tabs (Horizontaux & Défilants) ── */
+/* ── Tabs ── */
 .tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
 .tabs::-webkit-scrollbar { display: none; }
 .tab {
@@ -149,7 +149,7 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
   background: rgba(255, 30, 86, 0.12);
 }
 
-/* ── Grille de champs (2 colonnes) ── */
+/* ── Grille de champs ── */
 .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 15px; }
 .field-btn {
   position: relative; padding: 12px 10px;
@@ -169,7 +169,7 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 .field-icon { display: flex; align-items: center; color: var(--muted); }
 .field-btn.filled .field-icon { color: var(--accent); }
 
-/* ── Filtres actifs (Criteria Bar) ── */
+/* ── Filtres en cours ── */
 .criteria-bar { background: var(--surface); border: 1px solid var(--border); padding: 10px; margin-bottom: 15px; display: none; }
 .criteria-bar.visible { display: block; }
 .criteria-bar h3 { font-size: 8px; color: var(--muted); margin-bottom: 6px; }
@@ -181,7 +181,7 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 .criteria-tag .key { color: var(--accent); }
 .criteria-tag .remove { cursor: pointer; color: var(--muted); font-size: 13px; margin-left: 4px; padding: 0 2px; }
 
-/* ── Modale Bas d'Écran (Saisie Mobile-Friendly) ── */
+/* ── Modale Bas d'Écran ── */
 .overlay {
   position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); z-index: 100;
@@ -223,7 +223,7 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
   cursor: pointer; margin-top: 6px; text-transform: uppercase;
 }
 
-/* ── Fiches Résultats ── */
+/* ── Fiches Résultats Confidentielles ── */
 .results-section { margin-top: 25px; }
 .results-section h2 {
   font-family: var(--font-display); font-size: 10px; color: var(--muted);
@@ -256,7 +256,8 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .no-results { background: var(--card); border: 1px solid var(--accent); padding: 25px; text-align: center; }
-.no-results h3 { font-family: var(--font-display); font-size: 12px; color: var(--accent); }
+.no-results h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 4px; color: var(--accent); }
+.no-results p { font-size: 10px; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -284,22 +285,22 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 </div>
 
 <main>
-  <div class="section-title">MODULES DE RECHERCHE</div>
+  <div class="section-title">SECTEURS DE RECHERCHE</div>
   <div class="tabs" id="tabs"></div>
 
   <div class="criteria-bar" id="criteriaBar">
-    <h3>CRITÈRES INJECTÉS</h3>
+    <h3>FILTRES ENCOURS</h3>
     <div class="criteria-list" id="criteriaList"></div>
   </div>
 
-  <div class="section-title">PARAMÈTRES CIBLE</div>
+  <div class="section-title">PARAMÈTRES CIBLES</div>
   <div class="fields-grid" id="fieldsGrid"></div>
 
   <button class="search-btn" id="searchBtn" disabled onclick="launchSearch()">
     EXTRAIRE LES DONNÉES
   </button>
   <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">
-    Réinitialiser les filtres
+    Vider la session
   </button>
 
   <div class="results-section" id="resultsSection" style="display:none"></div>
@@ -345,42 +346,42 @@ const ICON = {
 
 const CATEGORIES = [
   { id:"identite", label:"Identité", fields:[
-    {k:"nom_famille",    ico:ICON.id,    l:"NOM"},
-    {k:"prenom",         ico:ICON.id,    l:"PRÉNOM"},
-    {k:"nom_naissance",  ico:ICON.id,    l:"NOM DE NAISSANCE"},
-    {k:"nom_affichage",  ico:ICON.id,    l:"NOM D'AFFICHAGE"},
-    {k:"date_naissance", ico:ICON.birth, l:"DATE DE NAISSANCE"},
-    {k:"annee_naissance",ico:ICON.birth, l:"ANNÉE DE NAISSANCE"},
-    {k:"ville_naissance",ico:ICON.birth, l:"VILLE DE NAISSANCE"},
-    {k:"genre",          ico:ICON.dot,   l:"GENRE (M/F)"},
+    {k:"nom_famille",    ico:ICON.id,    l:"Nom"},
+    {k:"prenom",         ico:ICON.id,    l:"Prénom"},
+    {k:"nom_naissance",  ico:ICON.id,    l:"Nom Naissance"},
+    {k:"nom_affichage",  ico:ICON.id,    l:"Pseudonyme"},
+    {k:"date_naissance", ico:ICON.birth, l:"Date Nais."},
+    {k:"annee_naissance",ico:ICON.birth, l:"Année Nais."},
+    {k:"ville_naissance",ico:ICON.birth, l:"Ville Nais."},
+    {k:"genre",          ico:ICON.dot,   l:"Genre (M/F)"},
   ]},
   { id:"contact", label:"Contact", fields:[
-    {k:"telephone",      ico:ICON.phone, l:"N° TÉLÉPHONE"},
-    {k:"email",          ico:ICON.mail,  l:"ADRESSE EMAIL"},
-    {k:"nom_utilisateur",ico:ICON.chat,  l:"USERNAME CHAT"},
-    {k:"adresse_ip",     ico:ICON.ip,    l:"ADRESSE IP"},
+    {k:"telephone",      ico:ICON.phone, l:"Téléphone"},
+    {k:"email",          ico:ICON.mail,  l:"Email"},
+    {k:"nom_utilisateur",ico:ICON.chat,  l:"Username"},
+    {k:"adresse_ip",     ico:ICON.ip,    l:"Adresse IP"},
   ]},
   { id:"localisation", label:"Localisation", fields:[
-    {k:"adresse",        ico:ICON.loc,   l:"ADRESSE RÉSIDENTIELLE"},
-    {k:"code_postal",    ico:ICON.loc,   l:"CODE POSTAL"},
-    {k:"ville",          ico:ICON.loc,   l:"VILLE"},
-    {k:"region",         ico:ICON.loc,   l:"RÉGION"},
-    {k:"departement",    ico:ICON.loc,   l:"DÉPARTEMENT"},
-    {k:"pays",           ico:ICON.loc,   l:"PAYS"},
+    {k:"adresse",        ico:ICON.loc,   l:"Adresse Civile"},
+    {k:"code_postal",    ico:ICON.loc,   l:"Code Postal"},
+    {k:"ville",          ico:ICON.loc,   l:"Ville"},
+    {k:"region",         ico:ICON.loc,   l:"Région"},
+    {k:"departement",    ico:ICON.loc,   l:"Département"},
+    {k:"pays",           ico:ICON.loc,   l:"Pays"},
   ]},
-  { id:"gaming", label:"Réseaux / Jeux", fields:[
-    {k:"steam_id",       ico:ICON.game,  l:"STEAM ID"},
-    {k:"fivem_license",  ico:ICON.game,  l:"FIVEM LICENSE 1"},
-    {k:"discord_id",     ico:ICON.chat,  l:"DISCORD ID"},
-    {k:"xbox_live",      ico:ICON.game,  l:"XBOX LIVE"},
-    {k:"live_id",        ico:ICON.game,  l:"LIVE ID"},
-    {k:"fivem_license2", ico:ICON.game,  l:"FIVEM LICENSE 2"},
+  { id:"gaming", label:"Gaming / Réseaux", fields:[
+    {k:"steam_id",       ico:ICON.game,  l:"Steam ID"},
+    {k:"fivem_license",  ico:ICON.game,  l:"FiveM License"},
+    {k:"discord_id",     ico:ICON.chat,  l:"Discord ID"},
+    {k:"xbox_live",      ico:ICON.game,  l:"Xbox Live"},
+    {k:"live_id",        ico:ICON.game,  l:"Live ID"},
+    {k:"fivem_license2", ico:ICON.game,  l:"FiveM License 2"},
   ]},
   { id:"avance", label:"Avancé", fields:[
-    {k:"nir",            ico:ICON.lock,  l:"NUMÉRO SÉCURITÉ SOCIALE"},
+    {k:"nir",            ico:ICON.lock,  l:"Num. Sécu (NIR)"},
     {k:"iban",           ico:ICON.bank,  l:"IBAN"},
     {k:"bic",            ico:ICON.bank,  l:"BIC"},
-    {k:"vin_plaque",     ico:ICON.car,   l:"PLAQUE / VIN VÉHICULE"},
+    {k:"vin_plaque",     ico:ICON.car,   l:"Plaque / VIN"},
     {k:"siret",          ico:ICON.biz,   l:"SIRET"},
     {k:"siren",          ico:ICON.biz,   l:"SIREN"},
   ]},
@@ -393,7 +394,6 @@ let activeCat    = "identite";
 let criteria     = {};
 let currentField = null;
 
-// Initialisation Telegram WebApp
 window.Telegram?.WebApp?.ready();
 window.Telegram?.WebApp?.expand();
 
@@ -465,9 +465,10 @@ function confirmValue() {
 
 function getPlaceholder(k) {
   const map = {
-    telephone:"Saisir le numéro...", email:"Saisir l'adresse email...",
-    code_postal:"Ex: 75001", date_naissance:"Ex: 15/03/1990",
-    annee_naissance:"Ex: 1990", iban:"Saisir l'IBAN...",
+    telephone:"0612345678", email:"cible@email.com",
+    code_postal:"75001", date_naissance:"15/03/1990",
+    annee_naissance:"1990", iban:"FR76...", pays:"FR",
+    genre:"M", vin_plaque:"AB-123-CD",
   };
   return map[k] || "Saisir la cible...";
 }
@@ -513,16 +514,22 @@ async function launchSearch() {
   sec.innerHTML = `
     <div class="loader">
       <div class="spinner"></div>
-      <div>EXTRACTION EN COURS... VEUILLEZ PATIENTER</div>
+      <div>EXTRACTION DE LA BASE EN COURS...</div>
     </div>`;
   sec.scrollIntoView({behavior:"smooth", block:"start"});
 
   try {
     const payload = {...criteria, flexible: true, per_page: 10};
+    
+    // ⚡ MODIFICATION MAJEURE ICI : Ajout du mode cors et de l'en-tête Accept requis par BrixHub
     const r = await fetch(`${BASE}/search`, {
       method: "POST",
       mode: "cors",
-      headers: {"Content-Type":"application/json", "X-API-Key": API_KEY},
+      headers: {
+        "Accept": "application/json, text/plain, */*",
+        "Content-Type": "application/json", 
+        "X-API-Key": API_KEY
+      },
       body: JSON.stringify(payload)
     });
     const data = await r.json();
@@ -532,24 +539,26 @@ async function launchSearch() {
   } catch(e) {
     sec.innerHTML = `
       <div class="no-results">
-        <h3>AUCUN RÉSULTAT</h3>
+        <h3>CONFLIT RÉSEAU</h3>
+        <p>${e.message}</p>
       </div>`;
   }
 }
 
 function renderResults(results) {
   const sec = document.getElementById("resultsSection");
-  if (!results.length) {
+  if (!results || !results.length) {
     sec.innerHTML = `
       <div class="no-results">
-        <h3>AUCUN RÉSULTAT</h3>
+        <h3>BROUILLEUR ACTIF / AUCUNE ENTRÉE</h3>
+        <p>Aucune correspondance trouvée pour cette signature.</p>
       </div>`;
     return;
   }
 
   const skip = new Set(["_sources","_confidence","_id"]);
   const cards = results.map((p) => {
-    const name = [p.prenom, p.nom_famille].filter(Boolean).join(" ").toUpperCase() || "DOSSIER SANS NOM";
+    const name = [p.prenom, p.nom_famille].filter(Boolean).join(" ").toUpperCase() || "CIBLE INCONNUE";
     const conf = p._confidence ?? 0;
     const sources = (p._sources||[]).map(s=>`<span class="source-tag">${s}</span>`).join("");
 
@@ -584,14 +593,18 @@ function renderResults(results) {
 
 async function loadQuota() {
   try {
+    // ⚡ AJOUT DU REQUÊTAGE CORRECT ICI AUSSI POUR LE QUOTA
     const r = await fetch(`${BASE}/me`, {
       method: "GET",
       mode: "cors",
-      headers: {"X-API-Key": API_KEY}
+      headers: {
+        "Accept": "application/json, text/plain, */*",
+        "X-API-Key": API_KEY
+      }
     });
     const d = (await r.json())?.data || {};
     const badge = document.getElementById("quotaBadge");
-    badge.innerHTML = `<b>${d.daily_remaining ?? "?"}</b> REQ RESTANTES`;
+    badge.innerHTML = `<b>${d.daily_remaining ?? "?"}</b> FLUX RESTANTS`;
   } catch { }
 }
 </script>
