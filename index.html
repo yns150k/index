@@ -614,14 +614,17 @@ function renderResults(results) {
     sec.innerHTML = `<div class="no-results"><h3>AUCUN DOSSIER TROUVÉ</h3><p>Aucune correspondance disponible pour ces critères.</p></div>`;
     return;
   }
-  const skip = new Set(["_sources","_confidence","_id"]);
+const skip = new Set(["_sources","_confidence","_id"]);
   const cards = results.map((p) => {
     const name = [p.prenom, p.nom_famille].filter(Boolean).join(" ").toUpperCase() || "PROFIL IDENTIFIÉ";
-    const conf = p._confidence ?? 0;
+    
     const rows = Object.entries(p).filter(([k,v]) => !skip.has(k) && v).map(([k,v]) => {
       const f = FIELD_MAP[k] || {ico: ICON.dot, l:k.replace(/_/g," ").toUpperCase()};
       return `<div class="info-row"><span class="info-key">${f.l}</span><span class="info-val">${v}</span></div>`;
     }).join("");
+
+    return `<div class="result-card"><div class="card-header"><span class="card-name">${name}</span></div><div class="card-body">${rows || 'DONNÉES INDISPONIBLES'}</div></div>`;
+  }).join("");
 
     return `<div class="result-card"><div class="card-header"><span class="card-name">${name}</span><div class="confidence-container"><span>FIABILITÉ ${conf}%</span><div class="confidence-bar"><div class="confidence-fill" style="width:${conf}%"></div></div></div></div><div class="card-body">${rows || 'DONNÉES INDISPONIBLES'}</div></div>`;
   }).join("");
