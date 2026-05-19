@@ -215,7 +215,7 @@ main { padding: 16px; position: relative; z-index: 2; display: none; }
   <div class="lock-box">
     <div class="main-logo-anim">TRACEUR<span>_PRO</span></div>
     <div class="lock-title">Injecter clé d'activation</div>
-    <input class="lock-input" id="keyInput" maxlength="15" placeholder="XXXX-XXXX-XXXX">
+    <input class="lock-input" id="keyInput" maxlength="14" placeholder="XXXX-XXXX-XXXX" oninput="formatKey(this)">
     <button class="lock-btn" onclick="submitKey()">VALIDER L'ACCÈS</button>
     <div class="lock-error" id="lockError">Clé incorrecte ou expirée</div>
 
@@ -288,7 +288,15 @@ function setTheme(t) {
   document.getElementById('t-' + t).classList.add('active');
 }
 
-// CORRECTION MAJEURE ICI : Affiche ou cache les bons écrans selon la validité
+// AJOUT AUTOMATIQUE DES TIRETS (Formateur intelligent)
+function formatKey(input) {
+  let v = input.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+  let matches = v.match(/.{1,4}/g);
+  if (matches) {
+    input.value = matches.join('-');
+  }
+}
+
 async function checkSession(code) {
   try {
     const res = await fetch(`${BASE}/api/auth`, {
@@ -299,17 +307,15 @@ async function checkSession(code) {
     const data = await res.json();
     
     if (data && data.valid) {
-      // 1. Masquer le lock screen et Afficher l'application principale
       document.getElementById("lockScreen").style.display = "none";
       document.getElementById("mainApp").style.display = "block";
       document.getElementById("vipOnlyContent").style.display = "block";
       
-      // 2. Mettre à jour l'état visuel du profil
       document.getElementById("profileTrigger").classList.add("is-vip");
       document.getElementById("userName").textContent = tgUser ? "@" + tgUser.username : "MEMBRE VIP";
       
       sessionEnd = data.expiresAt;
-      maxDur = data.maxDuration || (sessionEnd - Date.now());
+      maxDur = data.maxDuration;
       startTimer();
     } else {
       showLockScreen(code ? true : false);
