@@ -8,14 +8,14 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root {
-  --bg:      #000000;
-  --surface: #0a0a0f;
-  --card:    #11111a;
-  --border:  #26192c;
+  --bg:      #030305;
+  --surface: #0a0a12;
+  --card:    #121220;
+  --border:  #ff1e56;
   --accent:  #ff1e56;
-  --accent-glow: rgba(255, 30, 86, 0.3);
+  --accent-glow: rgba(255, 30, 86, 0.4);
   --text:    #f5f5f7;
-  --muted:   #525266;
+  --muted:   #62627a;
   --success: #00ff66;
   --font-mono: 'JetBrains Mono', monospace;
   --font-display: 'Orbitron', sans-serif;
@@ -23,103 +23,132 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; }
 body { background: var(--bg); color: var(--text); font-family: var(--font-mono); min-height: 100vh; overflow-x: hidden; padding-bottom: env(safe-area-inset-bottom); }
-.grid-bg { position: fixed; inset: 0; opacity: 0.05; pointer-events: none; z-index: 0; background-image: linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px); background-size: 45px 45px; }
 
-#boot { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
-.boot-logo { font-family: var(--font-display); font-size: 26px; font-weight: 900; color: #fff; letter-spacing: 3px; text-shadow: 0 0 15px var(--accent-glow); }
+/* Fond de grille dynamique */
+.grid-bg { position: fixed; inset: 0; opacity: 0.04; pointer-events: none; z-index: 0; background-image: linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px); background-size: 50px 50px; }
+
+/* --- ANIMATION DE DÉMARRAGE --- */
+#boot { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; }
+.boot-logo { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: #fff; letter-spacing: 4px; animation: pulseGlow 2s infinite ease-in-out; }
 .boot-logo span { color: var(--accent); }
-.boot-bar-wrap { width: 140px; height: 2px; background: rgba(255,255,255,0.02); overflow: hidden; }
-.boot-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease-in-out; }
-#bootStatus { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+.boot-bar-wrap { width: 160px; height: 3px; background: rgba(255, 255, 255, 0.03); border-radius: 4px; overflow: hidden; }
+.boot-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease-in-out; box-shadow: 0 0 10px var(--accent); }
+#bootStatus { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
 
-/* Écran de verrouillage par code */
-#lockScreen { position: fixed; inset: 0; background: var(--bg); z-index: 900; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-.lock-box { width: 100%; max-width: 320px; background: var(--card); border: 1px solid var(--border); padding: 25px 20px; text-align: center; box-shadow: 0 0 25px rgba(0,0,0,0.5); }
-.lock-title { font-family: var(--font-display); font-size: 14px; margin-bottom: 15px; color: #fff; letter-spacing: 1px; }
-.lock-input { width: 100%; background: var(--surface); border: 1px solid var(--border); padding: 12px; color: #fff; font-family: var(--font-mono); font-size: 16px; text-align: center; letter-spacing: 2px; outline: none; margin-bottom: 15px; text-transform: uppercase; }
-.lock-input:focus { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
-.lock-btn { width: 100%; padding: 12px; background: var(--accent); border: none; color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 11px; letter-spacing: 1px; cursor: pointer; }
-.lock-error { color: var(--accent); font-size: 10px; margin-top: 10px; text-transform: uppercase; display: none; }
+/* --- ÉCRAN D'ACCÈS / LOCKSCREEN --- */
+#lockScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 900; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+.lock-box { width: 100%; max-width: 350px; background: var(--surface); border: 1px solid rgba(255, 30, 86, 0.2); padding: 30px 20px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 30px rgba(255,30,86,0.05); border-radius: 4px; }
 
-header { position: sticky; top: 0; z-index: 10; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 2px solid var(--border); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
+/* Logo principal animé */
+.main-logo-anim { font-family: var(--font-display); font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; position: relative; display: inline-block; animation: cyberScan 3s infinite ease-in-out; }
+.main-logo-anim span { color: var(--accent); text-shadow: 0 0 15px var(--accent-glow); }
+
+.lock-title { font-size: 10px; margin-bottom: 12px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+.lock-input { width: 100%; background: #000; border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 15px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 15px; text-transform: uppercase; transition: all 0.2s; }
+.lock-input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255, 30, 86, 0.2); }
+.lock-btn { width: 100%; padding: 14px; background: var(--accent); border: none; color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 12px; letter-spacing: 1.5px; cursor: pointer; box-shadow: 0 4px 15px var(--accent-glow); transition: transform 0.1s; }
+.lock-btn:active { transform: scale(0.98); }
+.lock-error { color: var(--accent); font-size: 10px; margin-top: 12px; text-transform: uppercase; font-weight: bold; display: none; }
+
+/* Offres commerciales simplifiées */
+.pricing-container { margin-top: 30px; padding-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.05); text-align: left; }
+.pricing-headline { font-family: var(--font-display); font-size: 10px; color: #fff; letter-spacing: 1px; margin-bottom: 15px; text-align: center; text-transform: uppercase; }
+.rates-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.rate-card { background: #000; border: 1px solid rgba(255, 255, 255, 0.05); padding: 15px; display: flex; justify-content: space-between; align-items: center; position: relative; border-radius: 2px; }
+.rate-card.popular { border-color: var(--accent); background: rgba(255, 30, 86, 0.01); box-shadow: 0 0 15px rgba(255, 30, 86, 0.05); }
+.rate-badge { position: absolute; top: -8px; right: 12px; background: var(--accent); color: #fff; font-size: 7px; font-weight: bold; padding: 2px 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.rate-name { font-size: 12px; font-weight: 700; color: #fff; letter-spacing: 0.5px; }
+.rate-features { font-size: 8.5px; color: var(--muted); margin-top: 4px; text-transform: uppercase; line-height: 1.3; }
+.rate-price { font-family: var(--font-display); font-size: 15px; font-weight: 900; color: #fff; }
+.rate-card.popular .rate-price { color: var(--success); text-shadow: 0 0 8px rgba(0,255,102,0.2); }
+.tg-contact-btn { display: block; width: 100%; padding: 14px; background: transparent; border: 1px solid rgba(255, 30, 86, 0.3); color: #fff; font-family: var(--font-mono); font-size: 10px; font-weight: bold; text-align: center; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; }
+.tg-contact-btn:hover { background: var(--accent); border-color: var(--accent); box-shadow: 0 4px 15px var(--accent-glow); }
+
+/* --- INTERFACE PRINCIPALE --- */
+header { position: sticky; top: 0; z-index: 10; background: rgba(3, 3, 5, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
 .header-left { display: flex; align-items: center; gap: 10px; }
-.logo { width: 30px; height: 30px; border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center; background: rgba(255, 30, 86, 0.05); }
-.logo svg { width: 14px; height: 14px; }
 header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900; letter-spacing: 1px; }
 header h1 span { color: var(--accent); }
 
-/* Compte à rebours en haut à droite */
-.session-timer { background: rgba(255, 30, 86, 0.08); border: 1px solid var(--accent); padding: 4px 8px; font-size: 11px; font-weight: bold; color: #fff; font-family: var(--font-mono); box-shadow: 0 0 8px var(--accent-glow); }
+.session-timer { background: rgba(255, 30, 86, 0.06); border: 1px solid rgba(255, 30, 86, 0.3); padding: 4px 8px; font-size: 10px; font-weight: bold; color: #fff; font-family: var(--font-mono); }
+.status-bar { font-size: 9px; color: var(--muted); padding: 8px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.02); display: flex; justify-content: space-between; background: #010102; letter-spacing: 0.5px; }
+.status-bar .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--success); box-shadow: 0 0 6px var(--success); margin-right: 5px; }
 
-.status-bar { font-size: 9px; color: var(--muted); padding: 6px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.02); display: flex; justify-content: space-between; background: #030305; letter-spacing: 0.5px; }
-.status-bar .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 6px var(--accent); margin-right: 4px; }
+main { padding: 16px; position: relative; z-index: 2; }
+.section-title { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; margin: 20px 0 12px 0; display: flex; align-items: center; gap: 8px; }
+.section-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.05); }
 
-main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
-.section-title { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; margin: 20px 0 10px 0; display: flex; align-items: center; gap: 8px; }
-.section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
-
-.tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }
-.tab { padding: 10px 16px; font-size: 11px; font-weight: 700; font-family: var(--font-mono); border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.1s; white-space: nowrap; text-transform: uppercase; }
-.tab.active { border-color: var(--accent); color: #fff; background: rgba(255, 30, 86, 0.12); }
+.tab { padding: 10px 16px; font-size: 11px; font-weight: 700; font-family: var(--font-mono); border: 1px solid rgba(255,255,255,0.05); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.1s; white-space: nowrap; text-transform: uppercase; }
+.tab.active { border-color: var(--accent); color: #fff; background: rgba(255, 30, 86, 0.08); }
 
 .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 15px; }
-.field-btn { position: relative; padding: 12px 10px; border: 1px solid var(--border); background: var(--surface); color: #aaa; font-family: var(--font-mono); font-size: 11px; text-align: left; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.field-btn { position: relative; padding: 14px 10px; border: 1px solid rgba(255,255,255,0.04); background: var(--surface); color: #aaa; font-family: var(--font-mono); font-size: 11px; text-align: left; display: flex; align-items: center; gap: 6px; cursor: pointer; }
 .field-btn.filled { border-color: var(--accent); background: rgba(255, 30, 86, 0.02); color: #fff; }
 .field-btn .tick { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 5px; height: 5px; background: var(--accent); box-shadow: 0 0 5px var(--accent); }
 .field-icon { display: flex; align-items: center; color: var(--muted); }
 .field-btn.filled .field-icon { color: var(--accent); }
 
-.criteria-bar { background: var(--surface); border: 1px solid var(--border); padding: 10px; margin-bottom: 15px; display: none; }
+.criteria-bar { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); padding: 10px; margin-bottom: 15px; display: none; }
 .criteria-bar.visible { display: block; }
 .criteria-bar h3 { font-size: 8px; color: var(--muted); margin-bottom: 6px; }
 .criteria-list { display: flex; flex-wrap: wrap; gap: 4px; }
-.criteria-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: #000; border: 1px solid var(--border); font-size: 10px; color: var(--text); }
+.criteria-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: #000; border: 1px solid rgba(255,255,255,0.05); font-size: 10px; color: var(--text); }
 .criteria-tag .key { color: var(--accent); }
-.criteria-tag .remove { cursor: pointer; color: var(--muted); font-size: 13px; margin-left: 4px; padding: 0 2px; }
+.criteria-tag .remove { cursor: pointer; color: var(--muted); font-size: 13px; margin-left: 4px; }
 
-.overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); z-index: 100; display: none; align-items: flex-end; }
+.overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 100; display: none; align-items: flex-end; }
 .overlay.open { display: flex; }
-.input-sheet { width: 100%; background: var(--card); border-top: 2px solid var(--accent); padding: 20px 16px calc(20px + env(safe-area-inset-bottom)) 16px; box-shadow: 0 -10px 30px rgba(0,0,0,0.9); animation: slideUp 0.15s cubic-bezier(0, 0, 0.2, 1); }
+.input-sheet { width: 100%; background: var(--surface); border-top: 2px solid var(--accent); padding: 20px 16px calc(20px + env(safe-area-inset-bottom)) 16px; box-shadow: 0 -10px 30px rgba(0,0,0,0.8); animation: slideUp 0.15s ease-out; }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
 .input-sheet h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 12px; letter-spacing: 0.5px; }
-.input-field { width: 100%; background: var(--surface); border: 1px solid var(--border); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 14px; outline: none; margin-bottom: 15px; border-radius: 0; -webkit-appearance: none; }
+.input-field { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 14px; outline: none; margin-bottom: 15px; }
 .input-field:focus { border-color: var(--accent); }
 .sheet-btns { display: flex; gap: 8px; }
 .btn-cancel, .btn-confirm { padding: 14px; font-family: var(--font-mono); font-size: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
-.btn-cancel { flex: 1; background: transparent; border: 1px solid var(--border); color: var(--muted); }
+.btn-cancel { flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.05); color: var(--muted); }
 .btn-confirm { flex: 2; background: var(--accent); border: none; color: #fff; font-weight: 900; box-shadow: 0 0 15px var(--accent-glow); }
 
-.search-btn { width: 100%; padding: 16px; border: none; background: var(--accent); color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 13px; letter-spacing: 1.5px; cursor: pointer; box-shadow: 0 0 15px var(--accent-glow); }
-.search-btn:disabled { background: var(--surface); color: var(--muted); border: 1px solid var(--border); box-shadow: none; opacity: 0.4; }
-.clear-btn { width: 100%; padding: 10px; background: transparent; border: none; color: var(--muted); font-family: var(--font-mono); font-size: 11px; cursor: pointer; margin-top: 6px; text-transform: uppercase; }
+.search-btn { width: 100%; padding: 16px; border: none; background: var(--accent); color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 13px; letter-spacing: 1.5px; cursor: pointer; box-shadow: 0 4px 15px var(--accent-glow); }
+.search-btn:disabled { background: var(--surface); color: var(--muted); border: 1px solid rgba(255,255,255,0.05); box-shadow: none; opacity: 0.4; }
+.clear-btn { width: 100%; padding: 10px; background: transparent; border: none; color: var(--muted); font-family: var(--font-mono); font-size: 11px; cursor: pointer; margin-top: 8px; text-transform: uppercase; }
 
 .results-section { margin-top: 25px; }
 .results-section h2 { font-family: var(--font-display); font-size: 10px; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
 .results-section h2 .count { background: rgba(255, 30, 86, 0.1); color: var(--accent); padding: 2px 6px; border: 1px solid var(--accent); }
 
-.result-card { background: var(--card); border: 1px solid var(--border); margin-bottom: 10px; }
-.card-header { padding: 10px 14px; background: rgba(255,255,255,0.01); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.result-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px; }
+.card-header { padding: 12px 14px; background: rgba(255,255,255,0.01); border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; }
 .card-name { font-family: var(--font-display); font-size: 12px; font-weight: 900; color: #fff; }
 .confidence-container { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--success); font-weight: bold; }
 .confidence-bar { width: 35px; height: 3px; background: rgba(255,255,255,0.04); overflow: hidden; }
 .confidence-fill { height: 100%; background: var(--success); }
 
-.card-body { padding: 10px 14px; }
+.card-body { padding: 12px 14px; }
 .info-row { display: flex; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.01); font-size: 11px; }
 .info-row:last-child { border-bottom: none; }
 .info-key { color: var(--muted); width: 115px; flex-shrink: 0; font-size: 9px; font-weight: 700; text-transform: uppercase; }
 .info-val { color: var(--text); word-break: break-all; user-select: text; -webkit-user-select: text; }
-.card-sources { padding: 6px 14px 10px; display: flex; flex-wrap: wrap; gap: 4px; }
-.source-tag { font-size: 8px; font-weight: 700; padding: 1px 4px; background: #000; border: 1px solid var(--border); color: var(--muted); }
 
 .loader { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 30px 0; color: var(--accent); font-size: 10px; font-weight: bold; }
 .spinner { width: 20px; height: 20px; border: 2px solid rgba(255, 30, 86, 0.1); border-top-color: var(--accent); animation: spin 0.4s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.no-results { background: var(--card); border: 1px solid var(--accent); padding: 25px; text-align: center; }
+.no-results { background: var(--surface); border: 1px solid var(--accent); padding: 25px; text-align: center; }
 .no-results h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 4px; color: var(--accent); }
 .no-results p { font-size: 10px; color: var(--muted); }
+
+/* --- SECTIONS D'ANIMATIONS (KEYFRAMES) --- */
+@keyframes pulseGlow {
+  0%, 100% { text-shadow: 0 0 10px rgba(255, 30, 86, 0.2); opacity: 0.8; }
+  50% { text-shadow: 0 0 25px rgba(255, 30, 86, 0.7); opacity: 1; }
+}
+
+@keyframes cyberScan {
+  0%, 100% { transform: translateY(0); filter: brightness(1); }
+  50% { transform: translateY(-1px); filter: brightness(1.2); text-shadow: 0 0 18px var(--accent); }
+}
 </style>
 </head>
 <body>
@@ -129,52 +158,73 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 <div id="boot">
   <div class="boot-logo">TRACEUR<span>_PRO</span></div>
   <div class="boot-bar-wrap"><div class="boot-bar" id="bootBar"></div></div>
-  <div id="bootStatus">Initialisation du pare-feu...</div>
+  <div id="bootStatus">Lancement du système...</div>
 </div>
 
 <div id="lockScreen" style="display:none">
   <div class="lock-box">
-    <div class="lock-title">INJECTER_CLÉ_D_ACCÈS</div>
+    <div class="main-logo-anim">TRACEUR<span>_PRO</span></div>
+    
+    <div class="lock-title">Saisir votre clé d'activation</div>
     <input class="lock-input" id="keyInput" maxlength="14" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
-    <button class="lock-btn" onclick="submitKey()">VALIDER L'ACCÈS</button>
+    <button class="lock-btn" onclick="submitKey()">VALIDER</button>
     <div class="lock-error" id="lockError">Clé incorrecte ou expirée</div>
+
+    <div class="pricing-container">
+      <div class="pricing-headline">Pas encore de pass ?</div>
+      <div class="rates-grid">
+        <div class="rate-card">
+          <div>
+            <div class="rate-name">PASS 7 JOURS</div>
+            <div class="rate-features">Retrouvez n'importe qui • Accès instantané • Recherches illimitées</div>
+          </div>
+          <div class="rate-price">10€</div>
+        </div>
+        <div class="rate-card popular">
+          <div class="rate-badge">LE PLUS PRISÉ 🔥</div>
+          <div>
+            <div class="rate-name">PASS UN MOIS</div>
+            <div class="rate-features">Idéal pour les dossiers complets • Recherche prioritaire 24/7</div>
+          </div>
+          <div class="rate-price" style="color: var(--success);">29.99€</div>
+        </div>
+      </div>
+      <a href="https://t.me/Kola4300" target="_blank" class="tg-contact-btn">
+        Prendre un pass avec @Kola4300
+      </a>
+    </div>
   </div>
 </div>
 
 <header>
   <div class="header-left">
-    <div class="logo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#ff1e56" stroke-width="2.5">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-      </svg>
-    </div>
     <h1>TRACEUR<span>_PRO</span></h1>
   </div>
   <div class="session-timer" id="sessionTimer">TERM: --h --m --s</div>
 </header>
 
 <div class="status-bar">
-  <span><span class="dot"></span>ACCÈS ACCORDÉ - SESSION SÉCURISÉE</span>
+  <span><span class="dot"></span>RECHERCHE ACTIVE</span>
   <span id="statusTime">SYS: --:--:--</span>
 </div>
 
 <main>
-  <div class="section-title">SECTEURS DE RECHERCHE</div>
+  <div class="section-title">CRITÈRES DISPONIBLES</div>
   <div class="tabs" id="tabs"></div>
 
   <div class="criteria-bar" id="criteriaBar">
-    <h3>FILTRES EN COURS</h3>
+    <h3>CRITÈRES SÉLECTIONNÉS</h3>
     <div class="criteria-list" id="criteriaList"></div>
   </div>
 
-  <div class="section-title">PARAMÈTRES CIBLES</div>
+  <div class="section-title">INFORMATIONS SUR LA CIBLE</div>
   <div class="fields-grid" id="fieldsGrid"></div>
 
   <button class="search-btn" id="searchBtn" disabled onclick="launchSearch()">
-    EXTRAIRE LES DONNÉES
+    LANCER LA RECHERCHE
   </button>
   <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">
-    Vider la session
+    Réinitialiser la recherche
   </button>
 
   <div class="results-section" id="resultsSection" style="display:none"></div>
@@ -182,11 +232,11 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 
 <div class="overlay" id="overlay" onclick="closeSheet(event)">
   <div class="input-sheet" id="inputSheet">
-    <h3>INJECTER_CRITÈRE &gt; <span id="sheetLabel" style="color:var(--accent)"></span></h3>
+    <h3>RECHERCHER PAR &gt; <span id="sheetLabel" style="color:var(--accent)"></span></h3>
     <input class="input-field" id="sheetInput" autocomplete="off" autocorrect="off" spellcheck="false"/>
     <div class="sheet-btns">
       <button class="btn-cancel" onclick="closeSheet()">Annuler</button>
-      <button class="btn-confirm" onclick="confirmValue()">Confirmer</button>
+      <button class="btn-confirm" onclick="confirmValue()">Valider</button>
     </div>
   </div>
 </div>
@@ -194,11 +244,9 @@ main { padding: 16px; position: relative; z-index: 2; max-width: 100%; }
 <script>
 const BASE = "https://grueling-fidelity-slimy.ngrok-free.dev"; 
 
-// Initialisation Telegram WebApp
 window.Telegram?.WebApp?.ready();
 window.Telegram?.WebApp?.expand();
 
-// Récupération dynamique du vrai ID utilisateur Telegram pour l'authentification
 const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
 const TELEGRAM_ID = tgUser?.id ? String(tgUser.id) : "TEST_LOCAL_USER";
 
@@ -215,7 +263,6 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 
-// Formatage automatique XXXX-XXXX-XXXX lors de la saisie
 document.getElementById("keyInput").addEventListener("input", (e) => {
   let val = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
   if (val.length > 4 && val.length <= 8) {
@@ -226,7 +273,6 @@ document.getElementById("keyInput").addEventListener("input", (e) => {
   e.target.value = val;
 });
 
-// Lancement au démarrage
 document.addEventListener("DOMContentLoaded", async () => {
   const bar = document.getElementById("bootBar");
   bar.style.width = "100%";
@@ -235,7 +281,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("boot").style.opacity = "0";
     setTimeout(() => document.getElementById("boot").style.display = "none", 200);
     
-    // Vérification si le compte Telegram possède déjà un pass valide
     await checkSession(null);
   }, 400);
 
@@ -243,7 +288,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderFields();
 });
 
-// Fonction pour interroger le backend sur l'état de l'accès
 async function checkSession(providedCode) {
   try {
     const res = await fetch(`${BASE}/api/auth`, {
@@ -262,20 +306,20 @@ async function checkSession(providedCode) {
     } else {
       document.getElementById("lockScreen").style.display = "flex";
       if (providedCode) {
-        showLockError(data.error || "CLÉ INVALIDE");
+        showLockError(data.error || "CLÉ INVALIDE OU EXPIRÉE");
       }
     }
   } catch(e) {
     console.error(e);
     document.getElementById("lockScreen").style.display = "flex";
-    showLockError("CONFLIT LIAISON BACKEND");
+    showLockError("ERREUR DE CONNEXION AU SYSTÈME");
   }
 }
 
 async function submitKey() {
   const code = document.getElementById("keyInput").value.trim();
   if (code.length < 14) {
-    showLockError("FORMAT INCORRECT (XXXX-XXXX-XXXX)");
+    showLockError("FORMAT REQUIS (XXXX-XXXX-XXXX)");
     return;
   }
   await checkSession(code);
@@ -287,7 +331,6 @@ function showLockError(msg) {
   err.style.display = "block";
 }
 
-// Gestion globale du compte à rebours en haut à droite
 function startCountdown() {
   if (timerInterval) clearInterval(timerInterval);
   
@@ -297,7 +340,7 @@ function startCountdown() {
       clearInterval(timerInterval);
       document.getElementById("sessionTimer").textContent = "EXPIRÉ";
       document.getElementById("lockScreen").style.display = "flex";
-      showLockError("VOTRE SESSION A EXPIRÉ");
+      showLockError("VOTRE TEMPS EST ÉCOULÉ");
       return;
     }
     
@@ -310,14 +353,13 @@ function startCountdown() {
     if (days > 0) timeStr += `${days}j `;
     timeStr += `${String(hrs).padStart(2,'0')}h ${String(min).padStart(2,'0')}m ${String(sec).padStart(2,'0')}s`;
     
-    document.getElementById("sessionTimer").textContent = "TERM: " + timeStr;
+    document.getElementById("sessionTimer").textContent = "RESTANT: " + timeStr;
   }
   
   updateTimer();
   timerInterval = setInterval(updateTimer, 1000);
 }
 
-// --- Logique des filtres et formulaires ---
 const ICON = {
   id: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
   birth: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`,
@@ -344,11 +386,11 @@ const CATEGORIES = [
   { id:"localisation", label:"Localisation", fields:[
     {k:"adresse", ico:ICON.loc, l:"Adresse Civile"}, {k:"code_postal", ico:ICON.loc, l:"Code Postal"}, {k:"ville", ico:ICON.loc, l:"Ville"}, {k:"region", ico:ICON.loc, l:"Région"}, {k:"departement", ico:ICON.loc, l:"Département"}, {k:"pays", ico:ICON.loc, l:"Pays"}
   ]},
-  { id:"gaming", label:"Gaming / Réseaux", fields:[
-    {k:"steam_id", ico:ICON.game, l:"Steam ID"}, {k:"fivem_license", ico:ICON.game, l:"FiveM License"}, {k:"discord_id", ico:ICON.chat, l:"Discord ID"}, {k:"xbox_live", ico:ICON.game, l:"Xbox Live"}, {k:"live_id", ico:ICON.game, l:"Live ID"}, {k:"fivem_license2", ico:ICON.game, l:"FiveM License 2"}
+  { id:"gaming", label:"Réseaux", fields:[
+    {k:"steam_id", ico:ICON.game, l:"Steam ID"}, {k:"fivem_license", ico:ICON.game, l:"FiveM ID"}, {k:"discord_id", ico:ICON.chat, l:"Discord ID"}, {k:"xbox_live", ico:ICON.game, l:"Xbox Live"}, {k:"live_id", ico:ICON.game, l:"Live ID"}, {k:"fivem_license2", ico:ICON.game, l:"FiveM ID 2"}
   ]},
-  { id:"avance", label:"Avancé", fields:[
-    {k:"nir", ico:ICON.lock, l:"Num. Sécu (NIR)"}, {k:"iban", ico:ICON.bank, l:"IBAN"}, {k:"bic", ico:ICON.bank, l:"BIC"}, {k:"vin_plaque", ico:ICON.car, l:"Plaque / VIN"}, {k:"siret", ico:ICON.biz, l:"SIRET"}, {k:"siren", ico:ICON.biz, l:"SIREN"}
+  { id:"avance", label:"Options", fields:[
+    {k:"nir", ico:ICON.lock, l:"Numéro unique"}, {k:"iban", ico:ICON.bank, l:"IBAN"}, {k:"bic", ico:ICON.bank, l:"BIC"}, {k:"vin_plaque", ico:ICON.car, l:"Plaque / VIN"}, {k:"siret", ico:ICON.biz, l:"Num. Entreprise"}, {k:"siren", ico:ICON.biz, l:"Registre Pro"}
   ]}
 ];
 
@@ -405,11 +447,10 @@ function renderCriteriaBar() {
 function removeCriteria(k) { delete criteria[k]; updateUI(); }
 function clearAll() { criteria = {}; document.getElementById("resultsSection").style.display = "none"; updateUI(); }
 
-// Requête de recherche sécurisée avec injection du Header d'identité Telegram
 async function launchSearch() {
   const sec = document.getElementById("resultsSection");
   sec.style.display = "block";
-  sec.innerHTML = `<div class="loader"><div class="spinner"></div><div>EXTRACTION SÉCURISÉE EN COURS...</div></div>`;
+  sec.innerHTML = `<div class="loader"><div class="spinner"></div><div>RECHERCHE ET ANALYSE EN COURS...</div></div>`;
   sec.scrollIntoView({behavior:"smooth", block:"start"});
 
   try {
@@ -418,7 +459,7 @@ async function launchSearch() {
       headers: { 
         "Content-Type": "application/json",
         "ngrok-skip-browser-warning": "true",
-        "x-telegram-id": TELEGRAM_ID // Identification requise
+        "x-telegram-id": TELEGRAM_ID
       },
       body: JSON.stringify(criteria)
     });
@@ -433,30 +474,29 @@ async function launchSearch() {
     const data = await r.json();
     renderResults(data?.data?.results || []);
   } catch(e) {
-    sec.innerHTML = `<div class="no-results"><h3>CONFLIT DE LIAISON</h3><p>${e.message}</p></div>`;
+    sec.innerHTML = `<div class="no-results"><h3>ERREUR SYSTÈME</h3><p>Impossible de joindre le serveur de recherche.</p></div>`;
   }
 }
 
 function renderResults(results) {
   const sec = document.getElementById("resultsSection");
   if (!results || !results.length) {
-    sec.innerHTML = `<div class="no-results"><h3>AUCUNE ENTRÉE TROUVÉE</h3><p>La signature n'est pas répertoriée.</p></div>`;
+    sec.innerHTML = `<div class="no-results"><h3>AUCUN DOSSIER TROUVÉ</h3><p>Aucune correspondance disponible pour ces critères.</p></div>`;
     return;
   }
   const skip = new Set(["_sources","_confidence","_id"]);
   const cards = results.map((p) => {
-    const name = [p.prenom, p.nom_famille].filter(Boolean).join(" ").toUpperCase() || "CIBLE INCONNUE";
+    const name = [p.prenom, p.nom_famille].filter(Boolean).join(" ").toUpperCase() || "PROFIL IDENTIFIÉ";
     const conf = p._confidence ?? 0;
-    const sources = (p._sources||[]).map(s=>`<span class="source-tag">${s}</span>`).join("");
     const rows = Object.entries(p).filter(([k,v]) => !skip.has(k) && v).map(([k,v]) => {
       const f = FIELD_MAP[k] || {ico: ICON.dot, l:k.replace(/_/g," ").toUpperCase()};
       return `<div class="info-row"><span class="info-key">${f.l}</span><span class="info-val">${v}</span></div>`;
     }).join("");
 
-    return `<div class="result-card"><div class="card-header"><span class="card-name">${name}</span><div class="confidence-container"><span>MATCH ${conf}%</span><div class="confidence-bar"><div class="confidence-fill" style="width:${conf}%"></div></div></div></div><div class="card-body">${rows || 'PAS DE DONNÉES'}</div>${sources ? `<div class="card-sources">${sources}</div>` : ""}</div>`;
+    return `<div class="result-card"><div class="card-header"><span class="card-name">${name}</span><div class="confidence-container"><span>FIABILITÉ ${conf}%</span><div class="confidence-bar"><div class="confidence-fill" style="width:${conf}%"></div></div></div></div><div class="card-body">${rows || 'DONNÉES INDISPONIBLES'}</div></div>`;
   }).join("");
 
-  sec.innerHTML = `<h2>DOSSIERS EXTRAITS <span class="count">${results.length}</span></h2>${cards}`;
+  sec.innerHTML = `<h2>DOSSIERS IDENTIFIÉS <span class="count">${results.length}</span></h2>${cards}`;
 }
 </script>
 </body>
