@@ -288,7 +288,6 @@ function setTheme(t) {
   document.getElementById('t-' + t).classList.add('active');
 }
 
-// AJOUT AUTOMATIQUE DES TIRETS (Formateur intelligent)
 function formatKey(input) {
   let v = input.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
   let matches = v.match(/.{1,4}/g);
