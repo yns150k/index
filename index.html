@@ -29,23 +29,23 @@
 
 /* Thème Furtif (Majoritairement Noir Profond + PRO Rouge) */
 body.theme-furtif {
-  --bg:          #000000; /* Fond principal noir */
-  --surface:     #000000; /* Surfaces noires */
-  --card:        #050505; /* Cartes noires très sombres */
-  --border:      rgba(255, 255, 255, 0.2); /* Bordures blanches contrastées */
-  --accent:      #ffffff; /* Éléments actifs en blanc */
+  --bg:          #000000;
+  --surface:     #000000;
+  --card:        #050505;
+  --border:      rgba(255, 255, 255, 0.2);
+  --accent:      #ffffff;
   --accent-glow: rgba(255, 255, 255, 0.1);
-  --text:        #ffffff; /* Texte blanc pur */
+  --text:        #ffffff;
   --muted:       #777777;
   --success:     #ffffff;
-  --header-bg:   #000000; /* Header noir */
+  --header-bg:   #000000;
   --input-bg:    #0a0a0a;
   --input-text:  #ffffff;
   --logo-text:   #ffffff;
-  --logo-pro:    #ff1e56; /* Préservation de l'identité rouge */
+  --logo-pro:    #ff1e56;
 }
 
-/* Thème Océan (Bleu) */
+/* Thème Océan */
 body.theme-ocean {
   --bg:          #020813;
   --surface:     #071124;
@@ -84,9 +84,10 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-mono);
 .lock-input { width: 100%; background: var(--input-bg); border: 1px solid var(--border); padding: 14px; color: var(--input-text); font-family: var(--font-mono); font-size: 15px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 15px; text-transform: uppercase; }
 .lock-btn { width: 100%; padding: 14px; background: var(--accent); border: none; color: #000; font-family: var(--font-display); font-weight: 900; font-size: 11px; letter-spacing: 1.5px; cursor: pointer; }
 body.theme-cyber .lock-btn { color: #fff; }
+body.theme-furtif .lock-btn { color: #000; font-weight: 900; }
 .lock-error { color: #ff1e56; font-size: 9px; margin-top: 12px; text-transform: uppercase; font-weight: bold; display: none; }
 
-/* Tarifs et Descriptions Micro */
+/* Tarifs */
 .pricing-container { margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border); text-align: left; }
 .pricing-headline { font-family: var(--font-display); font-size: 9px; color: var(--text); letter-spacing: 1px; margin-bottom: 8px; text-align: center; text-transform: uppercase; font-weight: 900; }
 .pricing-accroche { font-size: 7px; color: var(--muted); text-align: center; line-height: 1.4; margin-bottom: 16px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -94,7 +95,6 @@ body.theme-cyber .lock-btn { color: #fff; }
 .rate-card { background: var(--input-bg); border: 1px solid var(--border); padding: 10px; display: flex; justify-content: space-between; align-items: center; position: relative; border-radius: 2px; }
 .rate-card.popular { border-color: var(--accent); }
 .rate-badge { position: absolute; top: -6px; right: 10px; background: var(--accent); color: #000; font-size: 6px; font-weight: 900; padding: 1px 5px; text-transform: uppercase; }
-body.theme-cyber .rate-badge { color: #fff; }
 .rate-name { font-size: 9.5px; font-weight: 700; color: var(--text); text-transform: uppercase; }
 .rate-features { font-size: 7px; color: var(--muted); margin-top: 2px; text-transform: uppercase; }
 .rate-price { font-family: var(--font-display); font-size: 12px; font-weight: 900; color: var(--text); }
@@ -124,7 +124,6 @@ header h1 span { color: var(--logo-pro); }
 .theme-selector { display: flex; gap: 6px; margin-top: 10px; }
 .theme-btn { flex: 1; padding: 10px; background: var(--input-bg); border: 1px solid var(--border); color: var(--muted); font-family: var(--font-mono); font-size: 8.5px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
 .theme-btn.active { border-color: var(--accent); color: var(--bg); background: var(--accent); }
-body.theme-cyber .theme-btn.active { color: #fff; }
 
 .status-bar { font-size: 8.5px; color: var(--muted); padding: 8px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; background: var(--surface); letter-spacing: 0.5px; text-transform: uppercase; font-weight: bold; }
 .status-bar .dot { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--success); margin-right: 5px; }
@@ -143,6 +142,7 @@ main { padding: 16px; position: relative; z-index: 2; display: none; }
 .field-btn.filled { border-color: var(--accent); color: var(--text); font-weight: bold; }
 .field-btn .tick { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 4px; height: 4px; background: var(--accent); }
 
+/* Overlay & Loader */
 .overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(4px); z-index: 110; display: none; align-items: flex-end; }
 .overlay.open { display: flex; }
 .input-sheet { width: 100%; background: var(--surface); border-top: 2px solid var(--accent); padding: 20px 16px; animation: slideUp 0.15s ease-out; }
@@ -152,14 +152,15 @@ main { padding: 16px; position: relative; z-index: 2; display: none; }
 .input-field { width: 100%; background: var(--input-bg); border: 1px solid var(--border); padding: 14px; color: var(--input-text); font-family: var(--font-mono); font-size: 14px; outline: none; margin-bottom: 15px; }
 
 .btn-confirm { width: 100%; padding: 14px; background: var(--accent); border: none; color: #000; font-family: var(--font-display); font-weight: 900; font-size: 11px; cursor: pointer; }
-body.theme-cyber .btn-confirm { color: #fff; }
-
 .search-btn { width: 100%; padding: 16px; border: none; background: var(--accent); color: #000; font-family: var(--font-display); font-weight: 900; font-size: 12px; cursor: pointer; }
-body.theme-cyber .search-btn { color: #fff; }
 .search-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
+.loader { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 30px; font-size: 10px; color: var(--muted); letter-spacing: 2px; }
+.spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
 /* FICHE UNIQUE */
-.results-section { margin-top: 25px; }
+.results-section { margin-top: 25px; display: none; }
 .result-card { background: var(--card); border: 1px solid var(--border); margin-bottom: 10px; animation: scanReveal 0.4s ease-out forwards; }
 .card-header { padding: 12px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
 .card-name { font-family: var(--font-display); font-size: 11px; font-weight: 900; color: var(--text); }
@@ -170,15 +171,14 @@ body.theme-cyber .search-btn { color: #fff; }
 .info-row:last-child { border-bottom: none; }
 .info-key { color: var(--muted); width: 110px; flex-shrink: 0; font-size: 8px; font-weight: 700; text-transform: uppercase; }
 .info-val { color: var(--text); word-break: break-all; user-select: text; -webkit-user-select: text; }
+.no-results { text-align: center; padding: 20px; color: var(--muted); font-size: 10px; }
 
 @keyframes pulseGlow { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
 @keyframes cyberScan { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1px); } }
 @keyframes scanReveal { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 </style>
 </head>
-<body>
-
-<div class="grid-bg"></div>
+<body class="theme-furtif"> <div class="grid-bg"></div>
 
 <div id="boot">
   <div class="boot-logo">TRACEUR<span>_PRO</span></div>
@@ -204,8 +204,8 @@ body.theme-cyber .search-btn { color: #fff; }
   
   <div class="lock-title" style="text-align:left; margin-bottom:5px">STYLE VISUEL</div>
   <div class="theme-selector">
-    <button class="theme-btn active" id="t-cyber" onclick="setTheme('cyber')">Cyber</button>
-    <button class="theme-btn" id="t-furtif" onclick="setTheme('furtif')">Furtif</button>
+    <button class="theme-btn" id="t-cyber" onclick="setTheme('cyber')">Cyber</button>
+    <button class="theme-btn active" id="t-furtif" onclick="setTheme('furtif')">Furtif</button>
     <button class="theme-btn" id="t-ocean" onclick="setTheme('ocean')">Océan</button>
   </div>
 </div>
@@ -214,7 +214,7 @@ body.theme-cyber .search-btn { color: #fff; }
   <div class="lock-box">
     <div class="main-logo-anim">TRACEUR<span>_PRO</span></div>
     <div class="lock-title">Injecter clé d'activation</div>
-    <input class="lock-input" id="keyInput" maxlength="14" placeholder="XXXX-XXXX-XXXX">
+    <input class="lock-input" id="keyInput" maxlength="15" placeholder="XXXX-XXXX-XXXX">
     <button class="lock-btn" onclick="submitKey()">VALIDER L'ACCÈS</button>
     <div class="lock-error" id="lockError">Clé incorrecte ou expirée</div>
 
@@ -238,7 +238,7 @@ body.theme-cyber .search-btn { color: #fff; }
           <div class="rate-price">29.99€</div>
         </div>
       </div>
-      <a href="https://t.me/Kola4300" target="_blank" class="tg-contact-btn">Achetez un pass dés maintenant en contactant @Kola4300</a>
+      <a href="https://t.me/Kola4300" target="_blank" class="tg-contact-btn">RECHARGER AVEC @Kola4300</a>
     </div>
   </div>
 </div>
@@ -287,6 +287,7 @@ function setTheme(t) {
   document.getElementById('t-' + t).classList.add('active');
 }
 
+// Correction logique de fallback si l'API échoue ou renvoie invalide au démarrage
 async function checkSession(code) {
   try {
     const res = await fetch(`${BASE}/api/auth`, {
@@ -295,7 +296,7 @@ async function checkSession(code) {
       body: JSON.stringify({ telegramId: TELEGRAM_ID, code })
     });
     const data = await res.json();
-    if (data.valid) {
+    if (data && data.valid) {
       document.getElementById("lockScreen").style.display = "none";
       document.getElementById("mainApp").style.display = "block";
       document.getElementById("vipOnlyContent").style.display = "block";
@@ -304,12 +305,35 @@ async function checkSession(code) {
       sessionEnd = data.expiresAt;
       maxDur = data.maxDuration || (sessionEnd - Date.now());
       startTimer();
-    } else if(code) document.getElementById("lockError").style.display = "block";
-  } catch(e) { document.getElementById("lockScreen").style.display = "flex"; }
+    } else {
+      showLockScreen(code ? true : false);
+    }
+  } catch(e) { 
+    showLockScreen(false); 
+  }
+}
+
+function showLockScreen(showError) {
+  document.getElementById("lockScreen").style.display = "flex";
+  document.getElementById("mainApp").style.display = "none";
+  if(showError) document.getElementById("lockError").style.display = "block";
+}
+
+function submitKey() {
+  const key = document.getElementById("keyInput").value.trim();
+  if(key) {
+    document.getElementById("lockError").style.display = "none";
+    checkSession(key);
+  }
 }
 
 function startTimer() {
   setInterval(() => {
+    if(!sessionEnd || sessionEnd === "lifetime") {
+      document.getElementById("sessionTimer").textContent = "ILLIMITÉ (LIFETIME)";
+      document.getElementById("progressFill").style.width = "100%";
+      return;
+    }
     const rem = sessionEnd - Date.now();
     if(rem <= 0) return location.reload();
     const h = Math.floor(rem/3600000), m = Math.floor((rem%3600000)/60000), s = Math.floor((rem%60000)/1000);
@@ -334,7 +358,7 @@ function renderFields() {
   document.getElementById("searchBtn").disabled = Object.keys(criteria).length === 0;
 }
 
-function openSheet(k) { currentField = k; document.getElementById("sheetLabel").textContent = k.toUpperCase(); document.getElementById("sheetInput").value = criteria[k] || ""; document.getElementById("overlay").classList.add("open"); }
+function openSheet(k) { currentField = k; document.getElementById("sheetLabel").textContent = k.toUpperCase(); document.getElementById("sheetInput").value = criteria[k] || ""; document.getElementById("overlay").classList.add("open"); setTimeout(() => document.getElementById("sheetInput").focus(), 50); }
 function closeSheet(e) { if(e.target.id === "overlay") document.getElementById("overlay").classList.remove("open"); }
 function confirmValue() { const v = document.getElementById("sheetInput").value.trim(); if(v) criteria[currentField] = v; else delete criteria[currentField]; document.getElementById("overlay").classList.remove("open"); renderFields(); }
 
@@ -342,16 +366,34 @@ async function launchSearch() {
   const sec = document.getElementById("resultsSection");
   sec.style.display = "block";
   sec.innerHTML = `<div class="loader"><div class="spinner"></div><div>COMPILATION...</div></div>`;
-  const res = await fetch(`${BASE}/api/search`, { method: "POST", headers: { "Content-Type": "application/json", "x-telegram-id": TELEGRAM_ID }, body: JSON.stringify(criteria) });
-  const data = await res.json();
-  if(data.result) {
-    let rows = Object.entries(data.result).filter(([k,v]) => k !== "_confidence").map(([k,v]) => `<div class="info-row"><span class="info-key">${k}</span><span class="info-val">${v}</span></div>`).join("");
-    sec.innerHTML = `<div class="result-card"><div class="card-header"><span class="card-name">DOSSIER UNIQUE</span><div class="confidence-bar"><div class="confidence-fill" style="width:98%"></div></div></div><div class="card-body">${rows}</div></div>`;
-  } else sec.innerHTML = "<div class='no-results'>AUCUN RÉSULTAT</div>";
+  try {
+    const res = await fetch(`${BASE}/api/search`, { method: "POST", headers: { "Content-Type": "application/json", "x-telegram-id": TELEGRAM_ID }, body: JSON.stringify(criteria) });
+    const data = await res.json();
+    if(data.result) {
+      let rows = Object.entries(data.result).filter(([k,v]) => k !== "_confidence").map(([k,v]) => `<div class="info-row"><span class="info-key">${k}</span><span class="info-val">${v}</span></div>`).join("");
+      sec.innerHTML = `<div class="result-card"><div class="card-header"><span class="card-name">DOSSIER UNIQUE</span><div class="confidence-bar"><div class="confidence-fill" style="width:98%"></div></div></div><div class="card-body">${rows}</div></div>`;
+    } else sec.innerHTML = "<div class='no-results'>AUCUN RÉSULTAT</div>";
+  } catch(e) {
+    sec.innerHTML = "<div class='no-results'>ERREUR DE CONNEXION AU SERVEUR</div>";
+  }
+}
+
+function updateClock() {
+  const n = new Date();
+  document.getElementById("statusTime").textContent = n.toTimeString().split(' ')[0];
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(() => { document.getElementById("boot").style.display = "none"; checkSession(null); }, 1000);
+  setInterval(updateClock, 1000);
+  const bootBar = document.getElementById("bootBar");
+  bootBar.style.width = "100%";
+  setTimeout(() => { 
+    document.getElementById("boot").style.opacity = "0";
+    setTimeout(() => {
+      document.getElementById("boot").style.display = "none";
+      checkSession(null); 
+    }, 200);
+  }, 800);
   renderFields(); buildTabs();
 });
 </script>
