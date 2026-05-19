@@ -83,7 +83,6 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-mono);
 .lock-title { font-size: 9px; margin-bottom: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; font-weight: bold; }
 .lock-input { width: 100%; background: var(--input-bg); border: 1px solid var(--border); padding: 14px; color: var(--input-text); font-family: var(--font-mono); font-size: 15px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 15px; text-transform: uppercase; }
 .lock-btn { width: 100%; padding: 14px; background: var(--accent); border: none; color: #000; font-family: var(--font-display); font-weight: 900; font-size: 11px; letter-spacing: 1.5px; cursor: pointer; }
-body.theme-cyber .lock-btn { color: #fff; }
 body.theme-furtif .lock-btn { color: #000; font-weight: 900; }
 .lock-error { color: #ff1e56; font-size: 9px; margin-top: 12px; text-transform: uppercase; font-weight: bold; display: none; }
 
@@ -178,7 +177,9 @@ main { padding: 16px; position: relative; z-index: 2; display: none; }
 @keyframes scanReveal { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 </style>
 </head>
-<body class="theme-furtif"> <div class="grid-bg"></div>
+<body class="theme-furtif">
+
+<div class="grid-bg"></div>
 
 <div id="boot">
   <div class="boot-logo">TRACEUR<span>_PRO</span></div>
@@ -287,7 +288,7 @@ function setTheme(t) {
   document.getElementById('t-' + t).classList.add('active');
 }
 
-// Correction logique de fallback si l'API échoue ou renvoie invalide au démarrage
+// CORRECTION MAJEURE ICI : Affiche ou cache les bons écrans selon la validité
 async function checkSession(code) {
   try {
     const res = await fetch(`${BASE}/api/auth`, {
@@ -296,12 +297,17 @@ async function checkSession(code) {
       body: JSON.stringify({ telegramId: TELEGRAM_ID, code })
     });
     const data = await res.json();
+    
     if (data && data.valid) {
+      // 1. Masquer le lock screen et Afficher l'application principale
       document.getElementById("lockScreen").style.display = "none";
       document.getElementById("mainApp").style.display = "block";
       document.getElementById("vipOnlyContent").style.display = "block";
+      
+      // 2. Mettre à jour l'état visuel du profil
       document.getElementById("profileTrigger").classList.add("is-vip");
       document.getElementById("userName").textContent = tgUser ? "@" + tgUser.username : "MEMBRE VIP";
+      
       sessionEnd = data.expiresAt;
       maxDur = data.maxDuration || (sessionEnd - Date.now());
       startTimer();
@@ -316,6 +322,8 @@ async function checkSession(code) {
 function showLockScreen(showError) {
   document.getElementById("lockScreen").style.display = "flex";
   document.getElementById("mainApp").style.display = "none";
+  document.getElementById("profileTrigger").classList.remove("is-vip");
+  document.getElementById("userName").textContent = "Non actif";
   if(showError) document.getElementById("lockError").style.display = "block";
 }
 
