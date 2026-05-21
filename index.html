@@ -77,7 +77,20 @@ header { position: sticky; top: 0; z-index: 950; background: rgba(3,3,5,0.95); b
 .header-left { display: flex; align-items: center; gap: 10px; }
 header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900; letter-spacing: 1px; }
 
-.header-right { position: relative; display: flex; align-items: center; }
+.header-right { position: relative; display: flex; align-items: center; gap: 12px; }
+.status-indicator {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 0 8px currentColor;
+  white-space: nowrap;
+}
+.status-indicator.actif { background: var(--success); color: #030305; }
+.status-indicator.inactif { background: #ff1e56; color: #fff; }
+
 .profile-btn { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.2s; }
 .profile-btn:hover, .profile-btn.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
 
@@ -104,6 +117,8 @@ header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900;
 .theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
 .theme-opt-btn { padding: 6px; font-size: 8.5px; font-family: var(--font-mono); text-transform: uppercase; font-weight: bold; background: #000; border: 1px solid rgba(255,255,255,0.05); color: var(--muted); cursor: pointer; text-align: center; }
 .theme-opt-btn.active { border-color: var(--accent); color: var(--text); background: rgba(255,255,255,0.02); }
+
+#adminSection { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
 
 .status-bar { font-size: 9px; color: var(--muted); padding: 8px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); display: flex; justify-content: space-between; background: #010102; letter-spacing: 0.5px; }
 .status-bar .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--success); box-shadow: 0 0 6px var(--success); margin-right: 5px; }
@@ -172,6 +187,92 @@ main { padding: 16px; position: relative; z-index: 2; }
 .no-results h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 4px; color: var(--accent); }
 .no-results p { font-size: 10px; color: var(--muted); }
 
+/* ADMIN PANEL STYLES */
+#adminOverlay { z-index: 2000; align-items: center; justify-content: center; }
+.admin-panel {
+  width: 95%;
+  max-width: 920px;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  box-shadow: 0 0 60px var(--accent-glow);
+  animation: adminPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  max-height: 92vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+@keyframes adminPop {
+  0% { transform: scale(0.85) translateY(30px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+.admin-header {
+  padding: 16px 20px;
+  background: rgba(255,30,86,0.1);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.admin-header h1 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 3px;
+  margin: 0;
+}
+.admin-close {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: var(--accent);
+  cursor: pointer;
+  line-height: 1;
+}
+.admin-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+.admin-tab-bar { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+.admin-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.admin-stat-card {
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 16px;
+  border-radius: 4px;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.admin-table th, .admin-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  font-size: 11px;
+}
+.admin-table th { background: rgba(255,30,86,0.08); color: var(--accent); font-weight: 700; text-transform: uppercase; }
+.admin-table tr:hover { background: rgba(255,30,86,0.05); }
+.key-gen-btn {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 8px;
+  background: #111;
+  border: 1px solid var(--accent);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.key-gen-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
+
 @keyframes pulseGlow { 0%,100% { text-shadow: 0 0 10px rgba(255,30,86,0.2); opacity: 0.8; } 50% { text-shadow: 0 0 25px rgba(255,30,86,0.7); opacity: 1; } }
 @keyframes cyberScan { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-1px); text-shadow: 0 0 18px var(--accent); } }
 </style>
@@ -202,6 +303,8 @@ main { padding: 16px; position: relative; z-index: 2; }
   </div>
   
   <div class="header-right">
+    <span id="headerStatus" class="status-indicator"></span>
+    
     <button class="profile-btn" id="profileBtn" onclick="toggleDropdown(event)">
       <div id="profileAvatar" class="profile-avatar"></div>
     </button>
@@ -225,6 +328,10 @@ main { padding: 16px; position: relative; z-index: 2; }
           <button class="theme-opt-btn" id="th-furtif" onclick="setTheme('furtif')">Furtif</button>
           <button class="theme-opt-btn" id="th-ocean" onclick="setTheme('ocean')">Océan</button>
         </div>
+      </div>
+
+      <div id="adminSection" style="display:none; margin-top:12px;">
+        <button onclick="openAdminPanel()" style="width:100%; padding:14px; background:var(--accent); color:#000; font-family:var(--font-display); font-weight:900; font-size:13px; letter-spacing:2px; border:none; border-radius:4px; box-shadow:0 0 15px var(--accent-glow);">PANNEL ADMIN</button>
       </div>
     </div>
   </div>
@@ -268,6 +375,22 @@ main { padding: 16px; position: relative; z-index: 2; }
   </div>
 </div>
 
+<!-- ADMIN PANEL OVERLAY -->
+<div class="overlay" id="adminOverlay" style="display:none; align-items:center; justify-content:center;">
+  <div class="admin-panel">
+    <div class="admin-header">
+      <div class="main-logo-anim" style="font-size:22px; margin:0;">ADMIN<span>_PANEL</span></div>
+      <button class="admin-close" onclick="closeAdminPanel()">✕</button>
+    </div>
+    
+    <div class="admin-tab-bar" id="adminTabs"></div>
+    
+    <div class="admin-content" id="adminContent">
+      <!-- Dynamic content loaded via JS -->
+    </div>
+  </div>
+</div>
+
 <script>
 const BASE = "https://grueling-fidelity-slimy.ngrok-free.dev"; 
 
@@ -283,6 +406,7 @@ let currentField = null;
 let sessionEndTimestamp = null;
 let sessionMaxDuration = 0;
 let timerInterval = null;
+let isAdmin = false;
 
 function initProfileAvatar() {
   const avatarContainer = document.getElementById("profileAvatar");
@@ -303,6 +427,14 @@ function updateClock() {
 }
 updateClock();
 setInterval(updateClock, 1000);
+
+function updateHeaderStatus() {
+  const el = document.getElementById("headerStatus");
+  if (!el) return;
+  const isActive = sessionEndTimestamp && (sessionEndTimestamp === "lifetime" || sessionEndTimestamp > Date.now());
+  el.textContent = isActive ? "ACTIF" : "NON ACTIF";
+  el.className = `status-indicator ${isActive ? "actif" : "inactif"}`;
+}
 
 document.getElementById("keyInput").addEventListener("input", (e) => {
   let val = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
@@ -363,7 +495,10 @@ async function checkSession(providedCode) {
       document.getElementById("lockError").style.display = "none";
       sessionEndTimestamp = data.expiresAt;
       sessionMaxDuration = data.maxDuration || 0;
+      isAdmin = !!data.isAdmin;
+      document.getElementById("adminSection").style.display = isAdmin ? "block" : "none";
       startCountdown();
+      updateHeaderStatus();
     } else {
       document.getElementById("lockScreen").style.display = "flex";
       if (providedCode) showLockError(data.error || "CLÉ INVALIDE OU EXPIRÉE");
@@ -399,6 +534,7 @@ function startCountdown() {
     if (sessionEndTimestamp === "lifetime") {
       timerDisplay.textContent = "RESTANT: ILLIMITÉ";
       barFill.style.width = "100%";
+      updateHeaderStatus();
       return;
     }
     const remaining = sessionEndTimestamp - Date.now();
@@ -408,6 +544,7 @@ function startCountdown() {
       barFill.style.width = "0%";
       document.getElementById("lockScreen").style.display = "flex";
       showLockError("VOTRE TEMPS EST ÉCOULÉ");
+      updateHeaderStatus();
       return;
     }
     const sec = Math.floor((remaining / 1000) % 60);
@@ -421,6 +558,7 @@ function startCountdown() {
       const pct = (remaining / sessionMaxDuration) * 100;
       barFill.style.width = `${Math.max(0, Math.min(100, pct))}%`;
     }
+    updateHeaderStatus();
   }
   updateTimer();
   timerInterval = setInterval(updateTimer, 1000);
@@ -564,6 +702,180 @@ function renderResults(results) {
 
   sec.innerHTML = `<h2>DOSSIERS IDENTIFIÉS <span class="count">${results.length}</span></h2>${cards}`;
 }
+
+/* ==================== ADMIN PANEL ==================== */
+
+let currentAdminTab = 0;
+
+function openAdminPanel() {
+  if (!isAdmin) return;
+  document.getElementById("adminOverlay").style.display = "flex";
+  buildAdminTabs();
+  loadAdminData(0);
+}
+
+function closeAdminPanel() {
+  document.getElementById("adminOverlay").style.display = "none";
+}
+
+function buildAdminTabs() {
+  const tabsHTML = `
+    <button class="tab ${currentAdminTab===0?'active':''}" onclick="switchAdminTab(0)">STATISTIQUES</button>
+    <button class="tab ${currentAdminTab===1?'active':''}" onclick="switchAdminTab(1)">UTILISATEURS</button>
+    <button class="tab ${currentAdminTab===2?'active':''}" onclick="switchAdminTab(2)">HISTORIQUE</button>
+    <button class="tab ${currentAdminTab===3?'active':''}" onclick="switchAdminTab(3)">GÉNÉRATEUR CLÉS</button>
+  `;
+  document.getElementById("adminTabs").innerHTML = tabsHTML;
+}
+
+async function loadAdminData(tabIndex) {
+  currentAdminTab = tabIndex;
+  buildAdminTabs();
+  const content = document.getElementById("adminContent");
+  content.innerHTML = `<div class="loader"><div class="spinner"></div><div>CHARGEMENT DES DONNÉES ADMIN...</div></div>`;
+
+  try {
+    const res = await fetch(`${BASE}/api/admin/data`, {
+      method: "GET",
+      headers: { 
+        "ngrok-skip-browser-warning": "true",
+        "x-telegram-id": TELEGRAM_ID
+      }
+    });
+    if (!res.ok) throw new Error("Accès refusé");
+    const adminData = await res.json();
+
+    if (tabIndex === 0) renderStatsTab(adminData);
+    else if (tabIndex === 1) renderUsersTab(adminData);
+    else if (tabIndex === 2) renderHistoryTab(adminData);
+    else if (tabIndex === 3) renderGeneratorTab(adminData);
+  } catch(e) {
+    content.innerHTML = `<div class="no-results"><h3>ERREUR ADMIN</h3><p>Impossible de charger les données administrateur.</p></div>`;
+  }
+}
+
+function switchAdminTab(tabIndex) {
+  loadAdminData(tabIndex);
+}
+
+function renderStatsTab(data) {
+  const content = document.getElementById("adminContent");
+  const pct = Math.min(100, Math.round((data.apiRequests || 0) / 1000 * 100));
+  content.innerHTML = `
+    <div class="admin-stat-grid">
+      <div class="admin-stat-card">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Clés activées</div>
+        <div style="font-size:32px;font-weight:900;color:var(--accent);">${data.activatedKeys || 0}</div>
+      </div>
+      <div class="admin-stat-card">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Utilisateurs actifs</div>
+        <div style="font-size:32px;font-weight:900;color:var(--success);">${data.usersCount || 0}</div>
+      </div>
+      <div class="admin-stat-card">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Requêtes API</div>
+        <div style="font-size:32px;font-weight:900;color:#00e5ff;">${data.apiRequests || 0} <span style="font-size:14px;">/ 1000</span></div>
+        <div class="confidence-bar" style="width:100%;margin-top:8px;"><div class="confidence-fill" style="width:${pct}%"></div></div>
+      </div>
+      <div class="admin-stat-card">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Clés à vie</div>
+        <div style="font-size:32px;font-weight:900;color:#fff;">${data.lifetimeKeys || 0}</div>
+      </div>
+    </div>
+    <div style="margin-top:30px;font-size:10px;color:var(--muted);">Dernière mise à jour : ${new Date().toLocaleTimeString('fr-FR')}</div>
+  `;
+}
+
+function renderUsersTab(data) {
+  const content = document.getElementById("adminContent");
+  let rows = "";
+  if (data.users && data.users.length) {
+    rows = data.users.map(u => {
+      const remaining = u.expiresAt === "lifetime" ? "ILLIMITÉ" : Math.max(0, Math.floor((new Date(u.expiresAt) - Date.now()) / 86400000)) + " jours";
+      return `<tr>
+        <td>${u.telegramId}</td>
+        <td>${u.keyLabel}</td>
+        <td>${remaining}</td>
+        <td>${u.activatedAt ? new Date(u.activatedAt).toLocaleString('fr-FR') : '-'}</td>
+      </tr>`;
+    }).join("");
+  } else {
+    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);">Aucun utilisateur</td></tr>`;
+  }
+  content.innerHTML = `
+    <table class="admin-table">
+      <thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>TEMPS RESTANT</th><th>ACTIVATION</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function renderHistoryTab(data) {
+  const content = document.getElementById("adminContent");
+  let rows = "";
+  if (data.history && data.history.length) {
+    rows = data.history.slice(0, 30).map(h => `
+      <tr>
+        <td>${h.telegramId}</td>
+        <td>${new Date(h.timestamp).toLocaleString('fr-FR')}</td>
+        <td>${Object.keys(h.criteria || {}).join(", ")}</td>
+        <td>${h.results || 0} résultats</td>
+      </tr>
+    `).join("");
+  } else {
+    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);">Aucun historique</td></tr>`;
+  }
+  content.innerHTML = `
+    <table class="admin-table">
+      <thead><tr><th>UTILISATEUR</th><th>DATE</th><th>CRITÈRES</th><th>RÉSULTATS</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function renderGeneratorTab(data) {
+  const content = document.getElementById("adminContent");
+  content.innerHTML = `
+    <h3 style="margin-bottom:16px;font-family:var(--font-display);color:var(--accent);">GÉNÉRER UNE NOUVELLE CLÉ</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;">
+      <button class="key-gen-btn" onclick="generateNewKey('1semaine')">1 SEMAINE</button>
+      <button class="key-gen-btn" onclick="generateNewKey('1mois')">1 MOIS</button>
+      <button class="key-gen-btn" onclick="generateNewKey('3mois')">3 MOIS</button>
+      <button class="key-gen-btn" onclick="generateNewKey('test')">CLÉ TEST (2 min)</button>
+      <button class="key-gen-btn" onclick="generateNewKey('lifetime')">CLÉ À VIE</button>
+      <button class="key-gen-btn" onclick="generateNewKey('admin')" style="border-color:#00ff66;color:#00ff66;">CLÉ ADMIN (usage unique)</button>
+    </div>
+    <div id="generatedKeyDisplay" style="margin-top:20px; font-family:var(--font-mono); font-size:15px; letter-spacing:4px; background:#000; padding:14px; border:1px solid var(--accent); display:none;"></div>
+  `;
+}
+
+async function generateNewKey(type) {
+  const display = document.getElementById("generatedKeyDisplay");
+  display.style.display = "none";
+  
+  try {
+    const res = await fetch(`${BASE}/api/admin/generate`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true",
+        "x-telegram-id": TELEGRAM_ID
+      },
+      body: JSON.stringify({ type })
+    });
+    const result = await res.json();
+    if (result.key) {
+      display.textContent = result.key;
+      display.style.display = "block";
+      display.style.color = result.isAdmin ? "#00ff66" : "var(--accent)";
+      // refresh data
+      setTimeout(() => loadAdminData(currentAdminTab), 800);
+    }
+  } catch(e) {
+    alert("Erreur lors de la génération de la clé");
+  }
+}
+
+/* 3 clés admin uniques sont générées côté serveur et peuvent être utilisées une seule fois */
 </script>
 </body>
 </html>
