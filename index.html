@@ -8,75 +8,63 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root {
-  --bg:      #030305;
+  --bg: #030305;
   --surface: #0a0a12;
-  --card:    #121220;
-  --border:  #ff1e56;
-  --accent:  #ff1e56;
+  --card: #121220;
+  --border: #ff1e56;
+  --accent: #ff1e56;
   --accent-glow: rgba(255, 30, 86, 0.4);
-  --text:    #f5f5f7;
-  --muted:   #62627a;
+  --text: #f5f5f7;
+  --muted: #62627a;
   --success: #00ff66;
   --font-mono: 'JetBrains Mono', monospace;
   --font-display: 'Orbitron', sans-serif;
 }
-
 [data-theme="furtif"] {
-  --bg:      #010101;
+  --bg: #010101;
   --surface: #080808;
-  --card:    #0f0f0f;
-  --border:  #3a3a3a;
-  --accent:  #ffffff;
+  --card: #0f0f0f;
+  --border: #3a3a3a;
+  --accent: #ffffff;
   --accent-glow: rgba(255, 30, 86, 0.25);
-  --text:    #e0e0e0;
-  --muted:   #777777;
+  --text: #e0e0e0;
+  --muted: #777777;
   --success: #888888;
 }
-
 [data-theme="ocean"] {
-  --bg:      #010b14;
+  --bg: #010b14;
   --surface: #041624;
-  --card:    #072238;
-  --border:  #00e5ff;
-  --accent:  #00e5ff;
+  --card: #072238;
+  --border: #00e5ff;
+  --accent: #00e5ff;
   --accent-glow: rgba(0, 229, 255, 0.4);
-  --text:    #e1f5fe;
-  --muted:   #4f7085;
+  --text: #e1f5fe;
+  --muted: #4f7085;
   --success: #00e676;
 }
-
-/* _PRO toujours rouge */
 .main-logo-anim span, header h1 span, .boot-logo span {
   color: #ff1e56 !important;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; }
 body { background: var(--bg); color: var(--text); font-family: var(--font-mono); min-height: 100vh; overflow-x: hidden; padding-bottom: env(safe-area-inset-bottom); }
-
 .grid-bg { position: fixed; inset: 0; opacity: 0.04; pointer-events: none; z-index: 0; background-image: linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px); background-size: 50px 50px; }
-
 #boot { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; }
 .boot-logo { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: #fff; letter-spacing: 4px; animation: pulseGlow 2s infinite ease-in-out; }
 .boot-bar-wrap { width: 160px; height: 3px; background: rgba(255,255,255,0.03); border-radius: 4px; overflow: hidden; }
 .boot-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease-in-out; box-shadow: 0 0 10px var(--accent); }
 #bootStatus { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
-
 #lockScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 900; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
 .lock-box { width: 100%; max-width: 350px; background: var(--surface); border: 1px solid var(--border); padding: 30px 20px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 30px rgba(255,30,86,0.05); border-radius: 4px; }
-
 .main-logo-anim { font-family: var(--font-display); font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; position: relative; display: inline-block; animation: cyberScan 3s infinite ease-in-out; }
-
 .lock-title { font-size: 10px; margin-bottom: 12px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
 .lock-input { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 15px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 15px; text-transform: uppercase; transition: all 0.2s; }
 .lock-input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255,30,86,0.2); }
 .lock-btn { width: 100%; padding: 14px; background: var(--accent); border: none; color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 12px; letter-spacing: 1.5px; cursor: pointer; box-shadow: 0 4px 15px var(--accent-glow); transition: transform 0.1s; }
 .lock-btn:active { transform: scale(0.98); }
 .lock-error { color: var(--accent); font-size: 10px; margin-top: 12px; text-transform: uppercase; font-weight: bold; display: none; }
-
 header { position: sticky; top: 0; z-index: 950; background: rgba(3,3,5,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
 .header-left { display: flex; align-items: center; gap: 10px; }
 header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900; letter-spacing: 1px; }
-
 .header-right { position: relative; display: flex; align-items: center; gap: 12px; }
 .status-indicator {
   font-size: 10px;
@@ -90,54 +78,42 @@ header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900;
 }
 .status-indicator.actif { background: var(--success); color: #030305; }
 .status-indicator.inactif { background: #ff1e56; color: #fff; }
-
 .profile-btn { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.2s; }
 .profile-btn:hover, .profile-btn.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
-
 .profile-avatar {
   width: 18px; height: 18px; border-radius: 50%; overflow: hidden; display: flex;
   align-items: center; justify-content: center; font-size: 10px; font-weight: 700;
   background: var(--accent); color: #000; box-shadow: 0 0 8px var(--accent-glow);
 }
 .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-
 .profile-dropdown { position: absolute; top: calc(100% + 10px); right: 0; width: 260px; background: var(--surface); border: 1px solid var(--border); padding: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: none; flex-direction: column; gap: 12px; border-radius: 4px; z-index: 1000; }
 .profile-dropdown.open { display: flex; animation: fadeIn 0.15s ease-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-
 .dropdown-user-title { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
 .dropdown-timer-text { font-family: var(--font-mono); font-size: 13px; font-weight: bold; color: var(--text); margin-top: -4px; }
 .dropdown-bar-wrap { width: 100%; height: 5px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
 .dropdown-bar-fill { height: 100%; background: var(--accent); width: 0%; transition: width 1s linear; box-shadow: 0 0 8px var(--accent); }
-
 .dropdown-extend-btn { width: 100%; padding: 10px; background: #222; border: none; color: #666; font-family: var(--font-display); font-size: 10px; font-weight: 900; text-align: center; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; cursor: default; pointer-events: none; }
-
 .theme-selector { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
 .theme-title { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
 .theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
 .theme-opt-btn { padding: 6px; font-size: 8.5px; font-family: var(--font-mono); text-transform: uppercase; font-weight: bold; background: #000; border: 1px solid rgba(255,255,255,0.05); color: var(--muted); cursor: pointer; text-align: center; }
 .theme-opt-btn.active { border-color: var(--accent); color: var(--text); background: rgba(255,255,255,0.02); }
-
 #adminSection { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
-
 .status-bar { font-size: 9px; color: var(--muted); padding: 8px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); display: flex; justify-content: space-between; background: #010102; letter-spacing: 0.5px; }
 .status-bar .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--success); box-shadow: 0 0 6px var(--success); margin-right: 5px; }
-
 main { padding: 16px; position: relative; z-index: 2; }
 .section-title { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; margin: 20px 0 12px 0; display: flex; align-items: center; gap: 8px; }
 .section-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.05); }
-
 .tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; scrollbar-width: none; }
 .tab { padding: 10px 16px; font-size: 11px; font-weight: 700; font-family: var(--font-mono); border: 1px solid rgba(255,255,255,0.05); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.1s; white-space: nowrap; text-transform: uppercase; }
 .tab.active { border-color: var(--accent); color: #fff; background: rgba(255,30,86,0.08); }
-
 .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 15px; }
 .field-btn { position: relative; padding: 14px 10px; border: 1px solid rgba(255,255,255,0.04); background: var(--surface); color: #aaa; font-family: var(--font-mono); font-size: 11px; text-align: left; display: flex; align-items: center; gap: 6px; cursor: pointer; }
 .field-btn.filled { border-color: var(--accent); background: rgba(255,30,86,0.02); color: #fff; }
 .field-btn .tick { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 5px; height: 5px; background: var(--accent); box-shadow: 0 0 5px var(--accent); }
 .field-icon { display: flex; align-items: center; color: var(--muted); }
 .field-btn.filled .field-icon { color: var(--accent); }
-
 .criteria-bar { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); padding: 10px; margin-bottom: 15px; display: none; }
 .criteria-bar.visible { display: block; }
 .criteria-bar h3 { font-size: 8px; color: var(--muted); margin-bottom: 6px; }
@@ -145,12 +121,10 @@ main { padding: 16px; position: relative; z-index: 2; }
 .criteria-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: #000; border: 1px solid rgba(255,255,255,0.05); font-size: 10px; color: var(--text); }
 .criteria-tag .key { color: var(--accent); }
 .criteria-tag .remove { cursor: pointer; color: var(--muted); font-size: 13px; margin-left: 4px; }
-
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); z-index: 100; display: none; align-items: flex-end; }
 .overlay.open { display: flex; }
 .input-sheet { width: 100%; background: var(--surface); border-top: 2px solid var(--accent); padding: 20px 16px calc(20px + env(safe-area-inset-bottom)) 16px; box-shadow: 0 -10px 30px rgba(0,0,0,0.8); animation: slideUp 0.15s ease-out; }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
 .input-sheet h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 12px; letter-spacing: 0.5px; }
 .input-field { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 14px; outline: none; margin-bottom: 15px; }
 .input-field:focus { border-color: var(--accent); }
@@ -158,35 +132,26 @@ main { padding: 16px; position: relative; z-index: 2; }
 .btn-cancel, .btn-confirm { padding: 14px; font-family: var(--font-mono); font-size: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
 .btn-cancel { flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.05); color: var(--muted); }
 .btn-confirm { flex: 2; background: var(--accent); border: none; color: #fff; font-weight: 900; box-shadow: 0 0 15px var(--accent-glow); }
-
 .search-btn { width: 100%; padding: 16px; border: none; background: var(--accent); color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 13px; letter-spacing: 1.5px; cursor: pointer; box-shadow: 0 4px 15px var(--accent-glow); }
 .search-btn:disabled { background: var(--surface); color: var(--muted); border: 1px solid rgba(255,255,255,0.05); box-shadow: none; opacity: 0.4; }
 .clear-btn { width: 100%; padding: 10px; background: transparent; border: none; color: var(--muted); font-family: var(--font-mono); font-size: 11px; cursor: pointer; margin-top: 8px; text-transform: uppercase; }
-
 .results-section { margin-top: 25px; }
 .results-section h2 { font-family: var(--font-display); font-size: 10px; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
 .results-section h2 .count { background: rgba(255,30,86,0.1); color: var(--accent); padding: 2px 6px; border: 1px solid var(--border); }
-
 .result-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px; }
 .card-header { padding: 12px 14px; background: rgba(255,255,255,0.01); border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; }
 .card-name { font-family: var(--font-display); font-size: 12px; font-weight: 900; color: #fff; }
-.confidence-container { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--success); font-weight: bold; }
-.confidence-bar { width: 35px; height: 3px; background: rgba(255,255,255,0.04); overflow: hidden; }
-.confidence-fill { height: 100%; background: var(--success); }
-
 .card-body { padding: 12px 14px; }
 .info-row { display: flex; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.01); font-size: 11px; }
 .info-row:last-child { border-bottom: none; }
 .info-key { color: var(--muted); width: 115px; flex-shrink: 0; font-size: 9px; font-weight: 700; text-transform: uppercase; }
 .info-val { color: var(--text); word-break: break-all; user-select: text; }
-
 .loader { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 30px 0; color: var(--accent); font-size: 10px; font-weight: bold; }
 .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,30,86,0.1); border-top-color: var(--accent); animation: spin 0.4s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .no-results { background: var(--surface); border: 1px solid var(--border); padding: 25px; text-align: center; }
 .no-results h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 4px; color: var(--accent); }
 .no-results p { font-size: 10px; color: var(--muted); }
-
 /* ADMIN PANEL STYLES */
 #adminOverlay { z-index: 2000; align-items: center; justify-content: center; }
 .admin-panel {
@@ -259,20 +224,19 @@ main { padding: 16px; position: relative; z-index: 2; }
 .admin-table tr:hover { background: rgba(255,30,86,0.05); }
 .key-gen-btn {
   width: 100%;
-  padding: 14px;
+  padding: 12px 10px;
   margin-bottom: 8px;
   background: #111;
   border: 1px solid var(--accent);
   color: var(--text);
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: 12px;
-  letter-spacing: 1.5px;
+  font-size: 11px;
+  letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.2s;
 }
 .key-gen-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
-
 @keyframes pulseGlow { 0%,100% { text-shadow: 0 0 10px rgba(255,30,86,0.2); opacity: 0.8; } 50% { text-shadow: 0 0 25px rgba(255,30,86,0.7); opacity: 1; } }
 @keyframes cyberScan { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-1px); text-shadow: 0 0 18px var(--accent); } }
 </style>
@@ -301,14 +265,11 @@ main { padding: 16px; position: relative; z-index: 2; }
   <div class="header-left">
     <h1>TRACEUR<span>_PRO</span></h1>
   </div>
-  
   <div class="header-right">
     <span id="headerStatus" class="status-indicator"></span>
-    
     <button class="profile-btn" id="profileBtn" onclick="toggleDropdown(event)">
       <div id="profileAvatar" class="profile-avatar"></div>
     </button>
-    
     <div class="profile-dropdown" id="profileDropdown" onclick="event.stopPropagation()">
       <div>
         <div class="dropdown-user-title">Statut de l'accès</div>
@@ -320,7 +281,6 @@ main { padding: 16px; position: relative; z-index: 2; }
         </div>
       </div>
       <a href="#" class="dropdown-extend-btn">Prolonger l'accès</a>
-      
       <div class="theme-selector">
         <div class="theme-title">Thème de l'interface</div>
         <div class="theme-options">
@@ -329,7 +289,6 @@ main { padding: 16px; position: relative; z-index: 2; }
           <button class="theme-opt-btn" id="th-ocean" onclick="setTheme('ocean')">Océan</button>
         </div>
       </div>
-
       <div id="adminSection" style="display:none; margin-top:12px;">
         <button onclick="openAdminPanel()" style="width:100%; padding:14px; background:var(--accent); color:#000; font-family:var(--font-display); font-weight:900; font-size:13px; letter-spacing:2px; border:none; border-radius:4px; box-shadow:0 0 15px var(--accent-glow);">PANNEL ADMIN</button>
       </div>
@@ -345,22 +304,14 @@ main { padding: 16px; position: relative; z-index: 2; }
 <main>
   <div class="section-title">CRITÈRES DISPONIBLES</div>
   <div class="tabs" id="tabs"></div>
-
   <div class="criteria-bar" id="criteriaBar">
     <h3>CRITÈRES SÉLECTIONNÉS</h3>
     <div class="criteria-list" id="criteriaList"></div>
   </div>
-
   <div class="section-title">INFORMATIONS SUR LA CIBLE</div>
   <div class="fields-grid" id="fieldsGrid"></div>
-
-  <button class="search-btn" id="searchBtn" disabled onclick="launchSearch()">
-    LANCER LA RECHERCHE
-  </button>
-  <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">
-    Réinitialiser la recherche
-  </button>
-
+  <button class="search-btn" id="searchBtn" disabled onclick="launchSearch()">LANCER LA RECHERCHE</button>
+  <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">Réinitialiser la recherche</button>
   <div class="results-section" id="resultsSection" style="display:none"></div>
 </main>
 
@@ -375,28 +326,21 @@ main { padding: 16px; position: relative; z-index: 2; }
   </div>
 </div>
 
-<!-- ADMIN PANEL OVERLAY -->
 <div class="overlay" id="adminOverlay" style="display:none; align-items:center; justify-content:center;">
   <div class="admin-panel">
     <div class="admin-header">
       <div class="main-logo-anim" style="font-size:22px; margin:0;">ADMIN<span>_PANEL</span></div>
       <button class="admin-close" onclick="closeAdminPanel()">✕</button>
     </div>
-    
     <div class="admin-tab-bar" id="adminTabs"></div>
-    
-    <div class="admin-content" id="adminContent">
-      <!-- Dynamic content loaded via JS -->
-    </div>
+    <div class="admin-content" id="adminContent"></div>
   </div>
 </div>
 
 <script>
-const BASE = "https://server-js-g0tv.onrender.com"; 
-
+const BASE = "https://server-js-g0tv.onrender.com";
 window.Telegram?.WebApp?.ready();
 window.Telegram?.WebApp?.expand();
-
 const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user || {};
 const TELEGRAM_ID = tgUser?.id ? String(tgUser.id) : "TEST_LOCAL_USER";
 
@@ -407,6 +351,7 @@ let sessionEndTimestamp = null;
 let sessionMaxDuration = 0;
 let timerInterval = null;
 let isAdmin = false;
+let currentAdminTab = 0;
 
 function initProfileAvatar() {
   const avatarContainer = document.getElementById("profileAvatar");
@@ -446,13 +391,11 @@ document.getElementById("keyInput").addEventListener("input", (e) => {
 document.addEventListener("DOMContentLoaded", async () => {
   const bar = document.getElementById("bootBar");
   bar.style.width = "100%";
-  
   setTimeout(async () => {
     document.getElementById("boot").style.opacity = "0";
     setTimeout(() => document.getElementById("boot").style.display = "none", 200);
     await checkSession(null);
   }, 400);
-
   initProfileAvatar();
   buildTabs();
   renderFields();
@@ -475,7 +418,6 @@ function setTheme(themeName) {
   const body = document.documentElement;
   if (themeName === 'cyber') body.removeAttribute('data-theme');
   else body.setAttribute('data-theme', themeName);
-  
   document.querySelectorAll('.theme-opt-btn').forEach(b => b.classList.remove('active'));
   if (themeName === 'cyber') document.getElementById('th-cyber').classList.add('active');
   if (themeName === 'furtif') document.getElementById('th-furtif').classList.add('active');
@@ -529,7 +471,6 @@ function startCountdown() {
   if (timerInterval) clearInterval(timerInterval);
   const timerDisplay = document.getElementById("dropdownTimer");
   const barFill = document.getElementById("dropdownBarFill");
-  
   function updateTimer() {
     if (sessionEndTimestamp === "lifetime") {
       timerDisplay.textContent = "RESTANT: ILLIMITÉ";
@@ -656,7 +597,6 @@ async function launchSearch() {
   sec.style.display = "block";
   sec.innerHTML = `<div class="loader"><div class="spinner"></div><div>RECHERCHE ET ANALYSE EN COURS...</div></div>`;
   sec.scrollIntoView({behavior:"smooth", block:"start"});
-
   try {
     const r = await fetch(`${BASE}/api/search`, {
       method: "POST",
@@ -667,14 +607,12 @@ async function launchSearch() {
       },
       body: JSON.stringify(criteria)
     });
-    
     if (r.status === 403) {
       clearInterval(timerInterval);
       document.getElementById("lockScreen").style.display = "flex";
       showLockError("ACCÈS EXPIRÉ OU NON AUTORISÉ");
       return;
     }
-
     const data = await r.json();
     renderResults(data?.data?.results || []);
   } catch(e) {
@@ -691,22 +629,16 @@ function renderResults(results) {
   const skip = new Set(["_sources","_confidence","_id"]);
   const cards = results.map((p) => {
     const name = [p.prenom, p.nom_famille].filter(Boolean).join(" ").toUpperCase() || "PROFIL IDENTIFIÉ";
-    const conf = p._confidence ?? 0;
     const rows = Object.entries(p).filter(([k,v]) => !skip.has(k) && v).map(([k,v]) => {
       const f = FIELD_MAP[k] || {l:k.replace(/_/g," ").toUpperCase()};
       return `<div class="info-row"><span class="info-key">${f.l}</span><span class="info-val">${v}</span></div>`;
     }).join("");
-
-    return `<div class="result-card"><div class="card-header"><span class="card-name">${name}</span><div class="confidence-container"><span>FIABILITÉ ${conf}%</span><div class="confidence-bar"><div class="confidence-fill" style="width:${conf}%"></div></div></div></div><div class="card-body">${rows || 'DONNÉES INDISPONIBLES'}</div></div>`;
+    return `<div class="result-card"><div class="card-header"><span class="card-name">${name}</span></div><div class="card-body">${rows || 'DONNÉES INDISPONIBLES'}</div></div>`;
   }).join("");
-
   sec.innerHTML = `<h2>DOSSIERS IDENTIFIÉS <span class="count">${results.length}</span></h2>${cards}`;
 }
 
 /* ==================== ADMIN PANEL ==================== */
-
-let currentAdminTab = 0;
-
 function openAdminPanel() {
   if (!isAdmin) return;
   document.getElementById("adminOverlay").style.display = "flex";
@@ -733,18 +665,13 @@ async function loadAdminData(tabIndex) {
   buildAdminTabs();
   const content = document.getElementById("adminContent");
   content.innerHTML = `<div class="loader"><div class="spinner"></div><div>CHARGEMENT DES DONNÉES ADMIN...</div></div>`;
-
   try {
     const res = await fetch(`${BASE}/api/admin/data`, {
       method: "GET",
-      headers: { 
-        "ngrok-skip-browser-warning": "true",
-        "x-telegram-id": TELEGRAM_ID
-      }
+      headers: { "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID }
     });
     if (!res.ok) throw new Error("Accès refusé");
     const adminData = await res.json();
-
     if (tabIndex === 0) renderStatsTab(adminData);
     else if (tabIndex === 1) renderUsersTab(adminData);
     else if (tabIndex === 2) renderHistoryTab(adminData);
@@ -813,66 +740,70 @@ function renderHistoryTab(data) {
   const content = document.getElementById("adminContent");
   let rows = "";
   if (data.history && data.history.length) {
-    rows = data.history.slice(0, 30).map(h => `
-      <tr>
-        <td>${h.telegramId}</td>
-        <td>${new Date(h.timestamp).toLocaleString('fr-FR')}</td>
-        <td>${Object.keys(h.criteria || {}).join(", ")}</td>
-        <td>${h.results || 0} résultats</td>
-      </tr>
-    `).join("");
+    rows = data.history.slice(0, 30).map(h => {
+      const crit = Object.entries(h.criteria || {}).map(([k,v]) => `${k}: ${v}`).join(" | ");
+      return `<tr>
+        <td style="font-size:11px;">${h.telegramId}</td>
+        <td style="font-size:11px;">${new Date(h.timestamp).toLocaleString('fr-FR')}</td>
+        <td style="font-size:11px;max-width:200px;word-break:break-all;">${crit || '-'}</td>
+        <td style="font-size:11px;">${h.results || 0}</td>
+      </tr>`;
+    }).join("");
   } else {
-    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);">Aucun historique</td></tr>`;
+    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:20px;">Aucun historique</td></tr>`;
   }
   content.innerHTML = `
     <table class="admin-table">
-      <thead><tr><th>UTILISATEUR</th><th>DATE</th><th>CRITÈRES</th><th>RÉSULTATS</th></tr></thead>
+      <thead><tr><th>UTILISATEUR</th><th>DATE</th><th>RECHERCHE</th><th>RÉSULTATS</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
   `;
 }
 
-function renderGeneratorTab(data) {
+function renderGeneratorTab() {
   const content = document.getElementById("adminContent");
   content.innerHTML = `
     <h3 style="margin-bottom:16px;font-family:var(--font-display);color:var(--accent);">GÉNÉRER UNE NOUVELLE CLÉ</h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
       <button class="key-gen-btn" onclick="generateNewKey('1semaine')">1 SEMAINE</button>
       <button class="key-gen-btn" onclick="generateNewKey('1mois')">1 MOIS</button>
       <button class="key-gen-btn" onclick="generateNewKey('3mois')">3 MOIS</button>
-      <button class="key-gen-btn" onclick="generateNewKey('test')">CLÉ TEST (2 min)</button>
-      <button class="key-gen-btn" onclick="generateNewKey('lifetime')">CLÉ À VIE</button>
-      <button class="key-gen-btn" onclick="generateNewKey('admin')" style="border-color:#00ff66;color:#00ff66;">CLÉ ADMIN (usage unique)</button>
+      <button class="key-gen-btn" onclick="generateNewKey('test')">TEST 2 MIN</button>
+      <button class="key-gen-btn" onclick="generateNewKey('lifetime')">À VIE</button>
+      <button class="key-gen-btn" onclick="generateNewKey('admin')" style="border-color:#00ff66;color:#00ff66;">CLÉ ADMIN</button>
     </div>
-    <div id="generatedKeyDisplay" style="margin-top:20px; font-family:var(--font-mono); font-size:15px; letter-spacing:4px; background:#000; padding:14px; border:1px solid var(--accent); display:none;"></div>
+    <div id="generatedKeyDisplay" style="margin-top:25px;display:none;background:#000;border:2px solid var(--accent);border-radius:8px;padding:18px;text-align:center;word-break:break-all;font-family:var(--font-mono);font-size:17px;letter-spacing:5px;box-shadow:0 0 25px var(--accent-glow);"></div>
   `;
 }
 
 async function generateNewKey(type) {
   const display = document.getElementById("generatedKeyDisplay");
   display.style.display = "none";
-  
   try {
     const res = await fetch(`${BASE}/api/admin/generate`, {
       method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true",
-        "x-telegram-id": TELEGRAM_ID
-      },
+      headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
       body: JSON.stringify({ type })
     });
     const result = await res.json();
     if (result.key) {
-      display.textContent = result.key;
+      display.innerHTML = `
+        <div style="color:var(--accent);font-size:13px;margin-bottom:8px;">CLÉ GÉNÉRÉE AVEC SUCCÈS</div>
+        <div style="font-size:19px;letter-spacing:6px;margin-bottom:15px;">${result.key}</div>
+        <button onclick="copyKey('${result.key}')" style="background:var(--accent);color:#000;border:none;padding:14px 24px;border-radius:6px;font-weight:900;width:100%;">📋 COPIER LA CLÉ</button>
+      `;
       display.style.display = "block";
-      display.style.color = result.isAdmin ? "#00ff66" : "var(--accent)";
-      // refresh data
-      setTimeout(() => loadAdminData(currentAdminTab), 800);
+      display.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   } catch(e) {
     alert("Erreur lors de la génération de la clé");
   }
+}
+
+function copyKey(key) {
+  navigator.clipboard.writeText(key).then(() => {
+    alert("✅ Clé copiée dans le presse-papiers !");
+  });
 }
 
 /* 3 clés admin uniques sont générées côté serveur et peuvent être utilisées une seule fois */
