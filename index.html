@@ -53,24 +53,9 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-mono);
 /* Fond de grille dynamique */
 .grid-bg { position: fixed; inset: 0; opacity: 0.04; pointer-events: none; z-index: 0; background-image: linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px); background-size: 50px 50px; }
 
-/* --- SECTIONS D'ANIMATIONS NÉON LOGO --- */
-.neon-glow {
-  text-shadow: 0 0 4px var(--accent), 0 0 10px var(--accent), 0 0 20px var(--accent-glow);
-  animation: neonPulse 1.5s infinite alternate ease-in-out;
-}
-
-@keyframes neonPulse {
-  from {
-    text-shadow: 0 0 4px var(--accent), 0 0 10px var(--accent), 0 0 15px var(--accent-glow);
-  }
-  to {
-    text-shadow: 0 0 8px var(--accent), 0 0 20px var(--accent), 0 0 35px var(--accent), 0 0 40px var(--accent-glow);
-  }
-}
-
 /* --- ANIMATION DE DÉMARRAGE --- */
 #boot { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; }
-.boot-logo { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: #fff; letter-spacing: 4px; }
+.boot-logo { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: #fff; letter-spacing: 4px; animation: pulseGlow 2s infinite ease-in-out; }
 .boot-logo span { color: var(--accent); }
 .boot-bar-wrap { width: 160px; height: 3px; background: rgba(255, 255, 255, 0.03); border-radius: 4px; overflow: hidden; }
 .boot-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease-in-out; box-shadow: 0 0 10px var(--accent); }
@@ -80,8 +65,8 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-mono);
 #lockScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 900; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
 .lock-box { width: 100%; max-width: 350px; background: var(--surface); border: 1px solid rgba(255, 30, 86, 0.2); border-color: var(--border); padding: 30px 20px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 30px rgba(255,30,86,0.05); border-radius: 4px; }
 
-.main-logo-anim { font-family: var(--font-display); font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; position: relative; display: inline-block; }
-.main-logo-anim span { color: var(--accent); }
+.main-logo-anim { font-family: var(--font-display); font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; position: relative; display: inline-block; animation: cyberScan 3s infinite ease-in-out; }
+.main-logo-anim span { color: var(--accent); text-shadow: 0 0 15px var(--accent-glow); }
 
 .lock-title { font-size: 10px; margin-bottom: 12px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
 .lock-input { width: 100%; background: #000; border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 15px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 15px; text-transform: uppercase; transition: all 0.2s; }
@@ -200,16 +185,15 @@ main { padding: 16px; position: relative; z-index: 2; }
 .no-results h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 4px; color: var(--accent); }
 .no-results p { font-size: 10px; color: var(--muted); }
 
-/* Modification spécifique liens de parenté cliquables */
-.family-link-node {
-  color: var(--accent) !important;
-  text-decoration: underline;
-  cursor: pointer;
-  font-weight: bold;
-  transition: opacity 0.1s;
+/* --- SECTIONS D'ANIMATIONS (KEYFRAMES) --- */
+@keyframes pulseGlow {
+  0%, 100% { text-shadow: 0 0 10px rgba(255, 30, 86, 0.2); opacity: 0.8; }
+  50% { text-shadow: 0 0 25px rgba(255, 30, 86, 0.7); opacity: 1; }
 }
-.family-link-node:active {
-  opacity: 0.6;
+
+@keyframes cyberScan {
+  0%, 100% { transform: translateY(0); filter: brightness(1); }
+  50% { transform: translateY(-1px); filter: brightness(1.2); text-shadow: 0 0 18px var(--accent); }
 }
 </style>
 </head>
@@ -218,14 +202,14 @@ main { padding: 16px; position: relative; z-index: 2; }
 <div class="grid-bg"></div>
 
 <div id="boot">
-  <div class="boot-logo neon-glow">TRACEUR<span>_PRO</span></div>
+  <div class="boot-logo">TRACEUR<span>_PRO</span></div>
   <div class="boot-bar-wrap"><div class="boot-bar" id="bootBar"></div></div>
   <div id="bootStatus">Lancement du système...</div>
 </div>
 
 <div id="lockScreen" style="display:none">
   <div class="lock-box">
-    <div class="main-logo-anim neon-glow">TRACEUR<span>_PRO</span></div>
+    <div class="main-logo-anim">TRACEUR<span>_PRO</span></div>
     
     <div class="lock-title">Saisir votre clé d'activation</div>
     <input class="lock-input" id="keyInput" maxlength="14" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
@@ -260,7 +244,7 @@ main { padding: 16px; position: relative; z-index: 2; }
 
 <header>
   <div class="header-left">
-    <h1>TRACEUR<span class="neon-glow">_PRO</span></h1>
+    <h1>TRACEUR<span>_PRO</span></h1>
   </div>
   
   <div class="header-right">
@@ -340,10 +324,6 @@ main { padding: 16px; position: relative; z-index: 2; }
 <script>
 const BASE = "https://backend-traceur.onrender.com"; 
 
-// CONFIGURATION PRIVÉE DU COMPTE ADMIN 
-// Remplace cette valeur par ton ID numérique Telegram exact (ex: "18942054")
-const CONFIG_ADMIN_TELEGRAM_ID = "6348924710"; 
-
 window.Telegram?.WebApp?.ready();
 window.Telegram?.WebApp?.expand();
 
@@ -354,7 +334,7 @@ let activeCat    = "identite";
 let criteria     = {};
 let currentField = null;
 let sessionEndTimestamp = null;
-let sessionMaxDuration = 0; 
+let sessionMaxDuration = 0; // Stockage de la durée initiale pour la barre
 let timerInterval = null;
 
 function updateClock() {
@@ -389,6 +369,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderFields();
 });
 
+/* --- LOGIQUE DROPDOWN & ACCUEIL FERMETURE CLICK OUT --- */
 function toggleDropdown(event) {
   event.stopPropagation();
   const dropdown = document.getElementById("profileDropdown");
@@ -402,6 +383,7 @@ document.addEventListener("click", () => {
   document.getElementById("profileBtn").classList.remove("active");
 });
 
+/* --- LOGIQUE SELECTION DE THEME --- */
 function setTheme(themeName) {
   const body = document.documentElement;
   if (themeName === 'cyber') {
@@ -410,6 +392,7 @@ function setTheme(themeName) {
     body.setAttribute('data-theme', themeName);
   }
   
+  // Update boutons de sélection
   document.querySelectorAll('.theme-opt-btn').forEach(b => b.classList.remove('active'));
   if (themeName === 'cyber') document.getElementById('th-cyber').classList.add('active');
   if (themeName === 'furtif') document.getElementById('th-furtif').classList.add('active');
@@ -431,13 +414,6 @@ async function checkSession(providedCode) {
       document.getElementById("lockError").style.display = "none";
       sessionEndTimestamp = data.expiresAt;
       sessionMaxDuration = data.maxDuration || 0;
-      
-      // Injection automatique du Panel Admin si ID Telegram vérifié concordant
-      if ((TELEGRAM_ID === CONFIG_ADMIN_TELEGRAM_ID || TELEGRAM_ID === "TEST_LOCAL_USER") && !CATEGORIES.some(c => c.id === "panel_admin")) {
-        CATEGORIES.push({ id: "panel_admin", label: "⚡ PANEL ADMIN", fields: [] });
-      }
-      
-      buildTabs();
       startCountdown();
     } else {
       document.getElementById("lockScreen").style.display = "flex";
@@ -500,8 +476,10 @@ function startCountdown() {
     if (days > 0) timeStr += `${days}j `;
     timeStr += `${String(hrs).padStart(2,'0')}h ${String(min).padStart(2,'0')}m ${String(sec).padStart(2,'0')}s`;
     
+    // Met à jour le texte du chrono dans le profil
     timerDisplay.textContent = "RESTANT: " + timeStr;
     
+    // Calcul de remplissage de la barre (en %)
     if (sessionMaxDuration > 0) {
       const pct = (remaining / sessionMaxDuration) * 100;
       barFill.style.width = `${Math.max(0, Math.min(100, pct))}%`;
@@ -549,10 +527,6 @@ const CATEGORIES = [
 const FIELD_MAP = {};
 CATEGORIES.forEach(c => c.fields.forEach(f => FIELD_MAP[f.k] = f));
 
-// Ajout manuel d'IBAN / BIC dans la cartographie globale au cas où l'onglet change dynamiquement
-FIELD_MAP["iban"] = {k:"iban", ico:ICON.bank, l:"IBAN"};
-FIELD_MAP["bic"] = {k:"bic", ico:ICON.bank, l:"BIC"};
-
 document.getElementById("sheetInput").addEventListener("keydown", e => { if (e.key === "Enter") confirmValue(); });
 
 function buildTabs() {
@@ -561,62 +535,11 @@ function buildTabs() {
 function switchCat(id) { activeCat = id; buildTabs(); renderFields(); }
 
 function renderFields() {
-  const fieldsContainer = document.getElementById("fieldsGrid");
-  
-  // Rendu de l'interface spécifique du Panel Admin
-  if (activeCat === "panel_admin") {
-    fieldsContainer.innerHTML = `
-      <div style="grid-column: span 2; background: #000; border: 1px dashed var(--border); padding: 16px; border-radius: 4px; display:flex; flex-direction:column; gap:12px;">
-        <div style="font-family: var(--font-display); font-size:11px; color: var(--success); font-weight:900; letter-spacing:1px;">CONSOLE DE COMMANDES ADMIN</div>
-        
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
-          <div style="background:var(--surface); padding:10px; border:1px solid rgba(255,255,255,0.05);">
-            <div style="font-size:8px; color:var(--muted)">STATUT NODE SERVER</div>
-            <div style="font-size:12px; font-weight:bold; color:var(--success)">OPÉRATIONNEL</div>
-          </div>
-          <div style="background:var(--surface); padding:10px; border:1px solid rgba(255,255,255,0.05);">
-            <div style="font-size:8px; color:var(--muted)">SESSIONS TOTALES</div>
-            <div style="font-size:12px; font-weight:bold; color:#fff;">TRACKER SYNC</div>
-          </div>
-        </div>
-
-        <div>
-          <label style="font-size:9px; color:var(--muted); text-transform:uppercase; display:block; margin-bottom:4px;">Générer une clé maîtresse temporaire</label>
-          <select id="adminKeyType" style="width:100%; background:#050508; color:#fff; border:1px solid rgba(255,255,255,0.1); padding:10px; font-family:var(--font-mono); font-size:12px; outline:none; margin-bottom:10px;">
-            <option value="7 JOURS">PASS 7 JOURS</option>
-            <option value="30 JOURS">PASS 1 MOIS</option>
-            <option value="À VIE (LIFETIME)">PASS À VIE</option>
-          </select>
-          <button class="lock-btn" style="background:var(--success); color:#000; box-shadow: 0 0 10px rgba(0,255,102,0.2);" onclick="adminTriggerGeneration()">GÉNÉRER LE COMPOSANT BLOC</button>
-        </div>
-
-        <div id="adminOutputDisplay" style="display:none; background:#050508; border:1px dashed var(--success); padding:12px; text-align:center; font-family:var(--font-mono); color:var(--success); font-size:11px; font-weight:bold; word-break:break-all;"></div>
-      </div>
-    `;
-    return;
-  }
-
   const cat = CATEGORIES.find(c => c.id === activeCat);
-  fieldsContainer.innerHTML = cat.fields.map(f => {
+  document.getElementById("fieldsGrid").innerHTML = cat.fields.map(f => {
     const filled = criteria[f.k] !== undefined;
     return `<button class="field-btn ${filled?'filled':''}" onclick="openSheet('${f.k}')"><span class="field-icon">${f.ico}</span><span>${f.l}</span>${filled ? '<span class="tick"></span>' : ''}</button>`;
   }).join("");
-}
-
-// Générateur de clés purement visuel/front-end simulé pour le panel admin local
-function adminTriggerGeneration() {
-  const type = document.getElementById("adminKeyType").value;
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let p1 = "", p2 = "", p3 = "";
-  for(let i=0; i<4; i++) {
-    p1 += chars.charAt(Math.floor(Math.random() * chars.length));
-    p2 += chars.charAt(Math.floor(Math.random() * chars.length));
-    p3 += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  const keyGenerated = `${p1}-${p2}-${p3}`;
-  const display = document.getElementById("adminOutputDisplay");
-  display.style.display = "block";
-  display.innerHTML = `CLÉ UNIQUE CRÉÉE (${type}) :<br><span style="color:#fff; font-size:14px; letter-spacing:1px; user-select:all; -webkit-user-select:all;">${keyGenerated}</span>`;
 }
 
 function openSheet(fieldKey) {
@@ -649,37 +572,10 @@ function renderCriteriaBar() {
   const keys = Object.keys(criteria);
   if (!keys.length) { bar.classList.remove("visible"); return; }
   bar.classList.add("visible");
-  document.getElementById("criteriaList").innerHTML = keys.map(k => `<span class="criteria-tag"><span class="key">${FIELD_MAP[k]?.l || k.toUpperCase()}</span>: ${criteria[k]}<span class="remove" onclick="removeCriteria('${k}')">×</span></span>`).join("");
+  document.getElementById("criteriaList").innerHTML = keys.map(k => `<span class="criteria-tag"><span class="key">${FIELD_MAP[k].l}</span>: ${criteria[k]}<span class="remove" onclick="removeCriteria('${k}')">×</span></span>`).join("");
 }
 function removeCriteria(k) { delete criteria[k]; updateUI(); }
 function clearAll() { criteria = {}; document.getElementById("resultsSection").style.display = "none"; updateUI(); }
-
-// Logique d'enquête instantanée sur clic d'un lien familial
-function investigateRelative(relativeData) {
-  // Nettoyage de la chaîne brute pour isoler le nom complet (ex : supprime les mentions type "(Père)", "(Mère)")
-  let cleanName = relativeData.replace(/\(.*\)/g, '').trim();
-  let parts = cleanName.split(/\s+/);
-  
-  if (parts.length >= 2) {
-    // Premier élément considéré comme Prénom, le reste comme Nom de Famille
-    let firstname = parts[0];
-    let lastname = parts.slice(1).join(" ");
-    
-    criteria = {
-      prenom: firstname,
-      nom_famille: lastname
-    };
-  } else if (parts.length === 1) {
-    criteria = {
-      nom_famille: parts[0]
-    };
-  }
-  
-  // Redirection sur l'onglet Identité, rafraîchissement global et lancement automatique
-  activeCat = "identite";
-  updateUI();
-  launchSearch();
-}
 
 async function launchSearch() {
   const sec = document.getElementById("resultsSection");
@@ -724,17 +620,7 @@ function renderResults(results) {
     const conf = p._confidence ?? 0;
     const rows = Object.entries(p).filter(([k,v]) => !skip.has(k) && v).map(([k,v]) => {
       const f = FIELD_MAP[k] || {ico: ICON.dot, l:k.replace(/_/g," ").toUpperCase()};
-      
-      let finalValueDisplay = v;
-      // DÉTECTION : Si le critère correspond à un lien de parenté, on le transforme en bouton d'investigation directe
-      const keyLower = k.toLowerCase();
-      const isFamilyLinkField = keyLower.includes("parent") || keyLower.includes("famille") || keyLower.includes("lien") || keyLower.includes("relative") || keyLower.includes("conjoint") || keyLower.includes("pere") || keyLower.includes("mere") || keyLower.includes("frere") || keyLower.includes("soeur") || keyLower.includes("enfant");
-      
-      if (isFamilyLinkField && typeof v === 'string') {
-         finalValueDisplay = `<span class="family-link-node" onclick="investigateRelative('${v.replace(/'/g, "\\'")}')">${v}</span>`;
-      }
-
-      return `<div class="info-row"><span class="info-key">${f.l}</span><span class="info-val">${finalValueDisplay}</span></div>`;
+      return `<div class="info-row"><span class="info-key">${f.l}</span><span class="info-val">${v}</span></div>`;
     }).join("");
 
     return `<div class="result-card"><div class="card-header"><span class="card-name">${name}</span><div class="confidence-container"><span>FIABILITÉ ${conf}%</span><div class="confidence-bar"><div class="confidence-fill" style="width:${conf}%"></div></div></div></div><div class="card-body">${rows || 'DONNÉES INDISPONIBLES'}</div></div>`;
