@@ -154,7 +154,8 @@ main { padding: 16px; position: relative; z-index: 2; }
 .no-results p { font-size: 10px; color: var(--muted); }
 /* ADMIN PANEL STYLES */
 #adminOverlay { z-index: 2000; align-items: center; justify-content: center; }
-.admin-panel {
+#familyOverlay { z-index: 2100; align-items: center; justify-content: center; }
+.admin-panel, .family-panel {
   width: 95%;
   max-width: 920px;
   background: var(--surface);
@@ -171,7 +172,7 @@ main { padding: 16px; position: relative; z-index: 2; }
   0% { transform: scale(0.85) translateY(30px); opacity: 0; }
   100% { transform: scale(1) translateY(0); opacity: 1; }
 }
-.admin-header {
+.admin-header, .family-header {
   padding: 16px 20px;
   background: rgba(255,30,86,0.1);
   border-bottom: 1px solid var(--border);
@@ -179,13 +180,13 @@ main { padding: 16px; position: relative; z-index: 2; }
   align-items: center;
   justify-content: space-between;
 }
-.admin-header h1 {
+.admin-header h1, .family-header h1 {
   font-family: var(--font-display);
   font-size: 22px;
   letter-spacing: 3px;
   margin: 0;
 }
-.admin-close {
+.admin-close, .family-close {
   background: none;
   border: none;
   font-size: 28px;
@@ -193,7 +194,7 @@ main { padding: 16px; position: relative; z-index: 2; }
   cursor: pointer;
   line-height: 1;
 }
-.admin-content {
+.admin-content, .family-content {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
@@ -237,6 +238,20 @@ main { padding: 16px; position: relative; z-index: 2; }
   transition: all 0.2s;
 }
 .key-gen-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
+.family-list { display: flex; flex-direction: column; gap: 12px; }
+.family-card {
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 14px;
+  cursor: pointer;
+}
+.family-relation {
+  font-size: 12px;
+  color: var(--success);
+  font-weight: bold;
+  text-transform: uppercase;
+}
 @keyframes pulseGlow { 0%,100% { text-shadow: 0 0 10px rgba(255,30,86,0.2); opacity: 0.8; } 50% { text-shadow: 0 0 25px rgba(255,30,86,0.7); opacity: 1; } }
 @keyframes cyberScan { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-1px); text-shadow: 0 0 18px var(--accent); } }
 </style>
@@ -337,6 +352,16 @@ main { padding: 16px; position: relative; z-index: 2; }
   </div>
 </div>
 
+<div class="overlay" id="familyOverlay" style="display:none; align-items:center; justify-content:center;">
+  <div class="admin-panel family-panel">
+    <div class="admin-header family-header">
+      <div class="main-logo-anim" style="font-size:22px; margin:0;">APPROFONDIR LA RECHERCHE</div>
+      <button class="admin-close family-close" onclick="closeFamilyOverlay()">✕</button>
+    </div>
+    <div class="admin-content family-content" id="familyContent"></div>
+  </div>
+</div>
+
 <script>
 const BASE = "https://server-js-g0tv.onrender.com";
 window.Telegram?.WebApp?.ready();
@@ -352,6 +377,7 @@ let sessionMaxDuration = 0;
 let timerInterval = null;
 let isAdmin = false;
 let currentAdminTab = 0;
+let currentPerson = null; // pour approfondir
 
 function initProfileAvatar() {
   const avatarContainer = document.getElementById("profileAvatar");
@@ -627,18 +653,86 @@ function renderResults(results) {
     return;
   }
   const skip = new Set(["_sources","_confidence","_id"]);
-  const cards = results.map((p) => {
+  const cards = results.map((p, index) => {
     const name = [p.prenom, p.nom_famille].filter(Boolean).join(" ").toUpperCase() || "PROFIL IDENTIFIÉ";
     const rows = Object.entries(p).filter(([k,v]) => !skip.has(k) && v).map(([k,v]) => {
       const f = FIELD_MAP[k] || {l:k.replace(/_/g," ").toUpperCase()};
       return `<div class="info-row"><span class="info-key">${f.l}</span><span class="info-val">${v}</span></div>`;
     }).join("");
-    return `<div class="result-card"><div class="card-header"><span class="card-name">${name}</span></div><div class="card-body">${rows || 'DONNÉES INDISPONIBLES'}</div></div>`;
+    return `<div class="result-card">
+      <div class="card-header">
+        <span class="card-name">${name}</span>
+        <button onclick="approfondirRecherche(${index})" style="background:var(--accent);color:#000;border:none;padding:6px 12px;border-radius:4px;font-size:10px;font-weight:900;cursor:pointer;">APPROFONDIR LA RECHERCHE</button>
+      </div>
+      <div class="card-body">${rows || 'DONNÉES INDISPONIBLES'}</div>
+    </div>`;
   }).join("");
   sec.innerHTML = `<h2>DOSSIERS IDENTIFIÉS <span class="count">${results.length}</span></h2>${cards}`;
+  window.allResults = results;
 }
 
-/* ==================== ADMIN PANEL ==================== */
+function approfondirRecherche(index) {
+  currentPerson = window.allResults[index];
+  const familyContent = document.getElementById("familyContent");
+  let html = `<h3 style="margin-bottom:16px;color:var(--accent);">LIENS FAMILIAUX POSSIBLES POUR ${currentPerson.prenom || ''} ${currentPerson.nom_famille || ''}</h3>`;
+  const possibles = window.allResults.filter((p, i) => i !== index && 
+    (p.nom_famille === currentPerson.nom_famille || 
+     (p.adresse && currentPerson.adresse && p.adresse.toLowerCase().includes(currentPerson.adresse.toLowerCase().slice(0,8)))));
+  
+  if (possibles.length === 0) {
+    html += `<div class="no-results"><p>Aucun lien familial détecté avec les données actuelles.</p></div>`;
+  } else {
+    html += `<div class="family-list">`;
+    possibles.forEach(person => {
+      const ageDiff = Math.abs((parseInt(person.annee_naissance) || 2000) - (parseInt(currentPerson.annee_naissance) || 2000));
+      let relation = "";
+      if (ageDiff > 20 && ageDiff < 45) relation = "Père / Mère possible";
+      else if (ageDiff < 20) relation = "Frère / Sœur possible";
+      else relation = "Lien familial possible";
+      html += `
+        <div class="family-card" onclick="showPersonFiche(${window.allResults.indexOf(person)})">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <strong>${person.prenom || ''} ${person.nom_famille || ''}</strong>
+            </div>
+            <div class="family-relation">${relation}</div>
+          </div>
+          <small>${person.adresse ? person.adresse : ''}</small>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+  familyContent.innerHTML = html;
+  document.getElementById("familyOverlay").style.display = "flex";
+}
+
+function closeFamilyOverlay() {
+  document.getElementById("familyOverlay").style.display = "none";
+}
+
+function showPersonFiche(index) {
+  closeFamilyOverlay();
+  const p = window.allResults[index];
+  const sec = document.getElementById("resultsSection");
+  sec.innerHTML = `
+    <h2>FICHE DÉTAILLÉE</h2>
+    <div class="result-card">
+      <div class="card-header">
+        <span class="card-name">${(p.prenom || '') + ' ' + (p.nom_famille || '')}</span>
+      </div>
+      <div class="card-body">
+        ${Object.entries(p).filter(([k]) => ![" _sources","_confidence","_id"].includes(k)).map(([k,v]) => {
+          const f = FIELD_MAP[k] || {l:k.replace(/_/g," ").toUpperCase()};
+          return `<div class="info-row"><span class="info-key">${f.l}</span><span class="info-val">${v}</span></div>`;
+        }).join('')}
+      </div>
+    </div>
+    <button onclick="renderResults(window.allResults)" style="margin-top:15px;width:100%;padding:14px;background:var(--accent);color:#000;border:none;border-radius:4px;font-weight:900;">RETOUR AUX RÉSULTATS</button>
+  `;
+  sec.style.display = "block";
+}
+
+/* ADMIN PANEL */
 function openAdminPanel() {
   if (!isAdmin) return;
   document.getElementById("adminOverlay").style.display = "flex";
