@@ -899,10 +899,15 @@ async function approfondirRecherche(index) {
 }
 
 function showPersonFicheFromFamily(familyIndex) {
+  // On récupère le profil sélectionné pour l'afficher
   let person;
+  // Index -1 correspond au profil de base (index 0)
+  const basePerson = allResults[0]; 
+  
   if (familyIndex === -1) {
-    person = allResults[0];
+    person = basePerson;
   } else {
+    // Liste des profils liés (tous sauf le 0)
     const similars = allResults.filter((p, i) => i !== 0);
     person = similars[familyIndex];
   }
@@ -911,13 +916,14 @@ function showPersonFicheFromFamily(familyIndex) {
   const rows = Object.entries(person)
     .filter(([k]) => !k.startsWith("_"))
     .map(([k,v]) => `<div class="info-row"><span class="info-key">${k.replace(/_/g," ").toUpperCase()}</span><span class="info-val">${v}</span></div>`).join("");
+  
   document.getElementById("familyContent").innerHTML = `
     <h2 style="margin-bottom:20px;color:var(--accent);">FICHE DÉTAILLÉE : ${name}</h2>
     <div class="result-card" style="box-shadow: 0 0 25px rgba(255, 30, 86, 0.1);">
       <div class="card-header"><span class="card-name">${name}</span></div>
       <div class="card-body">${rows}</div>
     </div>
-    <button class="btn-approfondir btn-shine" onclick="approfondirRecherche(0)" style="margin-top:25px;width:100%;padding:18px;border-radius:6px;font-size:12px;">RETOUR AUX LIENS FAMILIAUX</button>
+    <button class="btn-approfondir btn-shine" onclick="approfondirRecherche(0)" style="margin-top:25px;width:100%;padding:18px;border-radius:6px;font-size:12px;text-transform:uppercase;">RETOUR À LA VUE D'ENSEMBLE FAMILIALE</button>
   `;
 }
 
