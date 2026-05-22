@@ -14,6 +14,8 @@
   --border: #ff1e56;
   --accent: #ff1e56;
   --accent-glow: rgba(255, 30, 86, 0.4);
+  --accent-soft-bg: rgba(255, 30, 86, 0.08);
+  --accent-inset-glow: rgba(255, 30, 86, 0.18);
   --text: #f5f5f7;
   --muted: #62627a;
   --success: #00ff66;
@@ -27,6 +29,8 @@
   --border: #444444;
   --accent: #e5e5e5;
   --accent-glow: rgba(229, 229, 229, 0.35);
+  --accent-soft-bg: rgba(229, 229, 229, 0.14);
+  --accent-inset-glow: rgba(229, 229, 229, 0.35);
   --text: #f0f0f0;
   --muted: #a8a8a8;
   --success: #a8a8a8;
@@ -38,6 +42,8 @@
   --border: #00e5ff;
   --accent: #00e5ff;
   --accent-glow: rgba(0, 229, 255, 0.4);
+  --accent-soft-bg: rgba(0, 229, 255, 0.09);
+  --accent-inset-glow: rgba(0, 229, 255, 0.28);
   --text: #e1f5fe;
   --muted: #4f7085;
   --success: #00e676;
@@ -55,7 +61,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-mono);
 
 /* ====================== ANIMATIONS GLOBALES ====================== */
 button {
-  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -66,27 +72,16 @@ button {
   text-align: center;
   word-break: break-word;
 }
-button:not(.intro-btn):not(.profile-btn):not(.tab):active {
-  transform: scale(0.96) translateY(1px);
-}
-button:hover:not(:disabled) {
-  filter: brightness(1.15);
+
+/* Feedback tactile ultra-satisfaisant sur mobile (Telegram WebApp) */
+button:active:not(:disabled) {
+  transform: scale(0.94) translateY(2px);
+  filter: brightness(0.92);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
 }
 
-.btn-shine::before {
-  content: "";
-  position: absolute;
-  top: 0; left: -100%;
-  width: 50%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  transform: skewX(-20deg);
-  animation: shine-sweep 3s infinite cubic-bezier(0.25, 0.8, 0.25, 1);
-  pointer-events: none;
-}
-@keyframes shine-sweep {
-  0% { left: -100%; }
-  20% { left: 200%; }
-  100% { left: 200%; }
+button:not(.intro-btn):not(.profile-btn):not(.tab):not(.field-btn):active {
+  transform: scale(0.94) translateY(2px);
 }
 
 /* ====================== INTRO & BOOT ====================== */
@@ -110,25 +105,15 @@ button:hover:not(:disabled) {
   outline: none;
 }
 .intro-btn:hover { 
-  background: rgba(255,30,86,0.15); 
+  background: var(--accent-soft-bg); 
   transform: translateY(-2px);
   box-shadow: 0 6px 0 var(--accent), 0 0 30px var(--accent-glow) inset, 0 12px 30px var(--accent-glow);
 }
 .intro-btn:active { 
-  transform: translateY(4px) !important;
-  box-shadow: 0 0px 0 var(--accent), 0 0 10px var(--accent-glow) inset, 0 0px 10px rgba(0,0,0,0.8); 
-  background: rgba(255,30,86,0.3);
-}
-
-@keyframes neonPulse {
-  0% { text-shadow: 0 0 5px #fff, 0 0 10px var(--accent), 0 0 20px var(--accent); }
-  100% { text-shadow: 0 0 10px #fff, 0 0 20px var(--accent), 0 0 40px var(--accent), 0 0 80px var(--accent); }
-}
-
-@media (max-width: 600px) {
-  .neon-logo { font-size: 28px; letter-spacing: 2px; margin-bottom: 15px; }
-  .intro-tagline { font-size: 9px; margin-bottom: 30px; letter-spacing: 2px; padding: 0 10px; }
-  .intro-btn { font-size: 12px; padding: 14px 20px; width: 90%; max-width: 300px; letter-spacing: 2px; }
+  transform: scale(0.94) translateY(2px) !important;
+  box-shadow: 0 2px 6px var(--accent-glow);
+  background: var(--accent);
+  color: #000;
 }
 
 /* ====================== BOOT ====================== */
@@ -148,10 +133,11 @@ button:hover:not(:disabled) {
 .lock-box { width: 100%; max-width: 350px; background: var(--surface); border: 1px solid var(--border); padding: 30px 20px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 30px rgba(255,30,86,0.05); border-radius: 8px; }
 .main-logo-anim { font-family: var(--font-display); font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; position: relative; display: inline-block; animation: neonPulse 2.5s infinite alternate; }
 .lock-title { font-size: 10px; margin-bottom: 12px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
-.lock-input { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 15px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 15px; text-transform: uppercase; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 4px; }
-.lock-input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255,30,86,0.3); transform: scale(1.02); }
+.lock-input { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 15px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 15px; text-transform: uppercase; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 4px; }
+.lock-input:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); transform: scale(1.02); }
 .lock-btn { width: 100%; padding: 14px; background: var(--accent); border: none; color: #000; font-family: var(--font-display); font-weight: 900; font-size: 12px; letter-spacing: 1.5px; box-shadow: 0 4px 15px var(--accent-glow); border-radius: 4px; }
 .lock-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--accent-glow); }
+.lock-btn:active { transform: scale(0.94) translateY(2px); background: #fff; color: #000; }
 .lock-error { color: var(--accent); font-size: 10px; margin-top: 12px; text-transform: uppercase; font-weight: bold; display: none; animation: shake 0.4s; }
 
 @keyframes shake {
@@ -192,13 +178,13 @@ header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900;
   100% { text-shadow: 0 0 20px currentColor, 0 0 35px currentColor; }
 }
 
-.profile-btn { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+.profile-btn { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 .profile-btn:hover, .profile-btn.active { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); transform: scale(1.1); }
 .profile-avatar { width: 18px; height: 18px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; background: var(--accent); color: #000; box-shadow: 0 0 8px var(--accent-glow); }
 .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
 .profile-dropdown { position: absolute; top: calc(100% + 10px); right: 0; width: 260px; background: var(--surface); border: 1px solid var(--border); padding: 16px; box-shadow: 0 10px 35px rgba(0,0,0,0.8); display: none; flex-direction: column; gap: 12px; border-radius: 8px; z-index: 1000; }
-.profile-dropdown.open { display: flex; animation: slideDownFade 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); }
+.profile-dropdown.open { display: flex; animation: slideDownFade 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
 
 @keyframes slideDownFade { 
   from { opacity: 0; transform: translateY(-10px) scale(0.98); } 
@@ -213,9 +199,9 @@ header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900;
 .theme-selector { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
 .theme-title { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
 .theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.theme-opt-btn { padding: 8px 6px; font-size: 8.5px; font-family: var(--font-mono); text-transform: uppercase; font-weight: bold; background: #000; border: 1px solid rgba(255,255,255,0.05); color: var(--muted); text-align: center; transition: all 0.3s; border-radius: 4px; }
-.theme-opt-btn:hover:not(.active) { border-color: rgba(255,30,86,0.5); color: #fff; transform: translateY(-1px); }
-.theme-opt-btn.active { border-color: var(--accent); color: var(--text); background: rgba(255,255,255,0.02); box-shadow: 0 0 10px rgba(255,30,86,0.1); }
+.theme-opt-btn { padding: 8px 6px; font-size: 8.5px; font-family: var(--font-mono); text-transform: uppercase; font-weight: bold; background: #000; border: 1px solid rgba(255,255,255,0.05); color: var(--muted); text-align: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 4px; }
+.theme-opt-btn:hover:not(.active) { border-color: var(--accent); color: #fff; transform: translateY(-1px) scale(1.03); }
+.theme-opt-btn.active { border-color: var(--accent); color: var(--text); background: var(--accent-soft-bg); box-shadow: 0 0 10px var(--accent-glow); }
 
 #adminSection { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
 .status-bar { font-size: 9px; color: var(--muted); padding: 8px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); display: flex; justify-content: space-between; background: #010102; letter-spacing: 0.5px; }
@@ -230,15 +216,49 @@ main { padding: 14px 12px; position: relative; z-index: 2; max-width: 100%; }
 /* Animation des onglets */
 .tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; flex-wrap: nowrap; }
 .tabs::-webkit-scrollbar { display: none; }
-.tab { flex-shrink: 0; padding: 12px 18px; font-size: 11px; font-weight: 700; font-family: var(--font-mono); border: 1px solid rgba(255,255,255,0.05); background: var(--surface); color: var(--muted); white-space: nowrap; text-transform: uppercase; border-radius: 6px; }
-.tab:hover:not(.active) { background: rgba(255,255,255,0.05); color: #fff; transform: translateY(-2px); }
-.tab.active { border-color: var(--accent); color: #fff; background: rgba(255,30,86,0.08); box-shadow: 0 4px 15px rgba(255,30,86,0.15); transform: scale(1.02); }
+.tab { flex-shrink: 0; padding: 12px 18px; font-size: 11px; font-weight: 700; font-family: var(--font-mono); border: 1px solid rgba(255,255,255,0.05); background: var(--surface); color: var(--muted); white-space: nowrap; text-transform: uppercase; border-radius: 6px; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+.tab:hover:not(.active) { background: var(--accent-soft-bg); color: #fff; transform: translateY(-2px); }
+.tab.active { border-color: var(--accent); color: #fff; background: var(--accent-soft-bg); box-shadow: 0 4px 15px var(--accent-glow); transform: scale(1.02); }
 
 /* Fields grid */
 .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
-.field-btn { position: relative; padding: 14px 30px 14px 12px; border: 1px solid rgba(255,255,255,0.04); background: var(--surface); color: #aaa; font-family: var(--font-mono); font-size: 11px; display: flex; align-items: center; gap: 8px; text-align: left; white-space: normal; line-height: 1.3; border-radius: 6px; }
-.field-btn:hover { background: rgba(255,30,86,0.08); border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.5); color: #fff; }
-.field-btn.filled { border-color: var(--accent); background: rgba(255,30,86,0.05); color: #fff; box-shadow: inset 0 0 10px rgba(255,30,86,0.1); }
+.field-btn { 
+  position: relative; 
+  padding: 14px 30px 14px 12px; 
+  border: 1px solid rgba(255,255,255,0.04); 
+  background: var(--surface); 
+  color: #aaa; 
+  font-family: var(--font-mono); 
+  font-size: 11px; 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  text-align: left; 
+  white-space: normal; 
+  line-height: 1.3; 
+  border-radius: 6px; 
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.field-btn:hover { 
+  background: var(--accent-soft-bg); 
+  border-color: var(--accent); 
+  transform: translateY(-2px); 
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4); 
+  color: #fff; 
+}
+.field-btn:active { 
+  transform: scale(0.92) translateY(1px); 
+}
+.field-btn.filled { 
+  border-color: var(--accent); 
+  background: var(--accent-soft-bg); 
+  color: #fff; 
+  box-shadow: 0 2px 8px var(--accent-inset-glow), inset 0 0 12px var(--accent-inset-glow); 
+}
+.field-btn.filled:hover { 
+  transform: translateY(-2px) scale(1.02); 
+  box-shadow: 0 6px 20px var(--accent-glow), inset 0 0 12px var(--accent-inset-glow); 
+}
 .field-btn .tick { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .field-icon { display: flex; align-items: center; justify-content: center; color: var(--muted); transition: color 0.3s; flex-shrink: 0; width: 16px; }
 .field-btn span:not(.field-icon):not(.tick) { flex: 1; }
@@ -251,7 +271,7 @@ main { padding: 14px 12px; position: relative; z-index: 2; max-width: 100%; }
 }
 
 .criteria-bar { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); padding: 12px; margin-bottom: 15px; display: none; border-radius: 6px; }
-.criteria-bar.visible { display: block; animation: slideUpFade 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+.criteria-bar.visible { display: block; animation: slideUpFade 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 .criteria-bar h3 { font-size: 8px; color: var(--muted); margin-bottom: 8px; letter-spacing: 1px; }
 .criteria-list { display: flex; flex-wrap: wrap; gap: 6px; }
 .criteria-tag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: #000; border: 1px solid rgba(255,255,255,0.08); font-size: 10px; color: var(--text); border-radius: 4px; animation: popInTag 0.2s ease-out; }
@@ -263,39 +283,50 @@ main { padding: 14px 12px; position: relative; z-index: 2; max-width: 100%; }
 
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 100; display: none; align-items: flex-end; }
 .overlay.open { display: flex; animation: fadeIn 0.2s ease-out; }
-.input-sheet { width: 100%; background: var(--surface); border-top: 2px solid var(--accent); padding: 24px 20px calc(24px + env(safe-area-inset-bottom)) 20px; box-shadow: 0 -10px 40px rgba(0,0,0,0.9); animation: slideUp 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 16px 16px 0 0; }
+.input-sheet { width: 100%; background: var(--surface); border-top: 2px solid var(--accent); padding: 24px 20px calc(24px + env(safe-area-inset-bottom)) 20px; box-shadow: 0 -10px 40px rgba(0,0,0,0.9); animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 16px 16px 0 0; }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 @keyframes slideUpFade { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .input-sheet h3 { font-family: var(--font-display); font-size: 13px; margin-bottom: 16px; letter-spacing: 0.5px; }
-.input-field { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 16px; color: #fff; font-family: var(--font-mono); font-size: 15px; outline: none; margin-bottom: 18px; transition: all 0.3s; border-radius: 6px; }
-.input-field:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255,30,86,0.2); transform: translateY(-2px); }
+.input-field { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 16px; color: #fff; font-family: var(--font-mono); font-size: 15px; outline: none; margin-bottom: 18px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 6px; }
+.input-field:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); transform: translateY(-2px); }
 .sheet-btns { display: flex; gap: 10px; }
 .btn-cancel, .btn-confirm { padding: 16px; font-family: var(--font-mono); font-size: 12px; font-weight: 700; text-transform: uppercase; border-radius: 6px; }
 .btn-cancel { flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--muted); }
 .btn-cancel:hover { background: rgba(255,255,255,0.08); color: #fff; }
 .btn-confirm { flex: 2; background: var(--accent); border: none; color: #000; font-weight: 900; box-shadow: 0 4px 15px var(--accent-glow); }
 .btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 6px 25px var(--accent); }
+.btn-confirm:active { transform: scale(0.94) translateY(2px); }
 
 /* Bouton principal de recherche */
-@keyframes btnPulse {
-  0% { box-shadow: 0 0 10px var(--accent-glow); }
-  50% { box-shadow: 0 0 25px var(--accent), 0 0 10px var(--accent) inset; }
-  100% { box-shadow: 0 0 10px var(--accent-glow); }
+.search-btn { 
+  width: 100%; 
+  padding: 18px; 
+  border: none; 
+  background: var(--accent); 
+  color: #000; 
+  font-family: var(--font-display); 
+  font-weight: 900; 
+  font-size: 14px; 
+  letter-spacing: 2px; 
+  box-shadow: 0 4px 15px var(--accent-glow); 
+  border-radius: 6px; 
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.search-btn { width: 100%; padding: 18px; border: none; background: var(--accent); color: #000; font-family: var(--font-display); font-weight: 900; font-size: 14px; letter-spacing: 2px; box-shadow: 0 4px 15px var(--accent-glow); border-radius: 6px; }
-.search-btn:not(:disabled) { animation: btnPulse 2s infinite cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+.search-btn:not(:disabled) { cursor: pointer; }
 .search-btn:not(:disabled):hover { transform: translateY(-3px); box-shadow: 0 8px 25px var(--accent); }
-.search-btn:disabled { background: var(--surface); color: var(--muted); border: 1px solid rgba(255,255,255,0.05); box-shadow: none; opacity: 0.5; cursor: not-allowed; animation: none; }
+.search-btn:not(:disabled):active { transform: scale(0.94) translateY(2px); }
+.search-btn:disabled { background: var(--surface); color: var(--muted); border: 1px solid rgba(255,255,255,0.05); box-shadow: none; opacity: 0.5; cursor: not-allowed; }
+
 .clear-btn { width: 100%; padding: 12px; background: transparent; border: none; color: var(--muted); font-family: var(--font-mono); font-size: 11px; margin-top: 10px; text-transform: uppercase; border-radius: 6px; transition: color 0.3s, background 0.3s; }
 .clear-btn:hover { color: #fff; background: rgba(255,255,255,0.03); }
 
 .results-section { margin-top: 30px; animation: fadeIn 0.5s ease; padding-bottom: 20px; }
 .results-section h2 { font-family: var(--font-display); font-size: 11px; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-.results-section h2 .count { background: rgba(255,30,86,0.15); color: var(--accent); padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; }
-.result-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 12px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 8px; overflow: hidden; }
-.result-card:hover { border-color: rgba(255,30,86,0.4); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px rgba(255,30,86,0.1); }
+.results-section h2 .count { background: var(--accent-soft-bg); color: var(--accent); padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; }
+.result-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 12px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 8px; overflow: hidden; }
+.result-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px var(--accent-glow); }
 .card-header { padding: 14px 16px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; }
 .card-name { font-family: var(--font-display); font-size: 13px; font-weight: 900; color: #fff; letter-spacing: 0.5px; }
 .card-body { padding: 14px 16px; }
@@ -305,8 +336,25 @@ main { padding: 14px 12px; position: relative; z-index: 2; max-width: 100%; }
 .info-val { color: var(--text); word-break: break-word; user-select: text; flex: 1; }
 
 /* Boutons Approfondir */
-.btn-approfondir { background: var(--accent); color: #000; border: none; padding: 10px 16px; border-radius: 4px; font-size: 10px; font-weight: 900; transition: all 0.3s; letter-spacing: 1px; }
-.btn-approfondir:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 4px 15px var(--accent-glow); background: #fff; }
+.btn-approfondir { 
+  background: var(--accent); 
+  color: #000; 
+  border: none; 
+  padding: 10px 16px; 
+  border-radius: 4px; 
+  font-size: 10px; 
+  font-weight: 900; 
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+  letter-spacing: 1px; 
+}
+.btn-approfondir:hover { 
+  transform: scale(1.05) translateY(-2px); 
+  box-shadow: 0 4px 15px var(--accent-glow); 
+  background: #fff; 
+}
+.btn-approfondir:active { 
+  transform: scale(0.92) translateY(1px); 
+}
 
 .loader { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; padding: 40px 0; color: var(--accent); font-size: 11px; font-weight: bold; letter-spacing: 1px; }
 .spinner { width: 24px; height: 24px; border: 3px solid rgba(255,30,86,0.1); border-top-color: var(--accent); animation: spin 0.6s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite; border-radius: 50%; }
@@ -373,10 +421,12 @@ main { padding: 14px 12px; position: relative; z-index: 2; max-width: 100%; }
 }
 
 .timer-container { font-size: 36px; font-weight: 900; color: var(--accent); text-shadow: 0 0 25px var(--accent-glow); text-align: center; margin: 24px 0; font-family: var(--font-mono); }
-.revoke-btn { background: #ff1e56; color: #fff; border: none; padding: 16px 24px; border-radius: 6px; font-weight: 900; font-size: 13px; letter-spacing: 1px; width: 100%; margin-top: 24px; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255, 30, 86, 0.3); }
+.revoke-btn { background: #ff1e56; color: #fff; border: none; padding: 16px 24px; border-radius: 6px; font-weight: 900; font-size: 13px; letter-spacing: 1px; width: 100%; margin-top: 24px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(255, 30, 86, 0.3); }
 .revoke-btn:hover { box-shadow: 0 8px 25px #ff1e56; transform: translateY(-2px); }
-.btn-small-revoke { background: var(--accent); color: #000; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 900; font-size: 10px; transition: all 0.3s; letter-spacing: 0.5px; }
-.btn-small-revoke:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 4px 15px var(--accent-glow); background: #fff; color: #ff1e56; }
+.revoke-btn:active { transform: scale(0.94) translateY(2px); }
+.btn-small-revoke { background: var(--accent); color: #000; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 900; font-size: 10px; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); letter-spacing: 0.5px; }
+.btn-small-revoke:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 4px 15px var(--accent-glow); background: #fff; color: #000; }
+.btn-small-revoke:active { transform: scale(0.92); }
 
 /* ====================== REFONTE ADMIN PANEL ====================== */
 .admin-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
@@ -420,7 +470,7 @@ main { padding: 14px 12px; position: relative; z-index: 2; max-width: 100%; }
 <div id="introScreen">
   <div class="neon-logo">TRACEUR<span>_PRO</span></div>
   <div class="intro-tagline">Le meilleur moteur de recherche d'informations personnelles français.</div>
-  <button class="intro-btn btn-shine" onmousedown="startBootSequence()" ontouchstart="startBootSequence()">INITIALISER LE SYSTÈME</button>
+  <button class="intro-btn" onmousedown="startBootSequence()" ontouchstart="startBootSequence()">INITIALISER LE SYSTÈME</button>
 </div>
 
 <div id="boot">
@@ -460,7 +510,7 @@ main { padding: 14px 12px; position: relative; z-index: 2; max-width: 100%; }
           </div>
         </div>
         <div id="adminSection" style="display:none; margin-top:12px;">
-          <button class="btn-shine" onclick="openAdminPanel()" style="width:100%; padding:14px; background:var(--accent); color:#000; font-family:var(--font-display); font-weight:900; font-size:13px; letter-spacing:2px; border:none; border-radius:4px; box-shadow:0 0 15px var(--accent-glow);">PANNEL ADMIN</button>
+          <button onclick="openAdminPanel()" style="width:100%; padding:14px; background:var(--accent); color:#000; font-family:var(--font-display); font-weight:900; font-size:13px; letter-spacing:2px; border:none; border-radius:4px; box-shadow:0 0 15px var(--accent-glow);">PANNEL ADMIN</button>
         </div>
       </div>
     </div>
@@ -481,7 +531,7 @@ main { padding: 14px 12px; position: relative; z-index: 2; max-width: 100%; }
     <div class="section-title">INFORMATIONS SUR LA CIBLE</div>
     <div class="fields-grid" id="fieldsGrid"></div>
     
-    <button class="search-btn btn-shine" id="searchBtn" disabled onclick="launchSearch()">LANCER LA RECHERCHE</button>
+    <button class="search-btn" id="searchBtn" disabled onclick="launchSearch()">LANCER LA RECHERCHE</button>
     <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">Réinitialiser la recherche</button>
     <div class="results-section" id="resultsSection" style="display:none"></div>
   </main>
@@ -492,7 +542,7 @@ main { padding: 14px 12px; position: relative; z-index: 2; max-width: 100%; }
     <div class="main-logo-anim">TRACEUR<span>_PRO</span></div>
     <div class="lock-title">SAISIR VOTRE CLÉ D'ACTIVATION</div>
     <input class="lock-input" id="keyInput" maxlength="14" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
-    <button class="lock-btn btn-shine" onclick="submitKey()">VALIDER</button>
+    <button class="lock-btn" onclick="submitKey()">VALIDER</button>
     <div class="lock-error" id="lockError">Clé incorrecte ou expirée</div>
   </div>
 </div>
@@ -503,7 +553,7 @@ main { padding: 14px 12px; position: relative; z-index: 2; max-width: 100%; }
     <input class="input-field" id="sheetInput" autocomplete="off" autocorrect="off" spellcheck="false"/>
     <div class="sheet-btns">
       <button class="btn-cancel" onclick="closeSheet()">Annuler</button>
-      <button class="btn-confirm btn-shine" onclick="confirmValue()">Valider</button>
+      <button class="btn-confirm" onclick="confirmValue()">Valider</button>
     </div>
   </div>
 </div>
@@ -963,7 +1013,7 @@ function renderResults(results) {
     return `<div class="result-card">
       <div class="card-header">
         <span class="card-name">${name}</span>
-        <button class="btn-approfondir btn-shine" onclick="approfondirRecherche(${index})">APPROFONDIR</button>
+        <button class="btn-approfondir" onclick="approfondirRecherche(${index})">APPROFONDIR</button>
       </div>
       <div class="card-body">${rows || 'DONNÉES INDISPONIBLES'}</div>
     </div>`;
@@ -1030,7 +1080,7 @@ function showPersonFicheFromFamily(familyIndex) {
       <div class="card-header"><span class="card-name">${name}</span></div>
       <div class="card-body">${rows}</div>
     </div>
-    <button class="btn-approfondir btn-shine" onclick="approfondirRecherche(${currentApprofondirIndex})" style="margin-top:25px;width:100%;padding:18px;border-radius:6px;font-size:12px;text-transform:uppercase;">RETOUR À LA VUE D'ENSEMBLE FAMILIALE</button>
+    <button class="btn-approfondir" onclick="approfondirRecherche(${currentApprofondirIndex})" style="margin-top:25px;width:100%;padding:18px;border-radius:6px;font-size:12px;text-transform:uppercase;">RETOUR À LA VUE D'ENSEMBLE FAMILIALE</button>
   `;
 }
 
@@ -1183,7 +1233,7 @@ function renderGeneratorTab() {
   content.innerHTML = `
     <h3 style="margin-bottom:20px;font-family:var(--font-display);color:var(--accent);">GÉNÉRER UNE NOUVELLE CLÉ</h3>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;">${cards}</div>
-    <button id="generateBtn" class="search-btn btn-shine" onclick="validateAndGenerate()" style="margin-top:30px; border-radius:8px; padding:18px;">GÉNÉRER LA CLÉ</button>
+    <button id="generateBtn" class="search-btn" onclick="validateAndGenerate()" style="margin-top:30px; border-radius:8px; padding:18px;">GÉNÉRER LA CLÉ</button>
     <div id="generatedKeyDisplay" style="margin-top:25px;display:none;background:#000;border:2px solid var(--accent);border-radius:12px;padding:20px;text-align:center;word-break:break-all;font-family:var(--font-mono);font-size:18px;letter-spacing:3px;box-shadow:0 0 30px var(--accent-glow);"></div>
     <button onclick="cleanExpiredKeys()" style="margin-top:20px;width:100%;padding:14px;background:#222;color:#fff;border:none;border-radius:6px;font-weight:900;">🧹 NETTOYER LES CLÉS EXPIRÉES / NON ACTIVES</button>
   `;
@@ -1214,7 +1264,7 @@ async function validateAndGenerate() {
       display.innerHTML = `
         <div style="color:var(--accent);font-size:12px;font-weight:bold;margin-bottom:16px;letter-spacing:1px;">✅ CLÉ GÉNÉRÉE AVEC SUCCÈS</div>
         <div style="font-size:23px;letter-spacing:5px;margin-bottom:20px;color:#fff;">${result.key}</div>
-        <button class="btn-approfondir btn-shine" onclick="copyKey('${result.key}')" style="width:100%; padding:14px; border-radius:6px; font-size:12px;">📋 COPIER LA CLÉ</button>
+        <button class="btn-approfondir" onclick="copyKey('${result.key}')" style="width:100%; padding:14px; border-radius:6px; font-size:12px;">📋 COPIER LA CLÉ</button>
       `;
       display.style.display = "block";
     }
@@ -1316,7 +1366,7 @@ async function showUserDetail(telegramId) {
     <div class="timer-container" id="userTimer">--:--:--</div>
     <h4 style="margin:20px 0 10px 0; color:var(--muted);">Historique de recherches</h4>
     <div id="userHistoryList" style="max-height:250px;overflow-y:auto;background:rgba(0,0,0,0.5);padding:15px;border-radius:8px; border:1px solid rgba(255,255,255,0.05);"></div>
-    <button onclick="revokeUserKey('${telegramId}')" class="revoke-btn btn-shine">RÉVOQUER LA CLÉ (BAN IMMÉDIAT)</button>
+    <button onclick="revokeUserKey('${telegramId}')" class="revoke-btn">RÉVOQUER LA CLÉ (BAN IMMÉDIAT)</button>
   `;
 }
 
