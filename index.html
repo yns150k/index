@@ -26,7 +26,7 @@
   --card: #0f0f0f;
   --border: #3a3a3a;
   --accent: #ffffff;
-  --accent-glow: rgba(255, 30, 86, 0.25);
+  --accent-glow: rgba(255, 255, 255, 0.25);
   --text: #e0e0e0;
   --muted: #777777;
   --success: #888888;
@@ -43,196 +43,363 @@
   --success: #00e676;
 }
 .main-logo-anim span, header h1 span, .boot-logo span {
-  color: #ff1e56 !important;
+  color: var(--accent) !important;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; }
-body { background: var(--bg); color: var(--text); font-family: var(--font-mono); min-height: 100vh; overflow-x: hidden; padding-bottom: env(safe-area-inset-bottom); }
-.grid-bg { position: fixed; inset: 0; opacity: 0.04; pointer-events: none; z-index: 0; background-image: linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px); background-size: 50px 50px; }
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0;
+  -webkit-tap-highlight-color: transparent; 
+  user-select: none; 
+}
+body { 
+  background: var(--bg); 
+  color: var(--text); 
+  font-family: var(--font-mono); 
+  min-height: 100vh; 
+  overflow-x: hidden; 
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.grid-bg { 
+  position: fixed; 
+  inset: 0; 
+  opacity: 0.04; 
+  pointer-events: none; 
+  z-index: 0;
+  background-image: linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px); 
+  background-size: 50px 50px;
+}
+
+/* ====================== ANIMATIONS & INTERACTIONS GLOBALES ====================== */
+button {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background 0.2s ease, filter 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  touch-action: manipulation; /* Optimisation mobile tactile */
+}
+
+/* Animation d'enfoncement mécanique */
+button:active:not(:disabled) {
+  transform: scale(0.96) translateY(2px) !important;
+  filter: brightness(0.9);
+}
+button:hover:not(:disabled) {
+  filter: brightness(1.15);
+}
+
+/* Effet Ripple (Onde de choc au clic) */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple-anim 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  background: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
+@keyframes ripple-anim {
+  to { transform: scale(4); opacity: 0; }
+}
 
 /* ====================== ÉCRAN D'ACCUEIL (INTRO) ====================== */
-#introScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; transition: opacity 0.5s ease; }
-.neon-logo { font-family: var(--font-display); font-size: 42px; font-weight: 900; color: #fff; text-shadow: 0 0 5px #fff, 0 0 15px var(--accent), 0 0 30px var(--accent), 0 0 50px var(--accent); animation: neonPulse 1.5s infinite alternate; margin-bottom: 20px; letter-spacing: 4px; }
-.neon-logo span { color: var(--accent); text-shadow: none; }
-.intro-tagline { font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 40px; max-width: 450px; line-height: 1.8; animation: fadeIn 2s ease-out; }
-.intro-btn { background: rgba(255,30,86,0.05); border: 2px solid var(--accent); color: #fff; padding: 18px 40px; font-family: var(--font-display); font-size: 14px; font-weight: 900; letter-spacing: 3px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 20px var(--accent-glow) inset, 0 0 20px var(--accent-glow); text-transform: uppercase; border-radius: 4px; outline: none; }
-.intro-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 40px var(--accent); transform: scale(1.05); }
-.intro-btn:active { transform: scale(0.98); }
+#introScreen { 
+  position: fixed; 
+  inset: 0;
+  background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); 
+  z-index: 9999; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  text-align: center;
+  padding: 20px; 
+  transition: opacity 0.4s ease; 
+}
+.neon-logo { 
+  font-family: var(--font-display); 
+  font-size: clamp(32px, 8vw, 42px); /* Typographie fluide */
+  font-weight: 900; 
+  color: #fff;
+  text-shadow: 0 0 5px #fff, 0 0 15px var(--accent), 0 0 30px var(--accent), 0 0 50px var(--accent);
+  animation: neonPulse 1.5s infinite alternate; 
+  margin-bottom: 20px; 
+  letter-spacing: 4px; 
+}
+.neon-logo span { color: var(--accent); } 
+.intro-tagline { 
+  font-family: var(--font-mono);
+  font-size: 11px; 
+  color: var(--muted); 
+  text-transform: uppercase; 
+  letter-spacing: 3px; 
+  margin-bottom: 40px; 
+  max-width: 450px; 
+  line-height: 1.8; 
+  animation: fadeIn 2s ease-out;
+  padding: 0 10px;
+}
+
+/* Bouton Intro Réaliste */
+.intro-btn { 
+  background: rgba(255,30,86,0.05); 
+  border: 2px solid var(--accent); 
+  color: #fff; 
+  padding: 18px 5%;
+  width: 90%;
+  max-width: 350px;
+  font-family: var(--font-display); 
+  font-size: clamp(12px, 4vw, 14px); 
+  font-weight: 900; 
+  letter-spacing: 3px; 
+  cursor: pointer; 
+  box-shadow: 0 4px 0 var(--accent), 0 0 20px var(--accent-glow) inset, 0 8px 20px rgba(0,0,0,0.5); 
+  text-transform: uppercase; 
+  border-radius: 8px; 
+  outline: none;
+  word-wrap: break-word;
+}
+.intro-btn:hover { 
+  background: rgba(255,30,86,0.15); 
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--accent), 0 0 30px var(--accent-glow) inset, 0 12px 30px var(--accent-glow);
+}
+.intro-btn:active { 
+  transform: translateY(4px) scale(0.98) !important;
+  box-shadow: 0 0px 0 var(--accent), 0 0 10px var(--accent-glow) inset, 0 0px 10px rgba(0,0,0,0.8); 
+  background: rgba(255,30,86,0.3);
+}
 
 @keyframes neonPulse {
   0% { text-shadow: 0 0 5px #fff, 0 0 10px var(--accent), 0 0 20px var(--accent); }
   100% { text-shadow: 0 0 10px #fff, 0 0 20px var(--accent), 0 0 40px var(--accent), 0 0 80px var(--accent); }
 }
 
-/* ====================== ÉCRAN DE BOOT ====================== */
-#boot { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 15px; transition: opacity 0.4s ease; }
+/* ====================== ÉCRAN DE BOOT & LOCK ====================== */
+#boot { 
+  position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: none;
+  flex-direction: column; align-items: center; justify-content: center; gap: 15px; transition: opacity 0.4s ease; 
+}
 .boot-logo { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: #fff; letter-spacing: 4px; animation: pulseGlow 2s infinite ease-in-out; }
-.boot-bar-wrap { width: 200px; height: 4px; background: rgba(255,255,255,0.03); border-radius: 4px; overflow: hidden; }
+.boot-bar-wrap { width: 80%; max-width: 250px; height: 4px; background: rgba(255,255,255,0.03); border-radius: 4px; overflow: hidden; }
 .boot-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease-out; box-shadow: 0 0 10px var(--accent); }
-#bootStatus { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; text-align: center; max-width: 280px; line-height: 1.5; }
+#bootStatus { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; text-align: center; max-width: 280px; line-height: 1.5; padding: 0 10px;}
 
-/* ====================== ÉCRAN DE VERROUILLAGE ====================== */
-#lockScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 900; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
-.lock-box { width: 100%; max-width: 350px; background: var(--surface); border: 1px solid var(--border); padding: 30px 20px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 30px rgba(255,30,86,0.05); border-radius: 4px; }
-.main-logo-anim { font-family: var(--font-display); font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; position: relative; display: inline-block; animation: cyberScan 3s infinite ease-in-out; }
+#lockScreen { 
+  position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%);
+  z-index: 900; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; 
+}
+.lock-box { 
+  width: 100%; max-width: 350px; background: var(--surface); border: 1px solid var(--border); 
+  padding: 30px 20px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 30px rgba(255,30,86,0.05); border-radius: 8px; 
+}
+.main-logo-anim { 
+  font-family: var(--font-display); font-size: clamp(20px, 6vw, 24px); font-weight: 900; color: #fff; 
+  letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; position: relative; display: inline-block; animation: cyberScan 3s infinite ease-in-out; 
+}
 .lock-title { font-size: 10px; margin-bottom: 12px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
-.lock-input { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 15px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 15px; text-transform: uppercase; transition: all 0.2s; }
+.lock-input { 
+  width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 16px; color: #fff; 
+  font-family: var(--font-mono); font-size: 16px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 15px; text-transform: uppercase; transition: all 0.2s; 
+}
 .lock-input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255,30,86,0.2); }
-.lock-btn { width: 100%; padding: 14px; background: var(--accent); border: none; color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 12px; letter-spacing: 1.5px; cursor: pointer; box-shadow: 0 4px 15px var(--accent-glow); transition: transform 0.1s; }
-.lock-btn:active { transform: scale(0.98); }
+.lock-btn { 
+  width: 100%; padding: 16px; background: var(--accent); border: none; border-radius: 6px; color: #fff; 
+  font-family: var(--font-display); font-weight: 900; font-size: 12px; letter-spacing: 1.5px; box-shadow: 0 4px 15px var(--accent-glow); 
+}
 .lock-error { color: var(--accent); font-size: 10px; margin-top: 12px; text-transform: uppercase; font-weight: bold; display: none; }
 
-header { position: sticky; top: 0; z-index: 950; background: rgba(3,3,5,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
+/* ====================== HEADER & STATUS ====================== */
+header { 
+  position: sticky; top: 0; z-index: 950; background: rgba(3,3,5,0.95); backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.05); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; 
+}
 .header-left { display: flex; align-items: center; gap: 10px; }
-header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900; letter-spacing: 1px; }
+header h1 { font-family: var(--font-display); font-size: clamp(14px, 4vw, 15px); font-weight: 900; letter-spacing: 1px; }
 .header-right { position: relative; display: flex; align-items: center; gap: 12px; }
-.status-indicator { font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 9999px; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 0 8px currentColor; white-space: nowrap; }
+.status-indicator { 
+  font-size: 9px; font-weight: 700; padding: 5px 10px; border-radius: 9999px; letter-spacing: 1px; text-transform: uppercase;
+  box-shadow: 0 0 8px currentColor; white-space: nowrap; 
+}
 .status-indicator.actif { background: var(--success); color: #030305; }
 .status-indicator.inactif { background: #ff1e56; color: #fff; }
-.profile-btn { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.2s; }
-.profile-btn:hover, .profile-btn.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
-.profile-avatar { width: 18px; height: 18px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; background: var(--accent); color: #000; box-shadow: 0 0 8px var(--accent-glow); }
+
+/* Profile Dropdown */
+.profile-btn { 
+  background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 50%; cursor: pointer; 
+  display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.2s; 
+}
+.profile-btn:hover, .profile-btn.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); transform: scale(1.05); }
+.profile-avatar { width: 22px; height: 22px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: var(--accent); color: #000; box-shadow: 0 0 8px var(--accent-glow); }
 .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-.profile-dropdown { position: absolute; top: calc(100% + 10px); right: 0; width: 260px; background: var(--surface); border: 1px solid var(--border); padding: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: none; flex-direction: column; gap: 12px; border-radius: 4px; z-index: 1000; }
-.profile-dropdown.open { display: flex; animation: fadeIn 0.15s ease-out; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+.profile-dropdown { 
+  position: absolute; top: calc(100% + 15px); right: 0; width: 280px; max-width: 90vw; background: var(--surface); border: 1px solid var(--border); 
+  padding: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.8); display: none; flex-direction: column; gap: 12px; border-radius: 8px; z-index: 1000; 
+}
+.profile-dropdown.open { display: flex; animation: dropIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes dropIn { from { opacity: 0; transform: translateY(-10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
 .dropdown-user-title { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-.dropdown-timer-text { font-family: var(--font-mono); font-size: 13px; font-weight: bold; color: var(--text); margin-top: -4px; }
-.dropdown-bar-wrap { width: 100%; height: 5px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+.dropdown-timer-text { font-family: var(--font-mono); font-size: 13px; font-weight: bold; color: var(--text); margin-top: 4px; }
+.dropdown-bar-wrap { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; margin-top: 6px; }
 .dropdown-bar-fill { height: 100%; background: var(--accent); width: 0%; transition: width 1s linear; box-shadow: 0 0 8px var(--accent); }
-.dropdown-extend-btn { width: 100%; padding: 10px; background: #222; border: none; color: #666; font-family: var(--font-display); font-size: 10px; font-weight: 900; text-align: center; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; cursor: default; pointer-events: none; }
+.dropdown-extend-btn { 
+  width: 100%; padding: 12px; background: #222; border-radius: 6px; border: none; color: #666; font-family: var(--font-display); 
+  font-size: 10px; font-weight: 900; text-align: center; text-transform: uppercase; letter-spacing: 1px; cursor: default; pointer-events: none; 
+}
 
-.theme-selector { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
-.theme-title { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-.theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
-.theme-opt-btn { padding: 6px; font-size: 8.5px; font-family: var(--font-mono); text-transform: uppercase; font-weight: bold; background: #000; border: 1px solid rgba(255,255,255,0.05); color: var(--muted); cursor: pointer; text-align: center; }
-.theme-opt-btn.active { border-color: var(--accent); color: var(--text); background: rgba(255,255,255,0.02); }
+.theme-selector { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
+.theme-title { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.theme-opt-btn { 
+  padding: 8px 4px; font-size: 9px; font-family: var(--font-mono); text-transform: uppercase; font-weight: bold; background: #000; 
+  border: 1px solid rgba(255,255,255,0.05); border-radius: 4px; color: var(--muted); text-align: center; transition: all 0.2s; 
+}
+.theme-opt-btn.active { border-color: var(--accent); color: var(--text); background: rgba(255,255,255,0.05); }
 
-#adminSection { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
-.status-bar { font-size: 9px; color: var(--muted); padding: 8px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); display: flex; justify-content: space-between; background: #010102; letter-spacing: 0.5px; }
-.status-bar .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--success); box-shadow: 0 0 6px var(--success); margin-right: 5px; }
+.status-bar { 
+  font-size: 9px; color: var(--muted); padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); 
+  display: flex; justify-content: space-between; background: #010102; letter-spacing: 0.5px; 
+}
+.status-bar .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--success); box-shadow: 0 0 6px var(--success); margin-right: 6px; }
 
+/* ====================== MAIN APP & GRIDS ====================== */
 main { padding: 16px; position: relative; z-index: 2; }
-.section-title { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; margin: 20px 0 12px 0; display: flex; align-items: center; gap: 8px; }
+.section-title { 
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; 
+  margin: 24px 0 16px 0; display: flex; align-items: center; gap: 8px; 
+}
 .section-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.05); }
-.tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; scrollbar-width: none; }
-.tab { padding: 10px 16px; font-size: 11px; font-weight: 700; font-family: var(--font-mono); border: 1px solid rgba(255,255,255,0.05); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.1s; white-space: nowrap; text-transform: uppercase; }
-.tab.active { border-color: var(--accent); color: #fff; background: rgba(255,30,86,0.08); }
-.fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 15px; }
-.field-btn { position: relative; padding: 14px 10px; border: 1px solid rgba(255,255,255,0.04); background: var(--surface); color: #aaa; font-family: var(--font-mono); font-size: 11px; text-align: left; display: flex; align-items: center; gap: 6px; cursor: pointer; }
-.field-btn.filled { border-color: var(--accent); background: rgba(255,30,86,0.02); color: #fff; }
-.field-btn .tick { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 5px; height: 5px; background: var(--accent); box-shadow: 0 0 5px var(--accent); }
-.field-icon { display: flex; align-items: center; color: var(--muted); }
-.field-btn.filled .field-icon { color: var(--accent); }
-.criteria-bar { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); padding: 10px; margin-bottom: 15px; display: none; }
-.criteria-bar.visible { display: block; }
-.criteria-bar h3 { font-size: 8px; color: var(--muted); margin-bottom: 6px; }
-.criteria-list { display: flex; flex-wrap: wrap; gap: 4px; }
-.criteria-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: #000; border: 1px solid rgba(255,255,255,0.05); font-size: 10px; color: var(--text); }
-.criteria-tag .key { color: var(--accent); }
-.criteria-tag .remove { cursor: pointer; color: var(--muted); font-size: 13px; margin-left: 4px; }
 
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); z-index: 100; display: none; align-items: flex-end; }
-.overlay.open { display: flex; }
-.input-sheet { width: 100%; background: var(--surface); border-top: 2px solid var(--accent); padding: 20px 16px calc(20px + env(safe-area-inset-bottom)) 16px; box-shadow: 0 -10px 30px rgba(0,0,0,0.8); animation: slideUp 0.15s ease-out; }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.input-sheet h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 12px; letter-spacing: 0.5px; }
-.input-field { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 14px; outline: none; margin-bottom: 15px; }
-.input-field:focus { border-color: var(--accent); }
-.sheet-btns { display: flex; gap: 8px; }
-.btn-cancel, .btn-confirm { padding: 14px; font-family: var(--font-mono); font-size: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+/* Animation et flexibilité des onglets */
+.tabs { 
+  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 12px; scrollbar-width: none; 
+  -webkit-overflow-scrolling: touch;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab { 
+  padding: 12px 18px; font-size: 11px; font-weight: 700; font-family: var(--font-mono); border: 1px solid rgba(255,255,255,0.05); 
+  background: var(--surface); color: var(--muted); white-space: nowrap; flex-shrink: 0; text-transform: uppercase; border-radius: 6px;
+}
+.tab.active { 
+  border-color: var(--accent); color: #fff; background: rgba(255,30,86,0.08); box-shadow: 0 0 12px rgba(255,30,86,0.15); 
+}
+
+/* Grille de critères - Ajustement texte pour mobile */
+.fields-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 20px; }
+.field-btn { 
+  position: relative; padding: 14px 12px; border: 1px solid rgba(255,255,255,0.04); border-radius: 6px; background: var(--surface); 
+  color: #aaa; font-family: var(--font-mono); font-size: 11px; text-align: left; display: flex; align-items: center; gap: 8px; 
+  min-height: 48px; white-space: normal; line-height: 1.3;
+}
+.field-btn.filled { border-color: var(--accent); background: rgba(255,30,86,0.05); color: #fff; box-shadow: inset 0 0 10px rgba(255,30,86,0.1); }
+.field-btn .tick { 
+  position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; 
+  background: var(--accent); box-shadow: 0 0 6px var(--accent); 
+}
+.field-icon { display: flex; align-items: center; color: var(--muted); transition: color 0.3s; flex-shrink: 0; }
+.field-btn.filled .field-icon { color: var(--accent); }
+
+/* Bouton principal de recherche animé */
+@keyframes btnPulse {
+  0% { box-shadow: 0 0 10px var(--accent-glow); }
+  50% { box-shadow: 0 0 25px var(--accent); }
+  100% { box-shadow: 0 0 10px var(--accent-glow); }
+}
+.search-btn { 
+  width: 100%; padding: 18px; border: none; border-radius: 8px; background: var(--accent); color: #fff; 
+  font-family: var(--font-display); font-weight: 900; font-size: 14px; letter-spacing: 1.5px; box-shadow: 0 4px 15px var(--accent-glow); 
+  margin-top: 10px;
+}
+.search-btn:not(:disabled) { animation: btnPulse 2.5s infinite; }
+.search-btn:disabled { background: var(--surface); color: var(--muted); border: 1px solid rgba(255,255,255,0.05); box-shadow: none; opacity: 0.5; }
+.clear-btn { 
+  width: 100%; padding: 14px; background: transparent; border: none; color: var(--muted); font-family: var(--font-mono); 
+  font-size: 11px; margin-top: 8px; text-transform: uppercase; border-radius: 6px;
+}
+.clear-btn:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+/* ====================== RÉSULTATS & MODALS ====================== */
+.overlay { 
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 2000; 
+  display: none; align-items: flex-end; justify-content: center;
+}
+.overlay.open { display: flex; animation: fadeInOverlay 0.2s ease; }
+@keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+
+.input-sheet { 
+  width: 100%; max-width: 600px; background: var(--surface); border-top: 2px solid var(--accent); border-radius: 16px 16px 0 0;
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom)) 20px; box-shadow: 0 -10px 40px rgba(0,0,0,0.8); 
+  animation: slideUpSpring 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+@keyframes slideUpSpring { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.input-sheet h3 { font-family: var(--font-display); font-size: 13px; margin-bottom: 16px; letter-spacing: 0.5px; }
+.input-field { 
+  width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 16px; 
+  color: #fff; font-family: var(--font-mono); font-size: 15px; outline: none; margin-bottom: 20px; transition: all 0.2s; 
+}
+.input-field:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255,30,86,0.15); }
+.sheet-btns { display: flex; gap: 12px; }
+.btn-cancel, .btn-confirm { padding: 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 12px; font-weight: 700; text-transform: uppercase; }
 .btn-cancel { flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.05); color: var(--muted); }
+.btn-cancel:hover { background: rgba(255,255,255,0.08); color: #fff; }
 .btn-confirm { flex: 2; background: var(--accent); border: none; color: #fff; font-weight: 900; box-shadow: 0 0 15px var(--accent-glow); }
 
-.search-btn { width: 100%; padding: 16px; border: none; background: var(--accent); color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 13px; letter-spacing: 1.5px; cursor: pointer; box-shadow: 0 4px 15px var(--accent-glow); }
-.search-btn:disabled { background: var(--surface); color: var(--muted); border: 1px solid rgba(255,255,255,0.05); box-shadow: none; opacity: 0.4; }
-.clear-btn { width: 100%; padding: 10px; background: transparent; border: none; color: var(--muted); font-family: var(--font-mono); font-size: 11px; cursor: pointer; margin-top: 8px; text-transform: uppercase; }
-
-.results-section { margin-top: 25px; }
-.results-section h2 { font-family: var(--font-display); font-size: 10px; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-.results-section h2 .count { background: rgba(255,30,86,0.1); color: var(--accent); padding: 2px 6px; border: 1px solid var(--border); }
-.result-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px; }
-.card-header { padding: 12px 14px; background: rgba(255,255,255,0.01); border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; }
-.card-name { font-family: var(--font-display); font-size: 12px; font-weight: 900; color: #fff; }
-.card-body { padding: 12px 14px; }
-.info-row { display: flex; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.01); font-size: 11px; }
-.info-row:last-child { border-bottom: none; }
-.info-key { color: var(--muted); width: 115px; flex-shrink: 0; font-size: 9px; font-weight: 700; text-transform: uppercase; }
-.info-val { color: var(--text); word-break: break-all; user-select: text; }
-
-.loader { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 30px 0; color: var(--accent); font-size: 10px; font-weight: bold; }
-.spinner { width: 20px; height: 20px; border: 2px solid rgba(255,30,86,0.1); border-top-color: var(--accent); animation: spin 0.4s linear infinite; border-radius: 50%; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.no-results { background: var(--surface); border: 1px solid var(--border); padding: 25px; text-align: center; }
-.no-results h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 4px; color: var(--accent); }
-.no-results p { font-size: 10px; color: var(--muted); }
-
-/* ====================== ADMIN & FAMILY OVERLAY STYLES ====================== */
-#adminOverlay { z-index: 2000; align-items: center; justify-content: center; }
-#familyOverlay { z-index: 2100; align-items: center; justify-content: center; background: rgba(0,0,0,0.92); }
-#userDetailModal { z-index: 2200; align-items: center; justify-content: center; }
-
-.admin-panel, .family-panel, .modal-panel {
-  width: 95%;
-  max-width: 980px;
-  background: var(--surface);
-  border: 2px solid var(--accent);
-  border-radius: 12px;
-  box-shadow: 0 0 100px var(--accent-glow);
-  animation: adminPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  max-height: 92vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+.criteria-bar { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 14px; margin-bottom: 20px; display: none; }
+.criteria-bar.visible { display: block; animation: slideDown 0.2s ease-out; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.criteria-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.criteria-tag { 
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 4px;
+  background: #000; border: 1px solid rgba(255,255,255,0.08); font-size: 11px; color: var(--text); 
 }
-@keyframes adminPop { 0% { transform: scale(0.85) translateY(40px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
-.family-panel { animation: familyPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-@keyframes familyPop { 0% { transform: scale(0.75) translateY(60px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+.criteria-tag .key { color: var(--accent); }
+.criteria-tag .remove { cursor: pointer; color: var(--muted); font-size: 14px; margin-left: 4px; padding: 2px; transition: color 0.2s; }
+.criteria-tag .remove:hover { color: var(--accent); transform: scale(1.2); }
+
+/* Structure commune pour les overlays Admin & Modal (centrés) */
+.admin-panel, .family-panel, .modal-panel {
+  width: 95%; max-width: 900px; background: var(--surface); border: 2px solid var(--accent); border-radius: 12px;
+  box-shadow: 0 0 60px var(--accent-glow); animation: popSpring 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;
+}
+@keyframes popSpring { 0% { transform: scale(0.9) translateY(20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
 
 .admin-header, .family-header, .modal-header {
-  padding: 18px 24px;
-  background: rgba(255,30,86,0.12);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  padding: 20px 24px; background: rgba(255,30,86,0.08); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
 }
-.admin-content, .family-content, .modal-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px;
+.admin-close, .modal-header button, .family-header button {
+  background: none; border: none; color: var(--accent); font-size: 26px; padding: 5px; cursor: pointer; transition: transform 0.3s;
 }
-.admin-tab-bar { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
-.admin-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
-.admin-stat-card { background: var(--card); border: 1px solid rgba(255,255,255,0.08); padding: 16px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
-.admin-stat-card:hover { transform: translateY(-6px); box-shadow: 0 0 30px var(--accent-glow); }
-.admin-table { width: 100%; border-collapse: collapse; }
-.admin-table th, .admin-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 11px; }
-.admin-table th { background: rgba(255,30,86,0.08); color: var(--accent); font-weight: 700; text-transform: uppercase; }
-.admin-table tr:hover { background: rgba(255,30,86,0.05); }
-.key-gen-btn { width: 100%; padding: 12px 10px; margin-bottom: 8px; background: #111; border: 1px solid var(--accent); color: var(--text); font-family: var(--font-display); font-weight: 900; font-size: 11px; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
-.key-gen-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
+.admin-close:hover, .modal-header button:hover, .family-header button:hover { transform: rotate(90deg) scale(1.2); color: #fff; }
+.admin-content, .family-content, .modal-content { flex: 1; overflow-y: auto; padding: 24px; -webkit-overflow-scrolling: touch; }
 
-.family-list { display: flex; flex-direction: column; gap: 16px; }
-.family-card {
-  background: var(--card);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 10px;
-  padding: 18px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-.family-card:hover { transform: translateY(-4px); box-shadow: 0 0 30px var(--accent-glow); }
-.family-name { font-family: var(--font-display); font-size: 18px; font-weight: 900; letter-spacing: 1px; }
-.family-birth { font-size: 12px; color: var(--muted); margin-top: 6px; }
-.family-bubble { position: absolute; top: 14px; right: 14px; background: var(--accent); color: #000; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 9999px; letter-spacing: 0.8px; box-shadow: 0 0 15px var(--accent-glow); }
-.timer-container { font-size: 32px; font-weight: 900; color: var(--accent); text-shadow: 0 0 20px var(--accent-glow); text-align: center; margin: 20px 0; }
-.revoke-btn { background: #ff1e56; color: #fff; border: none; padding: 14px 24px; border-radius: 4px; font-weight: 900; cursor: pointer; width: 100%; margin-top: 20px; transition: all 0.3s; }
-.revoke-btn:hover { box-shadow: 0 0 25px #ff1e56; transform: scale(1.05); }
-.btn-small-revoke { background: var(--accent); color: #000; border: none; padding: 6px 10px; border-radius: 4px; font-weight: 900; font-size: 10px; cursor: pointer; transition: 0.2s; }
-.btn-small-revoke:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--accent-glow); background: #ff4a73; color: #fff; }
+/* Result Cards */
+.results-section { margin-top: 30px; animation: fadeIn 0.4s ease; }
+.results-section h2 { font-family: var(--font-display); font-size: 11px; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.results-section h2 .count { background: rgba(255,30,86,0.1); color: var(--accent); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); }
+.result-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 16px; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; }
+.card-header { padding: 16px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
+.card-name { font-family: var(--font-display); font-size: 13px; font-weight: 900; color: #fff; }
+.card-body { padding: 16px; }
+.info-row { display: flex; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 12px; }
+.info-row:last-child { border-bottom: none; }
+.info-key { color: var(--muted); width: 120px; flex-shrink: 0; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+.info-val { color: var(--text); word-break: break-all; user-select: text; }
+
+.btn-approfondir { background: var(--accent); color: #000; border: none; padding: 10px 16px; border-radius: 6px; font-size: 10px; font-weight: 900; letter-spacing: 1px;}
+
+.loader { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 40px 0; color: var(--accent); font-size: 11px; font-weight: bold; }
+.spinner { width: 24px; height: 24px; border: 3px solid rgba(255,30,86,0.1); border-top-color: var(--accent); animation: spin 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; border-radius: 50%; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Fix table admin responsive */
+.admin-table { width: 100%; border-collapse: collapse; }
+.admin-table th, .admin-table td { padding: 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 12px; }
+.admin-table th { background: rgba(255,30,86,0.08); color: var(--accent); font-weight: 700; text-transform: uppercase; white-space: nowrap;}
+.table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; }
 
 </style>
 </head>
@@ -241,14 +408,73 @@ main { padding: 16px; position: relative; z-index: 2; }
 
 <div id="introScreen">
   <div class="neon-logo">TRACEUR<span>_PRO</span></div>
-  <div class="intro-tagline">Le meilleur moteur de recherche d'informations personnelles français.</div>
-  <button class="intro-btn" onclick="startBootSequence()">INITIALISER LE SYSTÈME</button>
+  <div class="intro-tagline">Système de recherche et d'analyse de données avancées.</div>
+  <button class="intro-btn" onmousedown="startBootSequence()" ontouchstart="startBootSequence()">INITIALISER LE SYSTÈME</button>
 </div>
 
 <div id="boot">
   <div class="boot-logo">TRACEUR<span>_PRO</span></div>
   <div class="boot-bar-wrap"><div class="boot-bar" id="bootBar"></div></div>
   <div id="bootStatus">CONNEXION AU SERVEUR...</div>
+</div>
+
+<div id="mainAppContainer" style="display:none;">
+  <header>
+    <div class="header-left">
+      <h1>TRACEUR<span>_PRO</span></h1>
+    </div>
+    <div class="header-right">
+      <span id="headerStatus" class="status-indicator"></span>
+      <button class="profile-btn" id="profileBtn" onclick="toggleDropdown(event)">
+        <div id="profileAvatar" class="profile-avatar"></div>
+      </button>
+     
+      <div class="profile-dropdown" id="profileDropdown" onclick="event.stopPropagation()">
+        <div>
+          <div class="dropdown-user-title">Statut de l'accès</div>
+          <div class="dropdown-timer-text" id="dropdownTimer">TERM: --h --m --s</div>
+        </div>
+        <div>
+          <div class="dropdown-bar-wrap">
+            <div class="dropdown-bar-fill" id="dropdownBarFill"></div>
+          </div>
+        </div>
+ 
+        <button class="dropdown-extend-btn">Prolonger l'accès</button>
+        <div class="theme-selector">
+          <div class="theme-title">Thème de l'interface</div>
+          <div class="theme-options">
+            <button class="theme-opt-btn active" id="th-cyber" onclick="setTheme('cyber')">Cyber</button>
+            <button class="theme-opt-btn" id="th-furtif" onclick="setTheme('furtif')">Furtif</button>
+            <button class="theme-opt-btn" id="th-ocean" onclick="setTheme('ocean')">Océan</button>
+          </div>
+        </div>
+        <div id="adminSection" style="display:none; margin-top:16px;">
+          <button onclick="openAdminPanel()" style="width:100%; padding:14px; background:var(--accent); color:#000; font-family:var(--font-display); font-weight:900; font-size:12px; letter-spacing:2px; border:none; border-radius:6px; box-shadow:0 0 15px var(--accent-glow);">PANNEL ADMIN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="status-bar">
+    <span><span class="dot"></span>RECHERCHE ACTIVE</span>
+    <span id="statusTime">SYS: --:--:--</span>
+  </div>
+
+  <main>
+    <div class="section-title">CRITÈRES DISPONIBLES</div>
+    <div class="tabs" id="tabs"></div>
+    <div class="criteria-bar" id="criteriaBar">
+      <h3 style="font-size: 10px; color: var(--muted); text-transform: uppercase;">CRITÈRES SÉLECTIONNÉS</h3>
+      <div class="criteria-list" id="criteriaList"></div>
+    </div>
+    <div class="section-title">INFORMATIONS SUR LA CIBLE</div>
+    <div class="fields-grid" id="fieldsGrid"></div>
+    
+    <button class="search-btn" id="searchBtn" disabled onclick="launchSearch()">LANCER LA RECHERCHE</button>
+    <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">Réinitialiser la recherche</button>
+    <div class="results-section" id="resultsSection" style="display:none"></div>
+  </main>
 </div>
 
 <div id="lockScreen" style="display:none">
@@ -261,60 +487,6 @@ main { padding: 16px; position: relative; z-index: 2; }
   </div>
 </div>
 
-<header>
-  <div class="header-left">
-    <h1>TRACEUR<span>_PRO</span></h1>
-  </div>
-  <div class="header-right">
-    <span id="headerStatus" class="status-indicator"></span>
-    <button class="profile-btn" id="profileBtn" onclick="toggleDropdown(event)">
-      <div id="profileAvatar" class="profile-avatar"></div>
-    </button>
-    <div class="profile-dropdown" id="profileDropdown" onclick="event.stopPropagation()">
-      <div>
-        <div class="dropdown-user-title">Statut de l'accès</div>
-        <div class="dropdown-timer-text" id="dropdownTimer">TERM: --h --m --s</div>
-      </div>
-      <div>
-        <div class="dropdown-bar-wrap">
-          <div class="dropdown-bar-fill" id="dropdownBarFill"></div>
-        </div>
-      </div>
-      <a href="#" class="dropdown-extend-btn">Prolonger l'accès</a>
-      <div class="theme-selector">
-        <div class="theme-title">Thème de l'interface</div>
-        <div class="theme-options">
-          <button class="theme-opt-btn active" id="th-cyber" onclick="setTheme('cyber')">Cyber</button>
-          <button class="theme-opt-btn" id="th-furtif" onclick="setTheme('furtif')">Furtif</button>
-          <button class="theme-opt-btn" id="th-ocean" onclick="setTheme('ocean')">Océan</button>
-        </div>
-      </div>
-      <div id="adminSection" style="display:none; margin-top:12px;">
-        <button onclick="openAdminPanel()" style="width:100%; padding:14px; background:var(--accent); color:#000; font-family:var(--font-display); font-weight:900; font-size:13px; letter-spacing:2px; border:none; border-radius:4px; box-shadow:0 0 15px var(--accent-glow);">PANNEL ADMIN</button>
-      </div>
-    </div>
-  </div>
-</header>
-
-<div class="status-bar">
-  <span><span class="dot"></span>RECHERCHE ACTIVE</span>
-  <span id="statusTime">SYS: --:--:--</span>
-</div>
-
-<main>
-  <div class="section-title">CRITÈRES DISPONIBLES</div>
-  <div class="tabs" id="tabs"></div>
-  <div class="criteria-bar" id="criteriaBar">
-    <h3>CRITÈRES SÉLECTIONNÉS</h3>
-    <div class="criteria-list" id="criteriaList"></div>
-  </div>
-  <div class="section-title">INFORMATIONS SUR LA CIBLE</div>
-  <div class="fields-grid" id="fieldsGrid"></div>
-  <button class="search-btn" id="searchBtn" disabled onclick="launchSearch()">LANCER LA RECHERCHE</button>
-  <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">Réinitialiser la recherche</button>
-  <div class="results-section" id="resultsSection" style="display:none"></div>
-</main>
-
 <div class="overlay" id="overlay" onclick="closeSheet(event)">
   <div class="input-sheet" id="inputSheet">
     <h3>RECHERCHER PAR &gt; <span id="sheetLabel" style="color:var(--accent)"></span></h3>
@@ -326,34 +498,16 @@ main { padding: 16px; position: relative; z-index: 2; }
   </div>
 </div>
 
-<div class="overlay" id="adminOverlay" style="display:none; align-items:center; justify-content:center;">
+<div class="overlay" id="adminOverlay" style="align-items:center; justify-content:center;">
   <div class="admin-panel">
     <div class="admin-header">
       <div class="main-logo-anim" style="font-size:22px; margin:0;">ADMIN<span>_PANEL</span></div>
-      <button class="admin-close" onclick="closeAdminPanel()" style="background:none; border:none; color:var(--accent); font-size:24px; cursor:pointer;">✕</button>
+      <button class="admin-close" onclick="closeAdminPanel()">✕</button>
     </div>
-    <div class="admin-tab-bar" id="adminTabs"></div>
-    <div class="admin-content" id="adminContent"></div>
-  </div>
-</div>
-
-<div class="overlay" id="userDetailModal" style="display:none;">
-  <div class="modal-panel" style="max-width: 600px;">
-    <div class="modal-header">
-      <div class="main-logo-anim" style="font-size:18px; margin:0;">GESTION<span>_UTILISATEUR</span></div>
-      <button onclick="closeUserModal()" style="background:none; border:none; color:var(--accent); font-size:24px; cursor:pointer;">✕</button>
+    <div class="admin-content" style="padding: 16px;">
+      <div class="tabs" id="adminTabs" style="margin-bottom: 20px;"></div>
+      <div id="adminContent"></div>
     </div>
-    <div class="modal-content" id="modalContent"></div>
-  </div>
-</div>
-
-<div class="overlay" id="familyOverlay" style="display:none;">
-  <div class="family-panel">
-    <div class="family-header">
-      <div class="main-logo-anim" style="font-size:21px; margin:0;">LIENS<span>_FAMILIAUX</span></div>
-      <button onclick="closeFamilyOverlay()" style="font-size:28px;color:var(--accent);background:none;border:none;cursor:pointer;">✕</button>
-    </div>
-    <div class="family-content" id="familyContent"></div>
   </div>
 </div>
 
@@ -374,6 +528,7 @@ let isAdmin = false;
 let currentAdminTab = 0;
 let allResults = [];
 let selectedKeyType = null;
+let bootStarted = false; 
 
 function initProfileAvatar() {
   const avatarContainer = document.getElementById("profileAvatar");
@@ -409,23 +564,25 @@ document.getElementById("keyInput").addEventListener("input", (e) => {
   else if (val.length > 8) val = val.slice(0,4) + '-' + val.slice(4,8) + '-' + val.slice(8,12);
   e.target.value = val;
 });
-
-// INITIALISATION DE BASE AU CHARGEMENT DE LA PAGE
 document.addEventListener("DOMContentLoaded", () => {
   initProfileAvatar();
   buildTabs();
   renderFields();
-  // On ne charge plus checkSession tout de suite, on attend le clic sur le bouton de l'intro
 });
 
-// NOUVELLE FONCTION DE DÉMARRAGE ET DE PING SERVEUR
-function startBootSequence() {
-  document.getElementById("introScreen").style.opacity = "0";
+function startBootSequence(e) {
+  if (e) e.preventDefault(); 
+  if (bootStarted) return;
+  bootStarted = true;
+  
   setTimeout(() => {
-    document.getElementById("introScreen").style.display = "none";
-    document.getElementById("boot").style.display = "flex";
-    pingServerLoop();
-  }, 500);
+    document.getElementById("introScreen").style.opacity = "0";
+    setTimeout(() => {
+      document.getElementById("introScreen").style.display = "none";
+      document.getElementById("boot").style.display = "flex";
+      pingServerLoop();
+    }, 400);
+  }, 150);
 }
 
 async function pingServerLoop() {
@@ -435,41 +592,31 @@ async function pingServerLoop() {
   
   let attempts = 0;
   let progress = 0;
-  
-  // Animation visuelle de la barre pour faire patienter
   const progressInterval = setInterval(() => {
-    progress += (95 - progress) * 0.05; // Monte progressivement vers 95%
+    progress += (95 - progress) * 0.05; 
     bar.style.width = `${progress}%`;
   }, 1000);
-
   while (true) {
     attempts++;
     try {
-      // Un simple fetch pour vérifier si le serveur répond. 
-      // Même s'il renvoie une erreur 400 (car on n'envoie pas de code valide), le simple fait de répondre prouve qu'il est éveillé.
       const res = await fetch(`${BASE}/api/auth`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ telegramId: "PING", code: null })
       });
-      
-      // Si la requête aboutit, le serveur est up
       clearInterval(progressInterval);
       bar.style.width = "100%";
       status.textContent = "SERVEUR EN LIGNE. INITIALISATION...";
-      
       setTimeout(async () => {
         document.getElementById("boot").style.opacity = "0";
         setTimeout(() => document.getElementById("boot").style.display = "none", 400);
-        await checkSession(null); // On lance la vérification de session standard
+        await checkSession(null);
       }, 600);
       break;
       
     } catch(e) {
-      // Si on attrape une erreur (généralement réseau/timeout car le serveur dort)
       status.textContent = `RÉVEIL DU SERVEUR EN COURS... (TENTATIVE ${attempts})`;
     }
-    // On attend 3 secondes avant de réessayer
     await new Promise(r => setTimeout(r, 3000));
   }
 }
@@ -483,8 +630,12 @@ function toggleDropdown(event) {
 }
 
 document.addEventListener("click", () => {
-  document.getElementById("profileDropdown").classList.remove("open");
-  document.getElementById("profileBtn").classList.remove("active");
+  const dropdown = document.getElementById("profileDropdown");
+  const btn = document.getElementById("profileBtn");
+  if(dropdown && btn) {
+    dropdown.classList.remove("open");
+    btn.classList.remove("active");
+  }
 });
 
 function setTheme(themeName) {
@@ -508,6 +659,7 @@ async function checkSession(providedCode) {
     if (data.valid) {
       document.getElementById("lockScreen").style.display = "none";
       document.getElementById("lockError").style.display = "none";
+      document.getElementById("mainAppContainer").style.display = "block"; 
       sessionEndTimestamp = data.expiresAt;
       sessionMaxDuration = data.maxDuration || 0;
       isAdmin = !!data.isAdmin;
@@ -515,11 +667,13 @@ async function checkSession(providedCode) {
       startCountdown();
       updateHeaderStatus();
     } else {
+      document.getElementById("mainAppContainer").style.display = "none";
       document.getElementById("lockScreen").style.display = "flex";
       if (providedCode) showLockError(data.error || "CLÉ INVALIDE OU EXPIRÉE");
     }
   } catch(e) {
     console.error(e);
+    document.getElementById("mainAppContainer").style.display = "none";
     document.getElementById("lockScreen").style.display = "flex";
     showLockError("ERREUR DE CONNEXION AU SYSTÈME");
   }
@@ -531,7 +685,10 @@ async function submitKey() {
     showLockError("FORMAT REQUIS (XXXX-XXXX-XXXX)");
     return;
   }
+  const btn = document.querySelector(".lock-btn");
+  btn.innerHTML = "VERIFICATION...";
   await checkSession(code);
+  btn.innerHTML = "VALIDER";
 }
 
 function showLockError(msg) {
@@ -556,6 +713,7 @@ function startCountdown() {
       clearInterval(timerInterval);
       timerDisplay.textContent = "EXPIRÉ";
       barFill.style.width = "0%";
+      document.getElementById("mainAppContainer").style.display = "none";
       document.getElementById("lockScreen").style.display = "flex";
       showLockError("VOTRE TEMPS EST ÉCOULÉ");
       updateHeaderStatus();
@@ -579,37 +737,27 @@ function startCountdown() {
 }
 
 const ICON = {
-  id: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
-  birth: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`,
-  phone: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.5 19.5 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.7.7 2.5a2 2 0 0 1-.4 2.1L8.1 9.5a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.4c.8.3 1.6.6 2.5.7A2 2 0 0 1 22 16.9z"/></svg>`,
-  mail: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
-  loc: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
-  game: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M6 12h4M8 10v4M15 12h2M18 12h-2"/></svg>`,
-  lock: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
-  chat: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
-  ip: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
-  car: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17H3v-7l3-5h10l3 5v7h-2m-8 0h4"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/></svg>`,
-  bank: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>`,
-  biz: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>`,
-  dot: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/></svg>`
+  id: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+  birth: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`,
+  phone: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.5 19.5 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.7.7 2.5a2 2 0 0 1-.4 2.1L8.1 9.5a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.4c.8.3 1.6.6 2.5.7A2 2 0 0 1 22 16.9z"/></svg>`,
+  mail: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
+  loc: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+  game: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M6 12h4M8 10v4M15 12h2M18 12h-2"/></svg>`,
+  lock: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+  chat: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
+  ip: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+  car: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17H3v-7l3-5h10l3 5v7h-2m-8 0h4"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/></svg>`,
+  bank: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>`,
+  biz: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>`,
+  dot: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/></svg>`
 };
 
 const CATEGORIES = [
-  { id:"identite", label:"Identité", fields:[
-    {k:"nom_famille", ico:ICON.id, l:"Nom"}, {k:"prenom", ico:ICON.id, l:"Prénom"}, {k:"nom_naissance", ico:ICON.id, l:"Nom Naissance"}, {k:"nom_affichage", ico:ICON.id, l:"Pseudonyme"}, {k:"date_naissance", ico:ICON.birth, l:"Date Nais."}, {k:"annee_naissance", ico:ICON.birth, l:"Année Nais."}, {k:"ville_naissance", ico:ICON.birth, l:"Ville Nais."}, {k:"genre", ico:ICON.dot, l:"Genre (M/F)"}
-  ]},
-  { id:"contact", label:"Contact", fields:[
-    {k:"telephone", ico:ICON.phone, l:"Téléphone"}, {k:"email", ico:ICON.mail, l:"Email"}, {k:"nom_utilisateur", ico:ICON.chat, l:"Username"}, {k:"adresse_ip", ico:ICON.ip, l:"Adresse IP"}
-  ]},
-  { id:"localisation", label:"Localisation", fields:[
-    {k:"adresse", ico:ICON.loc, l:"Adresse Civile"}, {k:"code_postal", ico:ICON.loc, l:"Code Postal"}, {k:"ville", ico:ICON.loc, l:"Ville"}, {k:"region", ico:ICON.loc, l:"Région"}, {k:"departement", ico:ICON.loc, l:"Département"}, {k:"pays", ico:ICON.loc, l:"Pays"}
-  ]},
-  { id:"gaming", label:"Réseaux", fields:[
-    {k:"steam_id", ico:ICON.game, l:"Steam ID"}, {k:"fivem_license", ico:ICON.game, l:"FiveM ID"}, {k:"discord_id", ico:ICON.chat, l:"Discord ID"}, {k:"xbox_live", ico:ICON.game, l:"Xbox Live"}, {k:"live_id", ico:ICON.game, l:"Live ID"}, {k:"fivem_license2", ico:ICON.game, l:"FiveM ID 2"}
-  ]},
-  { id:"avance", label:"Options", fields:[
-    {k:"nir", ico:ICON.lock, l:"Numéro unique"}, {k:"iban", ico:ICON.bank, l:"IBAN"}, {k:"bic", ico:ICON.bank, l:"BIC"}, {k:"vin_plaque", ico:ICON.car, l:"Plaque / VIN"}, {k:"siret", ico:ICON.biz, l:"Num. Entreprise"}, {k:"siren", ico:ICON.biz, l:"Registre Pro"}
-  ]}
+  { id:"identite", label:"Identité", fields:[ {k:"nom_famille", ico:ICON.id, l:"Nom"}, {k:"prenom", ico:ICON.id, l:"Prénom"}, {k:"nom_naissance", ico:ICON.id, l:"Nom Naissance"}, {k:"nom_affichage", ico:ICON.id, l:"Pseudonyme"}, {k:"date_naissance", ico:ICON.birth, l:"Date Nais."}, {k:"annee_naissance", ico:ICON.birth, l:"Année Nais."}, {k:"ville_naissance", ico:ICON.birth, l:"Ville Nais."}, {k:"genre", ico:ICON.dot, l:"Genre (M/F)"} ]},
+  { id:"contact", label:"Contact", fields:[ {k:"telephone", ico:ICON.phone, l:"Téléphone"}, {k:"email", ico:ICON.mail, l:"Email"}, {k:"nom_utilisateur", ico:ICON.chat, l:"Username"}, {k:"adresse_ip", ico:ICON.ip, l:"Adresse IP"} ]},
+  { id:"localisation", label:"Localisation", fields:[ {k:"adresse", ico:ICON.loc, l:"Adresse Civile"}, {k:"code_postal", ico:ICON.loc, l:"Code Postal"}, {k:"ville", ico:ICON.loc, l:"Ville"}, {k:"region", ico:ICON.loc, l:"Région"}, {k:"departement", ico:ICON.loc, l:"Département"}, {k:"pays", ico:ICON.loc, l:"Pays"} ]},
+  { id:"gaming", label:"Réseaux", fields:[ {k:"steam_id", ico:ICON.game, l:"Steam ID"}, {k:"fivem_license", ico:ICON.game, l:"FiveM ID"}, {k:"discord_id", ico:ICON.chat, l:"Discord ID"}, {k:"xbox_live", ico:ICON.game, l:"Xbox Live"}, {k:"live_id", ico:ICON.game, l:"Live ID"}, {k:"fivem_license2", ico:ICON.game, l:"FiveM ID 2"} ]},
+  { id:"avance", label:"Options", fields:[ {k:"nir", ico:ICON.lock, l:"Numéro unique"}, {k:"iban", ico:ICON.bank, l:"IBAN"}, {k:"bic", ico:ICON.bank, l:"BIC"}, {k:"vin_plaque", ico:ICON.car, l:"Plaque / VIN"}, {k:"siret", ico:ICON.biz, l:"Num. Entreprise"}, {k:"siren", ico:ICON.biz, l:"Registre Pro"} ]}
 ];
 
 const FIELD_MAP = {};
@@ -640,7 +788,11 @@ function openSheet(fieldKey) {
   setTimeout(() => inp.focus(), 100);
 }
 
-function closeSheet(e) { if (e && e.target !== document.getElementById("overlay")) return; document.getElementById("overlay").classList.remove("open"); currentField = null; }
+function closeSheet(e) { 
+  if (e && e.target !== document.getElementById("overlay")) return; 
+  document.getElementById("overlay").classList.remove("open"); 
+  currentField = null;
+}
 
 function confirmValue() {
   const val = document.getElementById("sheetInput").value.trim();
@@ -666,7 +818,6 @@ function renderCriteriaBar() {
 }
 
 function removeCriteria(k) { delete criteria[k]; updateUI(); }
-
 function clearAll() { criteria = {}; document.getElementById("resultsSection").style.display = "none"; updateUI(); }
 
 async function launchSearch() {
@@ -677,11 +828,7 @@ async function launchSearch() {
   try {
     const r = await fetch(`${BASE}/api/search`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true",
-        "x-telegram-id": TELEGRAM_ID
-      },
+      headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
       body: JSON.stringify(criteria)
     });
     if (r.status === 403) {
@@ -701,7 +848,10 @@ function renderResults(results) {
   const sec = document.getElementById("resultsSection");
   allResults = results || [];
   if (!allResults.length) {
-    sec.innerHTML = `<div class="no-results"><h3>AUCUN DOSSIER TROUVÉ</h3><p>Aucune correspondance disponible pour ces critères.</p></div>`;
+    sec.innerHTML = `<div class="no-results" style="background: var(--surface); border: 1px solid var(--border); padding: 30px; text-align: center; border-radius: 8px;">
+      <h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 8px;">AUCUN DOSSIER TROUVÉ</h3>
+      <p style="color: var(--muted); font-size: 11px;">Aucune correspondance disponible pour ces critères.</p>
+    </div>`;
     return;
   }
   const skip = new Set(["_sources","_confidence","_id"]);
@@ -714,366 +864,50 @@ function renderResults(results) {
     return `<div class="result-card">
       <div class="card-header">
         <span class="card-name">${name}</span>
-        <button onclick="approfondirRecherche(${index})" style="background:var(--accent);color:#000;border:none;padding:8px 14px;border-radius:4px;font-size:10px;font-weight:900;cursor:pointer;">APPROFONDIR</button>
+        <button class="btn-approfondir" onclick="approfondirRecherche(${index})">APPROFONDIR</button>
       </div>
       <div class="card-body">${rows || 'DONNÉES INDISPONIBLES'}</div>
     </div>`;
   }).join("");
-  sec.innerHTML = `<h2>DOSSIERS IDENTIFIÉS <span class="count">${allResults.length}/10</span></h2>${cards}`;
+  sec.innerHTML = `<h2>DOSSIERS IDENTIFIÉS <span class="count">${allResults.length}</span></h2>${cards}`;
 }
 
-function mergeProfilesIntoOneFiche(profiles) {
-  const merged = {};
-  profiles.forEach(profile => {
-    Object.entries(profile).forEach(([key, value]) => {
-      if (!value || key.startsWith("_")) return;
-      if (!merged[key] || String(value).length > String(merged[key] || "").length) {
-        merged[key] = value;
-      }
-    });
-  });
-  return merged;
+function approfondirRecherche(index) {
+  alert("Logique d'approfondissement (A relier à votre code de liens familiaux existant)");
 }
 
-/* ====================== FAMILY OVERLAY ====================== */
-async function approfondirRecherche(index) {
-  const basePerson = allResults[index];
-  const similars = allResults.filter((p, i) => i !== index &&
-    (p.nom_famille === basePerson.nom_famille ||
-     (p.prenom && basePerson.prenom && p.prenom.toLowerCase().includes(basePerson.prenom.toLowerCase().slice(0,3))))
-  );
-
-  let familyHTML = `<h3 style="margin-bottom:20px;color:var(--accent);">PERSONNES LIÉES (${similars.length + 1})</h3><div class="family-list">`;
+/* ====================== EFFET RIPPLE GLOBAL (SOURIS & TACTILE) ====================== */
+function createRipple(e, btn, isTouch = false) {
+  const ripple = document.createElement('span');
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
   
-  familyHTML += `
-    <div class="family-card" onclick="showPersonFicheFromFamily(-1)">
-      <div class="family-name">${[basePerson.prenom, basePerson.nom_famille].filter(Boolean).join(" ")}</div>
-      <div class="family-birth">Né(e) le ${basePerson.date_naissance || basePerson.annee_naissance || '—'}</div>
-      <div class="family-bubble">PRINCIPAL</div>
-    </div>`;
-
-  similars.forEach((p, i) => {
-    const fullName = [p.prenom, p.nom_famille].filter(Boolean).join(" ");
-    const birth = p.date_naissance || p.annee_naissance || '—';
-    familyHTML += `
-      <div class="family-card" onclick="showPersonFicheFromFamily(${i})">
-        <div class="family-name">${fullName}</div>
-        <div class="family-birth">Né(e) le ${birth}</div>
-        <div class="family-bubble">LIEN FAMILIAL</div>
-      </div>`;
-  });
-  familyHTML += `</div>`;
-
-  document.getElementById("familyContent").innerHTML = familyHTML;
-  document.getElementById("familyOverlay").style.display = "flex";
-}
-
-function showPersonFicheFromFamily(familyIndex) {
-  let person;
-  if (familyIndex === -1) {
-    person = allResults[0];
-  } else {
-    const similars = allResults.filter((p, i) => i !== 0);
-    person = similars[familyIndex];
-  }
-
-  const name = [person.prenom, person.nom_famille].filter(Boolean).join(" ").toUpperCase();
-  const rows = Object.entries(person)
-    .filter(([k]) => !k.startsWith("_"))
-    .map(([k,v]) => `<div class="info-row"><span class="info-key">${k.replace(/_/g," ").toUpperCase()}</span><span class="info-val">${v}</span></div>`).join("");
-
-  document.getElementById("familyContent").innerHTML = `
-    <h2 style="margin-bottom:20px;color:var(--accent);">FICHE DÉTAILLÉE : ${name}</h2>
-    <div class="result-card">
-      <div class="card-header"><span class="card-name">${name}</span></div>
-      <div class="card-body">${rows}</div>
-    </div>
-    <button onclick="approfondirRecherche(0)" style="margin-top:25px;width:100%;padding:16px;background:var(--accent);color:#000;border:none;border-radius:6px;font-weight:900;">RETOUR AUX LIENS FAMILIAUX</button>
-  `;
-}
-
-function closeFamilyOverlay() {
-  document.getElementById("familyOverlay").style.display = "none";
-}
-
-/* ====================== PANEL ADMIN ET RÉVOCATION ====================== */
-function openAdminPanel() {
-  if (!isAdmin) return;
-  document.getElementById("adminOverlay").style.display = "flex";
-  buildAdminTabs();
-  loadAdminData(0);
-}
-
-function closeAdminPanel() {
-  document.getElementById("adminOverlay").style.display = "none";
-}
-
-function buildAdminTabs() {
-  const tabsHTML = `
-    <button class="tab ${currentAdminTab===0?'active':''}" onclick="switchAdminTab(0)">STATISTIQUES</button>
-    <button class="tab ${currentAdminTab===1?'active':''}" onclick="switchAdminTab(1)">UTILISATEURS</button>
-    <button class="tab ${currentAdminTab===2?'active':''}" onclick="switchAdminTab(2)">HISTORIQUE</button>
-    <button class="tab ${currentAdminTab===3?'active':''}" onclick="switchAdminTab(3)">GÉNÉRATEUR CLÉS</button>
-  `;
-  document.getElementById("adminTabs").innerHTML = tabsHTML;
-}
-
-async function loadAdminData(tabIndex) {
-  currentAdminTab = tabIndex;
-  buildAdminTabs();
-  const content = document.getElementById("adminContent");
-  content.innerHTML = `<div class="loader"><div class="spinner"></div><div>CHARGEMENT DES DONNÉES ADMIN...</div></div>`;
-  try {
-    const res = await fetch(`${BASE}/api/admin/data`, {
-      method: "GET",
-      headers: { "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID }
-    });
-    if (!res.ok) throw new Error("Accès refusé");
-    const adminData = await res.json();
-    if (tabIndex === 0) renderStatsTab(adminData);
-    else if (tabIndex === 1) renderUsersTab(adminData);
-    else if (tabIndex === 2) renderHistoryTab(adminData);
-    else if (tabIndex === 3) renderGeneratorTab(adminData);
-  } catch(e) {
-    content.innerHTML = `<div class="no-results"><h3>ERREUR ADMIN</h3><p>Impossible de charger les données administrateur.</p></div>`;
-  }
-}
-
-function switchAdminTab(tabIndex) {
-  loadAdminData(tabIndex);
-}
-
-function renderStatsTab(data) {
-  const content = document.getElementById("adminContent");
-  const pct = Math.min(100, Math.round((data.apiRequests || 0) / 1000 * 100));
-  content.innerHTML = `
-    <div class="admin-stat-grid">
-      <div class="admin-stat-card" onclick="showActivatedKeys()">
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Clés activées</div>
-        <div style="font-size:32px;font-weight:900;color:var(--accent);">${data.activatedKeys || 0}</div>
-      </div>
-      <div class="admin-stat-card" onclick="showActiveUsers()">
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Utilisateurs actifs</div>
-        <div style="font-size:32px;font-weight:900;color:var(--success);">${data.usersCount || 0}</div>
-      </div>
-      <div class="admin-stat-card">
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Requêtes API</div>
-        <div style="font-size:32px;font-weight:900;color:#00e5ff;">${data.apiRequests || 0} <span style="font-size:14px;">/ 1000</span></div>
-        <div class="confidence-bar" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.05);height:4px;"><div class="confidence-fill" style="width:${pct}%;background:#00e5ff;height:100%;"></div></div>
-      </div>
-      <div class="admin-stat-card">
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Clés à vie</div>
-        <div style="font-size:32px;font-weight:900;color:#fff;">${data.lifetimeKeys || 0}</div>
-      </div>
-    </div>
-    <div style="margin-top:30px;font-size:10px;color:var(--muted);">Dernière mise à jour : ${new Date().toLocaleTimeString('fr-FR')}</div>
-  `;
-}
-
-// LOGIQUE POUR LA RÉVOCATION DIRECTE
-async function revokeUserKey(telegramId) {
-  if (confirm(`RÉVOCATION IMMÉDIATE : Bannir et supprimer la clé de l'utilisateur ${telegramId} ?`)) {
-    try {
-      // NOTE: Assure-toi d'avoir une route serveur correspondante : router.post('/admin/revoke') dans ton backend !
-      const res = await fetch(`${BASE}/api/admin/revoke`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
-        body: JSON.stringify({ targetId: telegramId })
-      });
-      if (res.ok) {
-        alert(`Clé de ${telegramId} révoquée avec succès.`);
-        closeUserModal();
-        loadAdminData(currentAdminTab); // Recharge le tableau
-      } else {
-        alert("Erreur lors de la révocation de la clé (Vérifiez le serveur).");
-      }
-    } catch(e) {
-      alert("Erreur réseau de communication avec l'API Admin.");
-    }
-  }
-}
-
-async function showActivatedKeys() {
-  const content = document.getElementById("adminContent");
-  content.innerHTML = `<div class="loader"><div class="spinner"></div>CHARGEMENT LISTE...</div>`;
-  const res = await fetch(`${BASE}/api/admin/data`, { headers: { "x-telegram-id": TELEGRAM_ID } });
-  const data = await res.json();
-  let html = `<h3>CLÉS ACTIVÉES (${data.users.length})</h3><table class="admin-table"><thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>EXPIRATION</th><th>ACTION</th></tr></thead><tbody>`;
-  data.users.forEach(u => {
-    html += `<tr style="cursor:pointer;">
-      <td onclick="showUserDetail('${u.telegramId}')">${u.telegramId}</td>
-      <td onclick="showUserDetail('${u.telegramId}')">${u.keyLabel}</td>
-      <td onclick="showUserDetail('${u.telegramId}')">${u.expiresAt === "lifetime" ? "À VIE" : new Date(u.expiresAt).toLocaleString('fr-FR')}</td>
-      <td><button class="btn-small-revoke" onclick="event.stopPropagation(); revokeUserKey('${u.telegramId}')">🗑️ BANNIR</button></td>
-    </tr>`;
-  });
-  html += `</tbody></table>`;
-  content.innerHTML = html;
-}
-
-async function showActiveUsers() {
-  const content = document.getElementById("adminContent");
-  content.innerHTML = `<div class="loader"><div class="spinner"></div>CHARGEMENT UTILISATEURS ACTIFS...</div>`;
-  const res = await fetch(`${BASE}/api/admin/data`, { headers: { "x-telegram-id": TELEGRAM_ID } });
-  const data = await res.json();
-  let html = `<h3>UTILISATEURS ACTIFS (${data.usersCount})</h3><table class="admin-table"><thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>TEMPS RESTANT</th><th>ACTION</th></tr></thead><tbody>`;
-  data.users.forEach(u => {
-    const remaining = u.expiresAt === "lifetime" ? "ILLIMITÉ" : Math.max(0, Math.floor((new Date(u.expiresAt) - Date.now()) / 86400000)) + " jours";
-    html += `<tr style="cursor:pointer;">
-      <td onclick="showUserDetail('${u.telegramId}')">${u.telegramId}</td>
-      <td onclick="showUserDetail('${u.telegramId}')">${u.keyLabel}</td>
-      <td onclick="showUserDetail('${u.telegramId}')">${remaining}</td>
-      <td><button class="btn-small-revoke" onclick="event.stopPropagation(); revokeUserKey('${u.telegramId}')">🗑️ BANNIR</button></td>
-    </tr>`;
-  });
-  html += `</tbody></table>`;
-  content.innerHTML = html;
-}
-
-async function showUserDetail(telegramId) {
-  const modal = document.getElementById("userDetailModal");
-  const content = document.getElementById("modalContent");
-  content.innerHTML = `<div class="loader"><div class="spinner"></div>CHARGEMENT DÉTAIL UTILISATEUR...</div>`;
-  modal.style.display = "flex";
-
-  content.innerHTML = `
-    <div id="modalTitle" style="font-size:18px;margin-bottom:15px">Utilisateur <span style="color:var(--accent)">${telegramId}</span></div>
-    <div class="timer-container" id="userTimer" style="font-size:32px;font-weight:900;color:var(--accent);text-shadow:0 0 20px var(--accent-glow);text-align:center;margin:20px 0;">TEMPS RESTANT : --:--:--</div>
-    <h4 style="margin:20px 0 10px 0">Historique de recherches (Bêta)</h4>
-    <div id="userHistoryList" style="max-height:300px;overflow-y:auto;background:#0a0a12;padding:10px;border-radius:4px;"></div>
-    <button onclick="revokeUserKey('${telegramId}')" class="revoke-btn">RÉVOQUER LA CLÉ (BAN IMMÉDIAT)</button>
-  `;
-
-  let remaining = 3600; // Fake duration pour la modal
-  const timerEl = document.getElementById("userTimer");
-  const interval = setInterval(() => {
-    if (remaining <= 0) { clearInterval(interval); timerEl.textContent = "EXPIRÉ"; return; }
-    remaining--;
-    const h = Math.floor(remaining / 3600);
-    const m = Math.floor((remaining % 3600) / 60);
-    const s = remaining % 60;
-    timerEl.textContent = `TEMPS RESTANT : ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-  }, 1000);
-}
-
-function closeUserModal() {
-  document.getElementById("userDetailModal").style.display = "none";
-}
-
-function renderUsersTab(data) {
-  const content = document.getElementById("adminContent");
-  let rows = "";
-  if (data.users && data.users.length) {
-    rows = data.users.map(u => {
-      const remaining = u.expiresAt === "lifetime" ? "ILLIMITÉ" : Math.max(0, Math.floor((new Date(u.expiresAt) - Date.now()) / 86400000)) + " jours";
-      return `<tr style="cursor:pointer;">
-        <td onclick="showUserDetail('${u.telegramId}')">${u.telegramId}</td>
-        <td onclick="showUserDetail('${u.telegramId}')">${u.keyLabel}</td>
-        <td onclick="showUserDetail('${u.telegramId}')">${remaining}</td>
-        <td><button class="btn-small-revoke" onclick="event.stopPropagation(); revokeUserKey('${u.telegramId}')">🗑️ BANNIR</button></td>
-      </tr>`;
-    }).join("");
-  } else {
-    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);">Aucun utilisateur</td></tr>`;
-  }
-  content.innerHTML = `
-    <table class="admin-table">
-      <thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>TEMPS RESTANT</th><th>ACTION</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
-  `;
-}
-
-function renderHistoryTab(data) {
-  const content = document.getElementById("adminContent");
-  let rows = "";
-  if (data.history && data.history.length) {
-    rows = data.history.slice(0, 30).map(h => {
-      const crit = Object.entries(h.criteria || {}).map(([k,v]) => `${k}: ${v}`).join(" | ");
-      return `<tr>
-        <td style="font-size:11px;">${h.telegramId}</td>
-        <td style="font-size:11px;">${new Date(h.timestamp).toLocaleString('fr-FR')}</td>
-        <td style="font-size:11px;max-width:200px;word-break:break-all;">${crit || '-'}</td>
-        <td style="font-size:11px;">${h.results || 0}</td>
-      </tr>`;
-    }).join("");
-  } else {
-    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:20px;">Aucun historique</td></tr>`;
-  }
-  content.innerHTML = `
-    <table class="admin-table">
-      <thead><tr><th>UTILISATEUR</th><th>DATE</th><th>RECHERCHE</th><th>RÉSULTATS</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
-  `;
-}
-
-function renderGeneratorTab() {
-  const types = [
-    {type:'1semaine', label:'1 SEMAINE'},
-    {type:'1mois', label:'1 MOIS'},
-    {type:'3mois', label:'3 MOIS'},
-    {type:'5min', label:'5 MINUTES'},
-    {type:'15min', label:'15 MINUTES'},
-    {type:'lifetime', label:'À VIE'},
-    {type:'admin', label:'CLÉ ADMIN'}
-  ];
-  const cards = types.map(t => `
-    <div onclick="selectKeyType('${t.type}')" class="selectable-card ${selectedKeyType === t.type ? 'active' : ''}" style="padding:14px;border:1px solid rgba(255,255,255,0.1);border-radius:6px;text-align:center;cursor:pointer;font-family:var(--font-display);font-weight:700;font-size:11px;background:${selectedKeyType === t.type ? 'var(--accent)' : 'transparent'};color:${selectedKeyType === t.type ? '#000' : 'var(--text)'};">
-      ${t.label}
-    </div>
-  `).join("");
+  const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+  const clientY = isTouch ? e.touches[0].clientY : e.clientY;
   
-  const content = document.getElementById("adminContent");
-  content.innerHTML = `
-    <h3 style="margin-bottom:20px;font-family:var(--font-display);color:var(--accent);">GÉNÉRER UNE NOUVELLE CLÉ</h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">${cards}</div>
-    <button id="generateBtn" onclick="validateAndGenerate()" style="margin-top:30px;width:100%;padding:18px;background:var(--accent);color:#000;font-family:var(--font-display);font-weight:900;font-size:15px;letter-spacing:2px;border:none;border-radius:8px;box-shadow:0 0 25px var(--accent-glow);cursor:pointer;">GÉNÉRER LA CLÉ</button>
-    <div id="generatedKeyDisplay" style="margin-top:25px;display:none;background:#000;border:2px solid var(--accent);border-radius:8px;padding:20px;text-align:center;word-break:break-all;font-family:var(--font-mono);font-size:19px;letter-spacing:7px;box-shadow:0 0 30px var(--accent-glow);"></div>
-  `;
+  const x = clientX - rect.left - size / 2;
+  const y = clientY - rect.top - size / 2;
+
+  ripple.style.width = ripple.style.height = `${size}px`;
+  ripple.style.left = `${x}px`;
+  ripple.style.top = `${y}px`;
+  ripple.classList.add('ripple');
+
+  btn.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 600);
 }
 
-function selectKeyType(type) {
-  selectedKeyType = type;
-  renderGeneratorTab();
-}
+document.addEventListener('mousedown', function(e) {
+  const btn = e.target.closest('button');
+  if (!btn || btn.disabled) return;
+  createRipple(e, btn, false);
+});
+document.addEventListener('touchstart', function(e) {
+  const btn = e.target.closest('button');
+  if (!btn || btn.disabled) return;
+  createRipple(e, btn, true);
+}, {passive: true});
 
-async function validateAndGenerate() {
-  if (!selectedKeyType) {
-    alert("⚠️ Sélectionne d'abord un type de clé");
-    return;
-  }
-  const btn = document.getElementById("generateBtn");
-  btn.innerHTML = `<div class="spinner" style="width:22px;height:22px;margin:auto;"></div>`;
-  btn.disabled = true;
-  try {
-    const res = await fetch(`${BASE}/api/admin/generate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
-      body: JSON.stringify({ type: selectedKeyType })
-    });
-    const result = await res.json();
-    if (result.key) {
-      const display = document.getElementById("generatedKeyDisplay");
-      display.innerHTML = `
-        <div style="color:var(--accent);font-size:14px;margin-bottom:12px;">✅ CLÉ GÉNÉRÉE AVEC SUCCÈS</div>
-        <div style="font-size:22px;letter-spacing:8px;margin-bottom:20px;">${result.key}</div>
-        <button onclick="copyKey('${result.key}')" style="background:var(--accent);color:#000;border:none;padding:14px 24px;border-radius:6px;font-weight:900;width:100%;cursor:pointer;">📋 COPIER LA CLÉ</button>
-      `;
-      display.style.display = "block";
-    }
-  } catch(e) {
-    alert("Erreur lors de la génération");
-  } finally {
-    btn.innerHTML = "GÉNÉRER LA CLÉ";
-    btn.disabled = false;
-    selectedKeyType = null;
-  }
-}
-
-function copyKey(key) {
-  navigator.clipboard.writeText(key).then(() => alert("✅ Clé copiée dans le presse-papiers !"));
-}
 </script>
 </body>
 </html>
