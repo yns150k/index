@@ -353,7 +353,7 @@ main { padding: 14px 12px; position: relative; z-index: 2; max-width: 100%; }
 }
 
 .family-list { display: flex; flex-direction: column; gap: 14px; }
-.family-card { background: var(--card); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 18px 18px 18px 18px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
+.family-card { background: var(--card); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 18px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
 .family-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 20px var(--accent-glow); border-color: var(--accent); }
 .family-card:active { transform: scale(0.97); }
 .family-name { font-family: var(--font-display); font-size: 15px; font-weight: 900; letter-spacing: 1px; color: #fff; line-height: 1.2; }
@@ -791,7 +791,7 @@ function getProbableRelation(basePerson, person) {
 
   if (!baseYear || !personYear) return "PROBABLE LIEN FAMILIAL";
 
-  const ageDiff = baseYear - personYear; // positif = base plus jeune que la personne
+  const ageDiff = baseYear - personYear;
 
   const baseGenre = (basePerson.genre || "").toLowerCase().trim();
   const personGenre = (person.genre || "").toLowerCase().trim();
@@ -802,21 +802,18 @@ function getProbableRelation(basePerson, person) {
   const isMaleName = (name) => /jean|paul|louis|thomas|antoine|luc|matthieu|nicolas|pierre|julien|alexandre|victor|léon|raphaël/i.test(name);
   const isFemaleName = (name) => /marie|anne|élise|camille|léa|manon|chloé|emma|jules|lou|alice|rose|clara|lina/i.test(name);
 
-  // Cas frère/sœur (âge très proche)
   if (Math.abs(ageDiff) <= 12) {
     if (personGenre === "m" || isMaleName(personPrenom)) return "PROBABLE FRÈRE";
     if (personGenre === "f" || isFemaleName(personPrenom)) return "PROBABLE SŒUR";
     return "PROBABLE FRÈRE / SŒUR";
   }
 
-  // Cas PARENT : la personne est plus âgée que la personne sélectionnée
   if (ageDiff > 18 && ageDiff < 55) {
     if (personGenre === "m" || isMaleName(personPrenom)) return "PROBABLE PÈRE";
     if (personGenre === "f" || isFemaleName(personPrenom)) return "PROBABLE MÈRE";
     return "PROBABLE PARENT";
   }
 
-  // Cas ENFANT : la personne est plus jeune que la personne sélectionnée
   if (ageDiff < -18 && ageDiff > -55) {
     if (personGenre === "m" || isMaleName(personPrenom)) return "PROBABLE FILS";
     if (personGenre === "f" || isFemaleName(personPrenom)) return "PROBABLE FILLE";
@@ -1155,6 +1152,7 @@ function renderGeneratorTab() {
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;">${cards}</div>
     <button id="generateBtn" class="search-btn btn-shine" onclick="validateAndGenerate()" style="margin-top:30px; border-radius:8px; padding:18px;">GÉNÉRER LA CLÉ</button>
     <div id="generatedKeyDisplay" style="margin-top:25px;display:none;background:#000;border:2px solid var(--accent);border-radius:12px;padding:20px;text-align:center;word-break:break-all;font-family:var(--font-mono);font-size:18px;letter-spacing:3px;box-shadow:0 0 30px var(--accent-glow);"></div>
+    <button onclick="cleanExpiredKeys()" style="margin-top:20px;width:100%;padding:14px;background:#222;color:#fff;border:none;border-radius:6px;font-weight:900;">🧹 NETTOYER LES CLÉS EXPIRÉES / NON ACTIVES</button>
   `;
 }
 
@@ -1200,6 +1198,21 @@ function copyKey(key) {
   navigator.clipboard.writeText(key).then(() => {
     alert("✅ Clé copiée dans le presse-papiers !");
   });
+}
+
+async function cleanExpiredKeys() {
+  if (confirm("Supprimer toutes les clés expirées / non actives du système ?")) {
+    try {
+      await fetch(`${BASE}/api/admin/clean`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID }
+      });
+      alert("✅ Clés expirées / non actives nettoyées avec succès.");
+      loadAdminData(currentAdminTab);
+    } catch(e) {
+      alert("Erreur lors du nettoyage.");
+    }
+  }
 }
 
 async function revokeUserKey(telegramId) {
@@ -1276,10 +1289,6 @@ async function showUserDetail(telegramId) {
 
 function closeUserModal() {
   document.getElementById("userDetailModal").style.display = "none";
-}
-
-function renderGeneratorTab() {
-  // déjà défini plus haut
 }
 </script>
 </body>
