@@ -139,10 +139,11 @@ main { padding: 16px; position: relative; z-index: 2; }
 .no-results { background: var(--surface); border: 1px solid var(--border); padding: 25px; text-align: center; }
 .no-results h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 4px; color: var(--accent); }
 .no-results p { font-size: 10px; color: var(--muted); }
-/* ADMIN PANEL STYLES - VERSION ULTRA RICHE */
+/* ADMIN PANEL STYLES */
 #adminOverlay { z-index: 2000; align-items: center; justify-content: center; }
-#userDetailModal { z-index: 2100; align-items: center; justify-content: center; }
-.admin-panel, .modal-panel {
+#familyOverlay { z-index: 2100; align-items: center; justify-content: center; }
+#userDetailModal { z-index: 2200; align-items: center; justify-content: center; }
+.admin-panel, .family-panel, .modal-panel {
   width: 95%;
   max-width: 980px;
   background: var(--surface);
@@ -156,7 +157,7 @@ main { padding: 16px; position: relative; z-index: 2; }
   flex-direction: column;
 }
 @keyframes adminPop { 0% { transform: scale(0.85) translateY(30px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
-.admin-header, .modal-header {
+.admin-header, .family-header, .modal-header {
   padding: 16px 20px;
   background: rgba(255,30,86,0.1);
   border-bottom: 1px solid var(--border);
@@ -164,13 +165,13 @@ main { padding: 16px; position: relative; z-index: 2; }
   align-items: center;
   justify-content: space-between;
 }
-.admin-header h1, .modal-header h1 {
+.admin-header h1, .family-header h1, .modal-header h1 {
   font-family: var(--font-display);
   font-size: 22px;
   letter-spacing: 3px;
   margin: 0;
 }
-.admin-close, .modal-close {
+.admin-close, .family-close, .modal-close {
   background: none;
   border: none;
   font-size: 28px;
@@ -178,7 +179,7 @@ main { padding: 16px; position: relative; z-index: 2; }
   cursor: pointer;
   line-height: 1;
 }
-.admin-content, .modal-content {
+.admin-content, .family-content, .modal-content {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
@@ -207,26 +208,11 @@ main { padding: 16px; position: relative; z-index: 2; }
   font-weight: bold;
   text-transform: uppercase;
 }
-.selectable-card {
-  padding: 16px;
-  background: #111;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  text-align: center;
-  font-weight: 900;
-  font-family: var(--font-display);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.selectable-card.active {
-  border-color: var(--accent);
-  background: rgba(255,30,86,0.12);
-  box-shadow: 0 0 25px var(--accent-glow);
-  animation: popIn 0.3s ease;
-}
 .timer-container { font-size: 32px; font-weight: 900; color: var(--accent); text-shadow: 0 0 20px var(--accent-glow); text-align: center; margin: 20px 0; }
 .revoke-btn { background: #ff1e56; color: #fff; border: none; padding: 14px 24px; border-radius: 4px; font-weight: 900; cursor: pointer; width: 100%; margin-top: 20px; transition: all 0.3s; }
 .revoke-btn:hover { box-shadow: 0 0 25px #ff1e56; transform: scale(1.05); }
+@keyframes pulseGlow { 0%,100% { text-shadow: 0 0 10px rgba(255,30,86,0.2); opacity: 0.8; } 50% { text-shadow: 0 0 25px rgba(255,30,86,0.7); opacity: 1; } }
+@keyframes cyberScan { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-1px); text-shadow: 0 0 18px var(--accent); } }
 </style>
 </head>
 <body>
@@ -259,7 +245,7 @@ main { padding: 16px; position: relative; z-index: 2; }
     </button>
     <div class="profile-dropdown" id="profileDropdown" onclick="event.stopPropagation()">
       <div>
-        <div class="dropdown-user-title">STATUT DE L'ACCÈS</div>
+        <div class="dropdown-user-title">Statut de l'accès</div>
         <div class="dropdown-timer-text" id="dropdownTimer">TERM: --h --m --s</div>
       </div>
       <div>
@@ -267,13 +253,13 @@ main { padding: 16px; position: relative; z-index: 2; }
           <div class="dropdown-bar-fill" id="dropdownBarFill"></div>
         </div>
       </div>
-      <a href="#" class="dropdown-extend-btn">PROLONGER L'ACCÈS</a>
+      <a href="#" class="dropdown-extend-btn">Prolonger l'accès</a>
       <div class="theme-selector">
-        <div class="theme-title">THÈME DE L'INTERFACE</div>
+        <div class="theme-title">Thème de l'interface</div>
         <div class="theme-options">
-          <button class="theme-opt-btn active" id="th-cyber" onclick="setTheme('cyber')">CYBER</button>
-          <button class="theme-opt-btn" id="th-furtif" onclick="setTheme('furtif')">FURTIF</button>
-          <button class="theme-opt-btn" id="th-ocean" onclick="setTheme('ocean')">OCÉAN</button>
+          <button class="theme-opt-btn active" id="th-cyber" onclick="setTheme('cyber')">Cyber</button>
+          <button class="theme-opt-btn" id="th-furtif" onclick="setTheme('furtif')">Furtif</button>
+          <button class="theme-opt-btn" id="th-ocean" onclick="setTheme('ocean')">Océan</button>
         </div>
       </div>
       <div id="adminSection" style="display:none; margin-top:12px;">
@@ -298,7 +284,7 @@ main { padding: 16px; position: relative; z-index: 2; }
   <div class="section-title">INFORMATIONS SUR LA CIBLE</div>
   <div class="fields-grid" id="fieldsGrid"></div>
   <button class="search-btn" id="searchBtn" disabled onclick="launchSearch()">LANCER LA RECHERCHE</button>
-  <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">RÉINITIALISER LA RECHERCHE</button>
+  <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">Réinitialiser la recherche</button>
   <div class="results-section" id="resultsSection" style="display:none"></div>
 </main>
 
@@ -335,6 +321,17 @@ main { padding: 16px; position: relative; z-index: 2; }
     <div class="admin-content" id="modalContent">
       <!-- Rempli dynamiquement -->
     </div>
+  </div>
+</div>
+
+<!-- FAMILY OVERLAY (restauré) -->
+<div class="overlay" id="familyOverlay" style="display:none; align-items:center; justify-content:center;">
+  <div class="admin-panel family-panel">
+    <div class="admin-header family-header">
+      <div class="main-logo-anim" style="font-size:22px; margin:0;">FICHE COMPLÈTE CONSOLIDÉE</div>
+      <button class="admin-close family-close" onclick="closeFamilyOverlay()">✕</button>
+    </div>
+    <div class="admin-content family-content" id="familyContent"></div>
   </div>
 </div>
 
@@ -677,6 +674,17 @@ async function approfondirRecherche(index) {
   const rows = Object.entries(consolidated)
     .filter(([k]) => !k.startsWith("_"))
     .map(([k,v]) => `<div class="info-row"><span class="info-key">${k.replace(/_/g," ").toUpperCase()}</span><span class="info-val">${v}</span></div>`).join("");
+  const familyHTML = similars.length ? `
+    <h4 style="margin:20px 0 10px 0;color:var(--accent);">LIENS FAMILIAUX DÉTECTÉS</h4>
+    <div class="family-list">
+      ${similars.map((p, i) => {
+        const famName = [p.prenom, p.nom_famille].filter(Boolean).join(" ");
+        return `<div class="family-card" onclick="showPersonFicheFromFamily(${i})">
+          <div class="family-relation">LIEN FAMILIAL</div>
+          <div style="font-weight:900;">${famName}</div>
+        </div>`;
+      }).join("")}
+    </div>` : `<p style="color:var(--muted);text-align:center;">Aucun lien familial détecté</p>`;
   const sec = document.getElementById("resultsSection");
   sec.innerHTML = `
     <h2 style="margin-bottom:16px;color:var(--accent);">FICHE COMPLÈTE CONSOLIDÉE</h2>
@@ -685,6 +693,25 @@ async function approfondirRecherche(index) {
         <span class="card-name">${name}</span>
       </div>
       <div class="card-body">${rows || 'Aucune donnée supplémentaire'}</div>
+    </div>
+    ${familyHTML}
+    <button onclick="renderResults(allResults)" style="margin-top:20px;width:100%;padding:14px;background:var(--accent);color:#000;border:none;border-radius:4px;font-weight:900;">RETOUR AUX RÉSULTATS</button>
+  `;
+  sec.style.display = "block";
+}
+
+function showPersonFicheFromFamily(index) {
+  const person = allResults[index];
+  const name = [person.prenom, person.nom_famille].filter(Boolean).join(" ").toUpperCase();
+  const rows = Object.entries(person).filter(([k]) => !k.startsWith("_")).map(([k,v]) => `<div class="info-row"><span class="info-key">${k.replace(/_/g," ").toUpperCase()}</span><span class="info-val">${v}</span></div>`).join("");
+  const sec = document.getElementById("resultsSection");
+  sec.innerHTML = `
+    <h2 style="margin-bottom:16px;color:var(--accent);">FICHE DE ${name}</h2>
+    <div class="result-card">
+      <div class="card-header">
+        <span class="card-name">${name}</span>
+      </div>
+      <div class="card-body">${rows}</div>
     </div>
     <button onclick="renderResults(allResults)" style="margin-top:20px;width:100%;padding:14px;background:var(--accent);color:#000;border:none;border-radius:4px;font-weight:900;">RETOUR AUX RÉSULTATS</button>
   `;
