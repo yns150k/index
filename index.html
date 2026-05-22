@@ -225,7 +225,7 @@ header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900;
 
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
-main { padding: 16px; position: relative; z-index: 2; }
+main { padding: 14px 12px; position: relative; z-index: 2; max-width: 100%; }
 .section-title { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; margin: 20px 0 12px 0; display: flex; align-items: center; gap: 8px; }
 .section-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.05); }
 
@@ -333,43 +333,45 @@ main { padding: 16px; position: relative; z-index: 2; }
 .admin-close, .modal-header button, .family-header button { background: none; border: none; color: var(--accent); font-size: 26px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; }
 .admin-close:hover, .modal-header button:hover, .family-header button:hover { transform: rotate(90deg) scale(1.1); color: #fff !important; background: rgba(255,30,86,0.2); }
 
-.admin-content, .family-content, .modal-content { flex: 1; overflow-y: auto; padding: 24px; }
+.admin-content, .family-content, .modal-content { flex: 1; overflow-y: auto; padding: 20px 18px; }
 .admin-tab-bar { 
   display: flex; 
-  gap: 8px; 
-  margin-bottom: 24px; 
+  gap: 6px; 
+  margin-bottom: 20px; 
   flex-wrap: wrap; 
-  padding: 0 24px; 
+  padding: 0 18px; 
   justify-content: space-around;
 }
 .admin-tab-bar .tab {
   flex: 1;
-  min-width: 110px;
+  min-width: 105px;
   text-align: center;
-  padding: 14px 16px;
+  padding: 13px 14px;
   font-size: 11.5px;
   white-space: nowrap;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
-.family-list { display: flex; flex-direction: column; gap: 16px; }
-.family-card { background: var(--card); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 20px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
+
+.family-list { display: flex; flex-direction: column; gap: 14px; }
+.family-card { background: var(--card); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 18px 18px 18px 18px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
 .family-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 20px var(--accent-glow); border-color: var(--accent); }
 .family-card:active { transform: scale(0.97); }
-.family-name { font-family: var(--font-display); font-size: 16px; font-weight: 900; letter-spacing: 1px; color: #fff; }
-.family-birth { font-size: 12px; color: var(--muted); margin-top: 8px; }
+.family-name { font-family: var(--font-display); font-size: 15px; font-weight: 900; letter-spacing: 1px; color: #fff; line-height: 1.2; }
+.family-birth { font-size: 12px; color: var(--muted); margin-top: 6px; }
 .family-bubble { 
   position: absolute; 
-  top: 16px; 
-  right: 16px; 
-  font-size: 9.5px; 
+  top: 14px; 
+  right: 14px; 
+  font-size: 8.5px; 
   font-weight: 900; 
-  padding: 6px 16px; 
+  padding: 3px 11px; 
   border-radius: 9999px; 
-  letter-spacing: 1px; 
-  box-shadow: 0 0 15px var(--accent-glow); 
+  letter-spacing: 0.8px; 
+  box-shadow: 0 0 12px var(--accent-glow); 
   text-transform: uppercase;
-  color: #000;
+  max-width: 110px;
+  text-align: center;
+  line-height: 1.1;
 }
 
 .timer-container { font-size: 36px; font-weight: 900; color: var(--accent); text-shadow: 0 0 25px var(--accent-glow); text-align: center; margin: 24px 0; font-family: var(--font-mono); }
@@ -377,34 +379,6 @@ main { padding: 16px; position: relative; z-index: 2; }
 .revoke-btn:hover { box-shadow: 0 8px 25px #ff1e56; transform: translateY(-2px); }
 .btn-small-revoke { background: var(--accent); color: #000; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 900; font-size: 10px; transition: all 0.3s; letter-spacing: 0.5px; }
 .btn-small-revoke:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 4px 15px var(--accent-glow); background: #fff; color: #ff1e56; }
-
-/* NOUVELLES STYLES POUR FONCTIONNALITÉS ADMIN */
-.admin-search-input {
-  width: 100%;
-  background: #000;
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 12px 16px;
-  color: #fff;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  border-radius: 6px;
-  margin-bottom: 16px;
-}
-.live-log {
-  max-height: 320px;
-  overflow-y: auto;
-  background: rgba(0,0,0,0.4);
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 11px;
-  line-height: 1.4;
-}
-.live-log-entry {
-  padding: 8px 0;
-  border-bottom: 1px dashed rgba(255,255,255,0.1);
-  display: flex;
-  justify-content: space-between;
-}
 </style>
 </head>
 <body>
@@ -803,8 +777,6 @@ CATEGORIES.forEach(c => c.fields.forEach(f => FIELD_MAP[f.k] = f));
 function getProbableRelation(basePerson, person) {
   if (!basePerson || !person) return "PROBABLE LIEN";
 
-  const currentYear = new Date().getFullYear();
-
   const getBirthYear = (p) => {
     if (p.date_naissance) {
       const yearMatch = p.date_naissance.match(/(\d{4})/);
@@ -819,7 +791,7 @@ function getProbableRelation(basePerson, person) {
 
   if (!baseYear || !personYear) return "PROBABLE LIEN FAMILIAL";
 
-  const ageDiff = baseYear - personYear;
+  const ageDiff = baseYear - personYear; // positif = base plus jeune que la personne
 
   const baseGenre = (basePerson.genre || "").toLowerCase().trim();
   const personGenre = (person.genre || "").toLowerCase().trim();
@@ -830,19 +802,22 @@ function getProbableRelation(basePerson, person) {
   const isMaleName = (name) => /jean|paul|louis|thomas|antoine|luc|matthieu|nicolas|pierre|julien|alexandre|victor|léon|raphaël/i.test(name);
   const isFemaleName = (name) => /marie|anne|élise|camille|léa|manon|chloé|emma|jules|lou|alice|rose|clara|lina/i.test(name);
 
+  // Cas frère/sœur (âge très proche)
   if (Math.abs(ageDiff) <= 12) {
     if (personGenre === "m" || isMaleName(personPrenom)) return "PROBABLE FRÈRE";
     if (personGenre === "f" || isFemaleName(personPrenom)) return "PROBABLE SŒUR";
     return "PROBABLE FRÈRE / SŒUR";
   }
 
-  if (ageDiff < -18 && ageDiff > -55) {
+  // Cas PARENT : la personne est plus âgée que la personne sélectionnée
+  if (ageDiff > 18 && ageDiff < 55) {
     if (personGenre === "m" || isMaleName(personPrenom)) return "PROBABLE PÈRE";
     if (personGenre === "f" || isFemaleName(personPrenom)) return "PROBABLE MÈRE";
     return "PROBABLE PARENT";
   }
 
-  if (ageDiff > 18 && ageDiff < 55) {
+  // Cas ENFANT : la personne est plus jeune que la personne sélectionnée
+  if (ageDiff < -18 && ageDiff > -55) {
     if (personGenre === "m" || isMaleName(personPrenom)) return "PROBABLE FILS";
     if (personGenre === "f" || isFemaleName(personPrenom)) return "PROBABLE FILLE";
     return "PROBABLE ENFANT";
@@ -966,7 +941,7 @@ function renderResults(results) {
   sec.innerHTML = `<h2>DOSSIERS IDENTIFIÉS <span class="count">${allResults.length}/10</span></h2>${cards}`;
 }
 
-/* ====================== FAMILY OVERLAY AVEC RELATION INTELLIGENTE TRÈS VISIBLE ====================== */
+/* ====================== FAMILY OVERLAY ====================== */
 function approfondirRecherche(index) {
   currentApprofondirIndex = index;
   const basePerson = allResults[index];
@@ -991,7 +966,7 @@ function approfondirRecherche(index) {
       <div class="family-card" onclick="showPersonFicheFromFamily(${i})">
         <div class="family-name">${fullName}</div>
         <div class="family-birth">Né(e) le ${birth}</div>
-        <div class="family-bubble" style="background:#00ff88;color:#000;font-size:10px;">${relation}</div>
+        <div class="family-bubble" style="background:#00ff88;color:#000;">${relation}</div>
       </div>`;
   });
   familyHTML += `</div>`;
@@ -1034,9 +1009,7 @@ function closeFamilyOverlay() {
   currentApprofondirIndex = null;
 }
 
-/* ====================== PANEL ADMIN COMPLÈTEMENT RÉORGANISÉ + NOUVELLES FONCTIONNALITÉS ====================== */
-let adminUsersData = [];
-
+/* ====================== PANEL ADMIN ====================== */
 function openAdminPanel() {
   if (!isAdmin) return;
   document.getElementById("adminOverlay").style.display = "flex";
@@ -1050,11 +1023,10 @@ function closeAdminPanel() {
 
 function buildAdminTabs() {
   const tabsHTML = `
-    <button class="tab ${currentAdminTab===0?'active':''}" onclick="switchAdminTab(0)" style="flex:1;min-width:105px;">📊 STATS</button>
-    <button class="tab ${currentAdminTab===1?'active':''}" onclick="switchAdminTab(1)" style="flex:1;min-width:105px;">👥 USERS</button>
-    <button class="tab ${currentAdminTab===2?'active':''}" onclick="switchAdminTab(2)" style="flex:1;min-width:105px;">📜 LOGS</button>
+    <button class="tab ${currentAdminTab===0?'active':''}" onclick="switchAdminTab(0)" style="flex:1;min-width:105px;">📊 STATISTIQUES</button>
+    <button class="tab ${currentAdminTab===1?'active':''}" onclick="switchAdminTab(1)" style="flex:1;min-width:105px;">👥 UTILISATEURS</button>
+    <button class="tab ${currentAdminTab===2?'active':''}" onclick="switchAdminTab(2)" style="flex:1;min-width:105px;">📜 HISTORIQUE</button>
     <button class="tab ${currentAdminTab===3?'active':''}" onclick="switchAdminTab(3)" style="flex:1;min-width:105px;">🔑 GÉNÉRATEUR</button>
-    <button class="tab ${currentAdminTab===4?'active':''}" onclick="switchAdminTab(4)" style="flex:1;min-width:105px;">📡 LIVE</button>
   `;
   document.getElementById("adminTabs").innerHTML = tabsHTML;
 }
@@ -1071,12 +1043,10 @@ async function loadAdminData(tabIndex) {
     });
     if (!res.ok) throw new Error("Accès refusé");
     const adminData = await res.json();
-    adminUsersData = adminData.users || [];
     if (tabIndex === 0) renderStatsTab(adminData);
     else if (tabIndex === 1) renderUsersTab(adminData);
     else if (tabIndex === 2) renderHistoryTab(adminData);
     else if (tabIndex === 3) renderGeneratorTab(adminData);
-    else if (tabIndex === 4) renderLiveTab(adminData);
   } catch(e) {
     content.innerHTML = `<div class="no-results"><h3>ERREUR ADMIN</h3><p>Impossible de charger les données administrateur.</p></div>`;
   }
@@ -1086,65 +1056,37 @@ function switchAdminTab(tabIndex) {
   loadAdminData(tabIndex);
 }
 
-/* NOUVELLE FONCTIONNALITÉ : STATS AMÉLIORÉES */
 function renderStatsTab(data) {
   const content = document.getElementById("adminContent");
   const pct = Math.min(100, Math.round((data.apiRequests || 0) / 1000 * 100));
   content.innerHTML = `
     <div class="admin-stat-grid">
       <div class="admin-stat-card" onclick="showActivatedKeys()">
-        <div style="font-size:10px;color:var(--muted);">CLÉS ACTIVÉES</div>
-        <div style="font-size:42px;font-weight:900;color:var(--accent);">${data.activatedKeys || 0}</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Clés activées</div>
+        <div style="font-size:36px;font-weight:900;color:var(--accent);">${data.activatedKeys || 0}</div>
       </div>
       <div class="admin-stat-card" onclick="showActiveUsers()">
-        <div style="font-size:10px;color:var(--muted);">UTILISATEURS ACTIFS</div>
-        <div style="font-size:42px;font-weight:900;color:var(--success);">${data.usersCount || 0}</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Utilisateurs actifs</div>
+        <div style="font-size:36px;font-weight:900;color:var(--success);">${data.usersCount || 0}</div>
       </div>
       <div class="admin-stat-card">
-        <div style="font-size:10px;color:var(--muted);">REQUÊTES API</div>
-        <div style="font-size:42px;font-weight:900;color:#00e5ff;">${data.apiRequests || 0}</div>
-        <div style="width:100%;margin-top:8px;background:rgba(255,255,255,0.05);height:6px;border-radius:4px;overflow:hidden;"><div style="width:${pct}%;background:#00e5ff;height:100%;"></div></div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Requêtes API</div>
+        <div style="font-size:36px;font-weight:900;color:#00e5ff;">${data.apiRequests || 0} <span style="font-size:14px;">/ 1000</span></div>
+        <div style="width:100%;margin-top:8px;background:rgba(255,255,255,0.05);height:4px;border-radius:2px;overflow:hidden;"><div style="width:${pct}%;background:#00e5ff;height:100%;"></div></div>
       </div>
       <div class="admin-stat-card">
-        <div style="font-size:10px;color:var(--muted);">CLÉS À VIE</div>
-        <div style="font-size:42px;font-weight:900;color:#fff;">${data.lifetimeKeys || 0}</div>
-      </div>
-      <div class="admin-stat-card">
-        <div style="font-size:10px;color:var(--muted);">RECHERCHES AUJOURD'HUI</div>
-        <div style="font-size:42px;font-weight:900;color:#00ff88;">${Math.floor(Math.random()*240)+120}</div>
-      </div>
-      <div class="admin-stat-card" style="cursor:default;">
-        <div style="font-size:10px;color:var(--muted);">SYSTÈME</div>
-        <div style="display:flex;gap:8px;margin-top:12px;">
-          <div style="background:#00ff88;color:#000;padding:4px 12px;border-radius:9999px;font-size:10px;font-weight:900;">EN LIGNE</div>
-          <div style="background:#ff1e56;color:#fff;padding:4px 12px;border-radius:9999px;font-size:10px;font-weight:900;">${Math.floor(Math.random()*12)+3} USERS</div>
-        </div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Clés à vie</div>
+        <div style="font-size:36px;font-weight:900;color:#fff;">${data.lifetimeKeys || 0}</div>
       </div>
     </div>
-    <button onclick="exportAllUsers()" style="margin-top:20px;width:100%;padding:16px;background:var(--accent);color:#000;font-weight:900;border:none;border-radius:6px;">📤 EXPORTER TOUS LES UTILISATEURS (CSV)</button>
   `;
 }
 
-/* NOUVELLE FONCTIONNALITÉ : FILTRE DE RECHERCHE DANS USERS */
 function renderUsersTab(data) {
   const content = document.getElementById("adminContent");
-  content.innerHTML = `
-    <input type="text" id="adminUserSearch" class="admin-search-input" placeholder="🔎 Rechercher par Telegram ID ou clé..." onkeyup="filterAdminUsers()">
-    <div style="overflow-x:auto;">
-      <table class="admin-table">
-        <thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>TEMPS RESTANT</th><th>ACTION</th></tr></thead>
-        <tbody id="usersTableBody"></tbody>
-      </table>
-    </div>
-  `;
-  renderUsersTable(adminUsersData);
-}
-
-function renderUsersTable(users) {
-  const tbody = document.getElementById("usersTableBody");
   let rows = "";
-  if (users && users.length) {
-    rows = users.map(u => {
+  if (data.users && data.users.length) {
+    rows = data.users.map(u => {
       const remaining = u.expiresAt === "lifetime" ? "ILLIMITÉ" : Math.max(0, Math.floor((new Date(u.expiresAt) - Date.now()) / 86400000)) + " jours";
       return `<tr style="cursor:pointer;" onclick="showUserDetail('${u.telegramId}')">
         <td>${u.telegramId}</td>
@@ -1154,21 +1096,18 @@ function renderUsersTable(users) {
       </tr>`;
     }).join("");
   } else {
-    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);">Aucun utilisateur trouvé</td></tr>`;
+    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);">Aucun utilisateur</td></tr>`;
   }
-  tbody.innerHTML = rows;
+  content.innerHTML = `
+    <div style="overflow-x:auto;">
+      <table class="admin-table">
+        <thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>TEMPS RESTANT</th><th>ACTION</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
 }
 
-function filterAdminUsers() {
-  const term = document.getElementById("adminUserSearch").value.toLowerCase().trim();
-  const filtered = adminUsersData.filter(u => 
-    u.telegramId.toLowerCase().includes(term) || 
-    (u.keyLabel && u.keyLabel.toLowerCase().includes(term))
-  );
-  renderUsersTable(filtered);
-}
-
-/* NOUVELLE FONCTIONNALITÉ : HISTORIQUE + LIVE ACTIVITY */
 function renderHistoryTab(data) {
   const content = document.getElementById("adminContent");
   let rows = "";
@@ -1183,7 +1122,7 @@ function renderHistoryTab(data) {
       </tr>`;
     }).join("");
   } else {
-    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:30px;">Aucun historique</td></tr>`;
+    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:30px;">Aucun historique de recherche</td></tr>`;
   }
   content.innerHTML = `
     <div style="overflow-x:auto;">
@@ -1193,36 +1132,6 @@ function renderHistoryTab(data) {
       </table>
     </div>
   `;
-}
-
-function renderLiveTab() {
-  const content = document.getElementById("adminContent");
-  content.innerHTML = `
-    <h3 style="margin-bottom:12px;color:var(--accent);">ACTIVITÉ EN DIRECT</h3>
-    <div class="live-log" id="liveLogContainer"></div>
-    <div style="text-align:center;margin-top:12px;font-size:10px;color:var(--muted);">Mise à jour toutes les 3 secondes</div>
-  `;
-  simulateLiveLog();
-}
-
-function simulateLiveLog() {
-  const container = document.getElementById("liveLogContainer");
-  const fakeEntries = [
-    "🟢 1234567890 a recherché Zajou → 4 résultats",
-    "🔵 9876543210 a recherché 06 12 34 56 78 → 2 résultats",
-    "🟡 1122334455 a recherché Paris → 11 résultats",
-    "🔴 6677889900 a recherché Cazajou → 1 résultat"
-  ];
-  let i = 0;
-  setInterval(() => {
-    if (!container) return;
-    const entry = document.createElement("div");
-    entry.className = "live-log-entry";
-    entry.innerHTML = `<span>${fakeEntries[i % fakeEntries.length]}</span><span style="color:var(--muted);font-size:10px;">il y a ${Math.floor(Math.random()*40)+5}s</span>`;
-    container.prepend(entry);
-    if (container.children.length > 12) container.lastChild.remove();
-    i++;
-  }, 2800);
 }
 
 function renderGeneratorTab() {
@@ -1236,17 +1145,16 @@ function renderGeneratorTab() {
     {type:'admin', label:'CLÉ ADMIN'}
   ];
   const cards = types.map(t => `
-    <button onclick="selectKeyType('${t.type}')" class="selectable-card ${selectedKeyType === t.type ? 'active' : ''}" style="padding:16px; border:2px solid ${selectedKeyType === t.type ? 'var(--accent)' : 'rgba(255,255,255,0.1)'}; border-radius:8px; text-align:center; font-family:var(--font-display); font-weight:900; font-size:12px; background:${selectedKeyType === t.type ? 'rgba(255,30,86,0.1)' : 'var(--surface)'}; color:${selectedKeyType === t.type ? '#fff' : 'var(--muted)'}; transition:all 0.2s; box-shadow:${selectedKeyType === t.type ? '0 0 15px var(--accent-glow)' : 'none'}; transform:${selectedKeyType === t.type ? 'scale(1.05)' : 'none'};">
+    <button onclick="selectKeyType('${t.type}')" class="selectable-card ${selectedKeyType === t.type ? 'active' : ''}" style="padding:14px 8px; border:2px solid ${selectedKeyType === t.type ? 'var(--accent)' : 'rgba(255,255,255,0.1)'}; border-radius:8px; text-align:center; font-family:var(--font-display); font-weight:900; font-size:11.5px; background:${selectedKeyType === t.type ? 'rgba(255,30,86,0.1)' : 'var(--surface)'}; color:${selectedKeyType === t.type ? '#fff' : 'var(--muted)'}; transition:all 0.2s; box-shadow:${selectedKeyType === t.type ? '0 0 15px var(--accent-glow)' : 'none'}; transform:${selectedKeyType === t.type ? 'scale(1.05)' : 'none'};">
       ${t.label}
     </button>
   `).join("");
   const content = document.getElementById("adminContent");
   content.innerHTML = `
     <h3 style="margin-bottom:20px;font-family:var(--font-display);color:var(--accent);">GÉNÉRER UNE NOUVELLE CLÉ</h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;">${cards}</div>
-    <button id="generateBtn" class="search-btn btn-shine" onclick="validateAndGenerate()" style="margin-top:30px; border-radius:8px; padding:20px;">GÉNÉRER LA CLÉ</button>
-    <div id="generatedKeyDisplay" style="margin-top:25px;display:none;background:#000;border:2px solid var(--accent);border-radius:12px;padding:24px;text-align:center;word-break:break-all;font-family:var(--font-mono);font-size:19px;letter-spacing:4px;box-shadow:0 0 30px var(--accent-glow); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);"></div>
-    <button onclick="cleanExpiredKeys()" style="margin-top:20px;width:100%;padding:14px;background:#222;color:#fff;border:none;border-radius:6px;">🧹 NETTOYER LES CLÉS EXPIRÉES</button>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;">${cards}</div>
+    <button id="generateBtn" class="search-btn btn-shine" onclick="validateAndGenerate()" style="margin-top:30px; border-radius:8px; padding:18px;">GÉNÉRER LA CLÉ</button>
+    <div id="generatedKeyDisplay" style="margin-top:25px;display:none;background:#000;border:2px solid var(--accent);border-radius:12px;padding:20px;text-align:center;word-break:break-all;font-family:var(--font-mono);font-size:18px;letter-spacing:3px;box-shadow:0 0 30px var(--accent-glow);"></div>
   `;
 }
 
@@ -1274,8 +1182,8 @@ async function validateAndGenerate() {
       const display = document.getElementById("generatedKeyDisplay");
       display.innerHTML = `
         <div style="color:var(--accent);font-size:12px;font-weight:bold;margin-bottom:16px;letter-spacing:1px;">✅ CLÉ GÉNÉRÉE AVEC SUCCÈS</div>
-        <div style="font-size:24px;letter-spacing:6px;margin-bottom:24px;color:#fff;">${result.key}</div>
-        <button class="btn-approfondir btn-shine" onclick="copyKey('${result.key}')" style="width:100%; padding:16px; border-radius:6px; font-size:13px;">📋 COPIER LA CLÉ</button>
+        <div style="font-size:23px;letter-spacing:5px;margin-bottom:20px;color:#fff;">${result.key}</div>
+        <button class="btn-approfondir btn-shine" onclick="copyKey('${result.key}')" style="width:100%; padding:14px; border-radius:6px; font-size:12px;">📋 COPIER LA CLÉ</button>
       `;
       display.style.display = "block";
     }
@@ -1370,15 +1278,8 @@ function closeUserModal() {
   document.getElementById("userDetailModal").style.display = "none";
 }
 
-async function exportAllUsers() {
-  alert("📤 Export CSV généré et prêt à être téléchargé (simulation). Dans la vraie version le fichier serait téléchargé directement.");
-}
-
-async function cleanExpiredKeys() {
-  if (confirm("Supprimer toutes les clés expirées du système ?")) {
-    alert("✅ Toutes les clés expirées ont été nettoyées avec succès.");
-    loadAdminData(currentAdminTab);
-  }
+function renderGeneratorTab() {
+  // déjà défini plus haut
 }
 </script>
 </body>
