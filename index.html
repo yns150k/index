@@ -48,11 +48,25 @@
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; }
 body { background: var(--bg); color: var(--text); font-family: var(--font-mono); min-height: 100vh; overflow-x: hidden; padding-bottom: env(safe-area-inset-bottom); }
 .grid-bg { position: fixed; inset: 0; opacity: 0.04; pointer-events: none; z-index: 0; background-image: linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px); background-size: 50px 50px; }
+
+button, .key-gen-btn, .selectable-card { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+button:active, .selectable-card:active { transform: scale(0.95); }
+
+@keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes glowPulse { 0%, 100% { text-shadow: 0 0 10px var(--accent); } 50% { text-shadow: 0 0 25px var(--accent); } }
+@keyframes pulseGlow { 0%,100% { text-shadow: 0 0 10px rgba(255,30,86,0.2); opacity: 0.8; } 50% { text-shadow: 0 0 25px rgba(255,30,86,0.7); opacity: 1; } }
+@keyframes cyberScan { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-1px); text-shadow: 0 0 18px var(--accent); } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes adminPop { 0% { transform: scale(0.85) translateY(30px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+
 #boot { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; }
 .boot-logo { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: #fff; letter-spacing: 4px; animation: pulseGlow 2s infinite ease-in-out; }
 .boot-bar-wrap { width: 160px; height: 3px; background: rgba(255,255,255,0.03); border-radius: 4px; overflow: hidden; }
 .boot-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease-in-out; box-shadow: 0 0 10px var(--accent); }
 #bootStatus { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
+
 #lockScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 900; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
 .lock-box { width: 100%; max-width: 350px; background: var(--surface); border: 1px solid var(--border); padding: 30px 20px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 30px rgba(255,30,86,0.05); border-radius: 4px; }
 .main-logo-anim { font-family: var(--font-display); font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; position: relative; display: inline-block; animation: cyberScan 3s infinite ease-in-out; }
@@ -62,33 +76,20 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-mono);
 .lock-btn { width: 100%; padding: 14px; background: var(--accent); border: none; color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 12px; letter-spacing: 1.5px; cursor: pointer; box-shadow: 0 4px 15px var(--accent-glow); transition: transform 0.1s; }
 .lock-btn:active { transform: scale(0.98); }
 .lock-error { color: var(--accent); font-size: 10px; margin-top: 12px; text-transform: uppercase; font-weight: bold; display: none; }
+
 header { position: sticky; top: 0; z-index: 950; background: rgba(3,3,5,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
 .header-left { display: flex; align-items: center; gap: 10px; }
 header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900; letter-spacing: 1px; }
 .header-right { position: relative; display: flex; align-items: center; gap: 12px; }
-.status-indicator {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 4px 12px;
-  border-radius: 9999px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  box-shadow: 0 0 8px currentColor;
-  white-space: nowrap;
-}
+.status-indicator { font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 9999px; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 0 8px currentColor; white-space: nowrap; }
 .status-indicator.actif { background: var(--success); color: #030305; }
 .status-indicator.inactif { background: #ff1e56; color: #fff; }
 .profile-btn { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.2s; }
 .profile-btn:hover, .profile-btn.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
-.profile-avatar {
-  width: 18px; height: 18px; border-radius: 50%; overflow: hidden; display: flex;
-  align-items: center; justify-content: center; font-size: 10px; font-weight: 700;
-  background: var(--accent); color: #000; box-shadow: 0 0 8px var(--accent-glow);
-}
+.profile-avatar { width: 18px; height: 18px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; background: var(--accent); color: #000; box-shadow: 0 0 8px var(--accent-glow); }
 .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .profile-dropdown { position: absolute; top: calc(100% + 10px); right: 0; width: 260px; background: var(--surface); border: 1px solid var(--border); padding: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: none; flex-direction: column; gap: 12px; border-radius: 4px; z-index: 1000; }
 .profile-dropdown.open { display: flex; animation: fadeIn 0.15s ease-out; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 .dropdown-user-title { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
 .dropdown-timer-text { font-family: var(--font-mono); font-size: 13px; font-weight: bold; color: var(--text); margin-top: -4px; }
 .dropdown-bar-wrap { width: 100%; height: 5px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
@@ -124,7 +125,6 @@ main { padding: 16px; position: relative; z-index: 2; }
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); z-index: 100; display: none; align-items: flex-end; }
 .overlay.open { display: flex; }
 .input-sheet { width: 100%; background: var(--surface); border-top: 2px solid var(--accent); padding: 20px 16px calc(20px + env(safe-area-inset-bottom)) 16px; box-shadow: 0 -10px 30px rgba(0,0,0,0.8); animation: slideUp 0.15s ease-out; }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 .input-sheet h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 12px; letter-spacing: 0.5px; }
 .input-field { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 14px; outline: none; margin-bottom: 15px; }
 .input-field:focus { border-color: var(--accent); }
@@ -148,10 +148,10 @@ main { padding: 16px; position: relative; z-index: 2; }
 .info-val { color: var(--text); word-break: break-all; user-select: text; }
 .loader { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 30px 0; color: var(--accent); font-size: 10px; font-weight: bold; }
 .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,30,86,0.1); border-top-color: var(--accent); animation: spin 0.4s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
 .no-results { background: var(--surface); border: 1px solid var(--border); padding: 25px; text-align: center; }
 .no-results h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 4px; color: var(--accent); }
 .no-results p { font-size: 10px; color: var(--muted); }
+
 /* ADMIN PANEL STYLES */
 #adminOverlay { z-index: 2000; align-items: center; justify-content: center; }
 #familyOverlay { z-index: 2100; align-items: center; justify-content: center; }
@@ -167,10 +167,6 @@ main { padding: 16px; position: relative; z-index: 2; }
   overflow: hidden;
   display: flex;
   flex-direction: column;
-}
-@keyframes adminPop {
-  0% { transform: scale(0.85) translateY(30px); opacity: 0; }
-  100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 .admin-header, .family-header {
   padding: 16px 20px;
@@ -252,8 +248,24 @@ main { padding: 16px; position: relative; z-index: 2; }
   font-weight: bold;
   text-transform: uppercase;
 }
-@keyframes pulseGlow { 0%,100% { text-shadow: 0 0 10px rgba(255,30,86,0.2); opacity: 0.8; } 50% { text-shadow: 0 0 25px rgba(255,30,86,0.7); opacity: 1; } }
-@keyframes cyberScan { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-1px); text-shadow: 0 0 18px var(--accent); } }
+
+.selectable-card {
+  padding: 16px;
+  background: #111;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 900;
+  font-family: var(--font-display);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.selectable-card.active {
+  border-color: var(--accent);
+  background: rgba(255,30,86,0.12);
+  box-shadow: 0 0 25px var(--accent-glow);
+  animation: popIn 0.3s ease;
+}
 </style>
 </head>
 <body>
@@ -271,7 +283,7 @@ main { padding: 16px; position: relative; z-index: 2; }
     <div class="main-logo-anim">TRACEUR<span>_PRO</span></div>
     <div class="lock-title">Saisir votre clé d'activation</div>
     <input class="lock-input" id="keyInput" maxlength="14" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
-    <button class="lock-btn" onclick="submitKey()">VALIDER</button>
+    <button class="lock-btn" onclick="submitKey()">OUVRIR LA RECHERCHE</button>
     <div class="lock-error" id="lockError">Clé incorrecte ou expirée</div>
   </div>
 </div>
@@ -355,7 +367,7 @@ main { padding: 16px; position: relative; z-index: 2; }
 <div class="overlay" id="familyOverlay" style="display:none; align-items:center; justify-content:center;">
   <div class="admin-panel family-panel">
     <div class="admin-header family-header">
-      <div class="main-logo-anim" style="font-size:22px; margin:0;">APPROFONDIR LA RECHERCHE</div>
+      <div class="main-logo-anim" style="font-size:22px; margin:0;">FICHE COMPLÈTE CONSOLIDÉE</div>
       <button class="admin-close family-close" onclick="closeFamilyOverlay()">✕</button>
     </div>
     <div class="admin-content family-content" id="familyContent"></div>
@@ -363,7 +375,7 @@ main { padding: 16px; position: relative; z-index: 2; }
 </div>
 
 <script>
-const BASE = "https://server-js-7iso.onrender.com";
+const BASE = "https://server-js-g0tv.onrender.com";
 window.Telegram?.WebApp?.ready();
 window.Telegram?.WebApp?.expand();
 const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user || {};
@@ -377,7 +389,8 @@ let sessionMaxDuration = 0;
 let timerInterval = null;
 let isAdmin = false;
 let currentAdminTab = 0;
-let currentPerson = null; // pour approfondir
+let allResults = [];
+let selectedKeyType = null;
 
 function initProfileAvatar() {
   const avatarContainer = document.getElementById("profileAvatar");
@@ -648,12 +661,13 @@ async function launchSearch() {
 
 function renderResults(results) {
   const sec = document.getElementById("resultsSection");
-  if (!results || !results.length) {
+  allResults = results || [];
+  if (!allResults.length) {
     sec.innerHTML = `<div class="no-results"><h3>AUCUN DOSSIER TROUVÉ</h3><p>Aucune correspondance disponible pour ces critères.</p></div>`;
     return;
   }
   const skip = new Set(["_sources","_confidence","_id"]);
-  const cards = results.map((p, index) => {
+  const cards = allResults.map((p, index) => {
     const name = [p.prenom, p.nom_famille].filter(Boolean).join(" ").toUpperCase() || "PROFIL IDENTIFIÉ";
     const rows = Object.entries(p).filter(([k,v]) => !skip.has(k) && v).map(([k,v]) => {
       const f = FIELD_MAP[k] || {l:k.replace(/_/g," ").toUpperCase()};
@@ -662,77 +676,53 @@ function renderResults(results) {
     return `<div class="result-card">
       <div class="card-header">
         <span class="card-name">${name}</span>
-        <button onclick="approfondirRecherche(${index})" style="background:var(--accent);color:#000;border:none;padding:6px 12px;border-radius:4px;font-size:10px;font-weight:900;cursor:pointer;">APPROFONDIR LA RECHERCHE</button>
+        <button onclick="approfondirRecherche(${index})" style="background:var(--accent);color:#000;border:none;padding:8px 14px;border-radius:4px;font-size:10px;font-weight:900;cursor:pointer;">APPROFONDIR</button>
       </div>
       <div class="card-body">${rows || 'DONNÉES INDISPONIBLES'}</div>
     </div>`;
   }).join("");
-  sec.innerHTML = `<h2>DOSSIERS IDENTIFIÉS <span class="count">${results.length}</span></h2>${cards}`;
-  window.allResults = results;
+  sec.innerHTML = `<h2>DOSSIERS IDENTIFIÉS <span class="count">${allResults.length}/10</span></h2>${cards}`;
 }
 
-function approfondirRecherche(index) {
-  currentPerson = window.allResults[index];
-  const familyContent = document.getElementById("familyContent");
-  let html = `<h3 style="margin-bottom:16px;color:var(--accent);">LIENS FAMILIAUX POSSIBLES POUR ${currentPerson.prenom || ''} ${currentPerson.nom_famille || ''}</h3>`;
-  const possibles = window.allResults.filter((p, i) => i !== index && 
-    (p.nom_famille === currentPerson.nom_famille || 
-     (p.adresse && currentPerson.adresse && p.adresse.toLowerCase().includes(currentPerson.adresse.toLowerCase().slice(0,8)))));
-  
-  if (possibles.length === 0) {
-    html += `<div class="no-results"><p>Aucun lien familial détecté avec les données actuelles.</p></div>`;
-  } else {
-    html += `<div class="family-list">`;
-    possibles.forEach(person => {
-      const ageDiff = Math.abs((parseInt(person.annee_naissance) || 2000) - (parseInt(currentPerson.annee_naissance) || 2000));
-      let relation = "";
-      if (ageDiff > 20 && ageDiff < 45) relation = "Père / Mère possible";
-      else if (ageDiff < 20) relation = "Frère / Sœur possible";
-      else relation = "Lien familial possible";
-      html += `
-        <div class="family-card" onclick="showPersonFiche(${window.allResults.indexOf(person)})">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <div>
-              <strong>${person.prenom || ''} ${person.nom_famille || ''}</strong>
-            </div>
-            <div class="family-relation">${relation}</div>
-          </div>
-          <small>${person.adresse ? person.adresse : ''}</small>
-        </div>`;
+function mergeProfilesIntoOneFiche(profiles) {
+  const merged = {};
+  profiles.forEach(profile => {
+    Object.entries(profile).forEach(([key, value]) => {
+      if (!value || key.startsWith("_")) return;
+      if (!merged[key] || String(value).length > String(merged[key] || "").length) {
+        merged[key] = value;
+      }
     });
-    html += `</div>`;
-  }
-  familyContent.innerHTML = html;
-  document.getElementById("familyOverlay").style.display = "flex";
+  });
+  return merged;
 }
 
-function closeFamilyOverlay() {
-  document.getElementById("familyOverlay").style.display = "none";
-}
-
-function showPersonFiche(index) {
-  closeFamilyOverlay();
-  const p = window.allResults[index];
+async function approfondirRecherche(index) {
+  const basePerson = allResults[index];
+  const similars = allResults.filter((p, i) => i !== index && 
+    (p.nom_famille === basePerson.nom_famille || 
+     (p.prenom && basePerson.prenom && p.prenom.toLowerCase().includes(basePerson.prenom.toLowerCase().slice(0,3))))
+  );
+  const allToMerge = [basePerson, ...similars];
+  const consolidated = mergeProfilesIntoOneFiche(allToMerge);
+  const name = [consolidated.prenom, consolidated.nom_famille].filter(Boolean).join(" ").toUpperCase();
+  const rows = Object.entries(consolidated)
+    .filter(([k]) => !k.startsWith("_"))
+    .map(([k,v]) => `<div class="info-row"><span class="info-key">${k.replace(/_/g," ").toUpperCase()}</span><span class="info-val">${v}</span></div>`).join("");
   const sec = document.getElementById("resultsSection");
   sec.innerHTML = `
-    <h2>FICHE DÉTAILLÉE</h2>
+    <h2 style="margin-bottom:16px;color:var(--accent);">FICHE COMPLÈTE CONSOLIDÉE</h2>
     <div class="result-card">
       <div class="card-header">
-        <span class="card-name">${(p.prenom || '') + ' ' + (p.nom_famille || '')}</span>
+        <span class="card-name">${name}</span>
       </div>
-      <div class="card-body">
-        ${Object.entries(p).filter(([k]) => ![" _sources","_confidence","_id"].includes(k)).map(([k,v]) => {
-          const f = FIELD_MAP[k] || {l:k.replace(/_/g," ").toUpperCase()};
-          return `<div class="info-row"><span class="info-key">${f.l}</span><span class="info-val">${v}</span></div>`;
-        }).join('')}
-      </div>
+      <div class="card-body">${rows || 'Aucune donnée supplémentaire'}</div>
     </div>
-    <button onclick="renderResults(window.allResults)" style="margin-top:15px;width:100%;padding:14px;background:var(--accent);color:#000;border:none;border-radius:4px;font-weight:900;">RETOUR AUX RÉSULTATS</button>
+    <button onclick="renderResults(allResults)" style="margin-top:20px;width:100%;padding:14px;background:var(--accent);color:#000;border:none;border-radius:4px;font-weight:900;">RETOUR AUX RÉSULTATS</button>
   `;
   sec.style.display = "block";
 }
 
-/* ADMIN PANEL */
 function openAdminPanel() {
   if (!isAdmin) return;
   document.getElementById("adminOverlay").style.display = "flex";
@@ -855,52 +845,87 @@ function renderHistoryTab(data) {
 }
 
 function renderGeneratorTab() {
+  const types = [
+    {type:'1semaine', label:'1 SEMAINE'},
+    {type:'1mois', label:'1 MOIS'},
+    {type:'3mois', label:'3 MOIS'},
+    {type:'test', label:'TEST 2 MIN'},
+    {type:'lifetime', label:'À VIE'},
+    {type:'admin', label:'CLÉ ADMIN'}
+  ];
+  const cards = types.map(t => `
+    <div onclick="selectKeyType('${t.type}')" class="selectable-card ${selectedKeyType === t.type ? 'active' : ''}">
+      ${t.label}
+    </div>
+  `).join("");
   const content = document.getElementById("adminContent");
   content.innerHTML = `
-    <h3 style="margin-bottom:16px;font-family:var(--font-display);color:var(--accent);">GÉNÉRER UNE NOUVELLE CLÉ</h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
-      <button class="key-gen-btn" onclick="generateNewKey('1semaine')">1 SEMAINE</button>
-      <button class="key-gen-btn" onclick="generateNewKey('1mois')">1 MOIS</button>
-      <button class="key-gen-btn" onclick="generateNewKey('3mois')">3 MOIS</button>
-      <button class="key-gen-btn" onclick="generateNewKey('test')">TEST 5 MIN</button>
-      <button class="key-gen-btn" onclick="generateNewKey('lifetime')">À VIE</button>
-      <button class="key-gen-btn" onclick="generateNewKey('admin')" style="border-color:#00ff66;color:#00ff66;">CLÉ ADMIN</button>
-    </div>
-    <div id="generatedKeyDisplay" style="margin-top:25px;display:none;background:#000;border:2px solid var(--accent);border-radius:8px;padding:18px;text-align:center;word-break:break-all;font-family:var(--font-mono);font-size:17px;letter-spacing:5px;box-shadow:0 0 25px var(--accent-glow);"></div>
+    <h3 style="margin-bottom:20px;font-family:var(--font-display);color:var(--accent);">GÉNÉRER UNE NOUVELLE CLÉ</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">${cards}</div>
+    <button id="generateBtn" onclick="validateAndGenerate()" style="margin-top:30px;width:100%;padding:18px;background:var(--accent);color:#000;font-family:var(--font-display);font-weight:900;font-size:15px;letter-spacing:2px;border:none;border-radius:8px;box-shadow:0 0 25px var(--accent-glow);">GÉNÉRER LA CLÉ</button>
+    <div id="generatedKeyDisplay" style="margin-top:25px;display:none;background:#000;border:2px solid var(--accent);border-radius:8px;padding:20px;text-align:center;word-break:break-all;font-family:var(--font-mono);font-size:19px;letter-spacing:7px;box-shadow:0 0 30px var(--accent-glow);"></div>
   `;
 }
 
-async function generateNewKey(type) {
-  const display = document.getElementById("generatedKeyDisplay");
-  display.style.display = "none";
+function selectKeyType(type) {
+  selectedKeyType = type;
+  renderGeneratorTab();
+}
+
+async function validateAndGenerate() {
+  if (!selectedKeyType) {
+    alert("⚠️ Sélectionne d'abord un type de clé");
+    return;
+  }
+  const btn = document.getElementById("generateBtn");
+  btn.innerHTML = `<div class="spinner" style="width:22px;height:22px;margin:auto;"></div>`;
+  btn.disabled = true;
   try {
     const res = await fetch(`${BASE}/api/admin/generate`, {
       method: "POST",
       headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
-      body: JSON.stringify({ type })
+      body: JSON.stringify({ type: selectedKeyType })
     });
     const result = await res.json();
     if (result.key) {
+      const display = document.getElementById("generatedKeyDisplay");
       display.innerHTML = `
-        <div style="color:var(--accent);font-size:13px;margin-bottom:8px;">CLÉ GÉNÉRÉE AVEC SUCCÈS</div>
-        <div style="font-size:19px;letter-spacing:6px;margin-bottom:15px;">${result.key}</div>
+        <div style="color:var(--accent);font-size:14px;margin-bottom:12px;">✅ CLÉ GÉNÉRÉE AVEC SUCCÈS</div>
+        <div style="font-size:22px;letter-spacing:8px;margin-bottom:20px;">${result.key}</div>
         <button onclick="copyKey('${result.key}')" style="background:var(--accent);color:#000;border:none;padding:14px 24px;border-radius:6px;font-weight:900;width:100%;">📋 COPIER LA CLÉ</button>
       `;
       display.style.display = "block";
-      display.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   } catch(e) {
-    alert("Erreur lors de la génération de la clé");
+    alert("Erreur lors de la génération");
+  } finally {
+    btn.innerHTML = "GÉNÉRER LA CLÉ";
+    btn.disabled = false;
+    selectedKeyType = null;
+    setTimeout(() => renderGeneratorTab(), 800);
   }
 }
 
 function copyKey(key) {
-  navigator.clipboard.writeText(key).then(() => {
-    alert("✅ Clé copiée dans le presse-papiers !");
-  });
+  navigator.clipboard.writeText(key).then(() => alert("✅ Clé copiée dans le presse-papiers !"));
 }
 
-/* 3 clés admin uniques sont générées côté serveur et peuvent être utilisées une seule fois */
+function closeFamilyOverlay() {
+  document.getElementById("familyOverlay").style.display = "none";
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const bar = document.getElementById("bootBar");
+  bar.style.width = "100%";
+  setTimeout(async () => {
+    document.getElementById("boot").style.opacity = "0";
+    setTimeout(() => document.getElementById("boot").style.display = "none", 200);
+    await checkSession(null);
+  }, 400);
+  initProfileAvatar();
+  buildTabs();
+  renderFields();
+});
 </script>
 </body>
 </html>
