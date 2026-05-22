@@ -91,19 +91,6 @@ button:hover:not(:disabled) {
   100% { left: 200%; }
 }
 
-/* Effet Ripple Adouci et Premium */
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  transform: scale(0);
-  animation: ripple-anim 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 70%);
-  pointer-events: none;
-}
-@keyframes ripple-anim {
-  to { transform: scale(3); opacity: 0; }
-}
-
 /* ====================== ÉCRAN D'ACCUEIL (INTRO) ====================== */
 #introScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; transition: opacity 0.4s ease; }
 .neon-logo { font-family: var(--font-display); font-size: 42px; font-weight: 900; color: #fff; text-shadow: 0 0 5px #fff, 0 0 15px var(--accent), 0 0 30px var(--accent), 0 0 50px var(--accent); animation: neonPulse 1.5s infinite alternate; margin-bottom: 20px; letter-spacing: 4px; }
@@ -181,9 +168,33 @@ header { position: sticky; top: 0; z-index: 950; background: rgba(3,3,5,0.95); b
 .header-left { display: flex; align-items: center; gap: 10px; }
 header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900; letter-spacing: 1px; }
 .header-right { position: relative; display: flex; align-items: center; gap: 12px; }
-.status-indicator { font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 9999px; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 0 8px currentColor; white-space: nowrap; }
-.status-indicator.actif { background: var(--success); color: #030305; }
-.status-indicator.inactif { background: #ff1e56; color: #fff; }
+.status-indicator { 
+  font-size: 10px; 
+  font-weight: 700; 
+  padding: 4px 12px; 
+  border-radius: 9999px; 
+  letter-spacing: 1px; 
+  text-transform: uppercase; 
+  box-shadow: 0 0 8px currentColor; 
+  white-space: nowrap; 
+}
+.status-indicator.actif { 
+  background: var(--success); 
+  color: #030305; 
+  box-shadow: 0 0 12px #00ff66, 0 0 25px #00ff66, 0 0 40px rgba(0, 255, 102, 0.7) !important; 
+  animation: neonStatusPulse 1.5s infinite alternate;
+}
+.status-indicator.inactif { 
+  background: #ff1e56; 
+  color: #fff; 
+  box-shadow: 0 0 12px #ff1e56, 0 0 25px #ff1e56, 0 0 40px rgba(255, 30, 86, 0.9) !important; 
+  animation: neonStatusPulse 1.5s infinite alternate;
+}
+@keyframes neonStatusPulse {
+  0% { text-shadow: 0 0 8px currentColor; }
+  100% { text-shadow: 0 0 20px currentColor, 0 0 35px currentColor; }
+}
+
 .profile-btn { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
 .profile-btn:hover, .profile-btn.active { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); transform: scale(1.1); }
 .profile-avatar { width: 18px; height: 18px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; background: var(--accent); color: #000; box-shadow: 0 0 8px var(--accent-glow); }
@@ -201,7 +212,6 @@ header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900;
 .dropdown-timer-text { font-family: var(--font-mono); font-size: 13px; font-weight: bold; color: var(--text); margin-top: -4px; }
 .dropdown-bar-wrap { width: 100%; height: 5px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
 .dropdown-bar-fill { height: 100%; background: var(--accent); width: 0%; transition: width 1s linear; box-shadow: 0 0 8px var(--accent); }
-.dropdown-extend-btn { width: 100%; padding: 10px; background: #222; border: none; color: #666; font-family: var(--font-display); font-size: 10px; font-weight: 900; text-align: center; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; cursor: default; pointer-events: none; transition: background 0.2s; border-radius: 4px; }
 
 .theme-selector { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
 .theme-title { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
@@ -325,7 +335,7 @@ main { padding: 16px; position: relative; z-index: 2; }
 .admin-close:hover, .modal-header button:hover, .family-header button:hover { transform: rotate(90deg) scale(1.1); color: #fff !important; background: rgba(255,30,86,0.2); }
 
 .admin-content, .family-content, .modal-content { flex: 1; overflow-y: auto; padding: 24px; }
-.admin-tab-bar { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.admin-tab-bar { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; padding: 0 24px; justify-content: flex-start; }
 .admin-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
 .admin-stat-card { background: var(--card); border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 8px; }
 .admin-stat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.5), 0 0 20px var(--accent-glow); border-color: var(--accent); }
@@ -389,7 +399,6 @@ main { padding: 16px; position: relative; z-index: 2; }
           </div>
         </div>
  
-        <button class="dropdown-extend-btn">Prolonger l'accès</button>
         <div class="theme-selector">
           <div class="theme-title">Thème de l'interface</div>
           <div class="theme-options">
@@ -496,6 +505,7 @@ let currentAdminTab = 0;
 let allResults = [];
 let selectedKeyType = null;
 let bootStarted = false; 
+let currentApprofondirIndex = null;
 
 function initProfileAvatar() {
   const avatarContainer = document.getElementById("profileAvatar");
@@ -521,7 +531,7 @@ function updateHeaderStatus() {
   const el = document.getElementById("headerStatus");
   if (!el) return;
   const isActive = sessionEndTimestamp && (sessionEndTimestamp === "lifetime" || sessionEndTimestamp > Date.now());
-  el.textContent = isActive ? "ACTIF" : "NON ACTIF";
+  el.textContent = isActive ? "ACTIF" : "INACTIF";
   el.className = `status-indicator ${isActive ? "actif" : "inactif"}`;
 }
 
@@ -869,7 +879,8 @@ function mergeProfilesIntoOneFiche(profiles) {
 }
 
 /* ====================== FAMILY OVERLAY ====================== */
-async function approfondirRecherche(index) {
+function approfondirRecherche(index) {
+  currentApprofondirIndex = index;
   const basePerson = allResults[index];
   const similars = allResults.filter((p, i) => i !== index &&
     (p.nom_famille === basePerson.nom_famille ||
@@ -899,16 +910,16 @@ async function approfondirRecherche(index) {
 }
 
 function showPersonFicheFromFamily(familyIndex) {
-  // On récupère le profil sélectionné pour l'afficher
+  if (currentApprofondirIndex === null) return;
+  const basePerson = allResults[currentApprofondirIndex];
+  const similars = allResults.filter((p, i) => i !== currentApprofondirIndex &&
+    (p.nom_famille === basePerson.nom_famille ||
+     (p.prenom && basePerson.prenom && p.prenom.toLowerCase().includes(basePerson.prenom.toLowerCase().slice(0,3))))
+  );
   let person;
-  // Index -1 correspond au profil de base (index 0)
-  const basePerson = allResults[0]; 
-  
   if (familyIndex === -1) {
     person = basePerson;
   } else {
-    // Liste des profils liés (tous sauf le 0)
-    const similars = allResults.filter((p, i) => i !== 0);
     person = similars[familyIndex];
   }
 
@@ -923,12 +934,13 @@ function showPersonFicheFromFamily(familyIndex) {
       <div class="card-header"><span class="card-name">${name}</span></div>
       <div class="card-body">${rows}</div>
     </div>
-    <button class="btn-approfondir btn-shine" onclick="approfondirRecherche(0)" style="margin-top:25px;width:100%;padding:18px;border-radius:6px;font-size:12px;text-transform:uppercase;">RETOUR À LA VUE D'ENSEMBLE FAMILIALE</button>
+    <button class="btn-approfondir btn-shine" onclick="approfondirRecherche(${currentApprofondirIndex})" style="margin-top:25px;width:100%;padding:18px;border-radius:6px;font-size:12px;text-transform:uppercase;">RETOUR À LA VUE D'ENSEMBLE FAMILIALE</button>
   `;
 }
 
 function closeFamilyOverlay() {
   document.getElementById("familyOverlay").style.display = "none";
+  currentApprofondirIndex = null;
 }
 
 /* ====================== PANEL ADMIN ET RÉVOCATION ====================== */
@@ -1210,40 +1222,6 @@ function copyKey(key) {
     alert("✅ Clé copiée dans le presse-papiers !");
   });
 }
-
-// ====================== EFFET RIPPLE GLOBAL (SOURIS & TACTILE) ======================
-function createRipple(e, btn, isTouch = false) {
-  const ripple = document.createElement('span');
-  const rect = btn.getBoundingClientRect();
-  const size = Math.max(rect.width, rect.height);
-  
-  const clientX = isTouch ? e.touches[0].clientX : e.clientX;
-  const clientY = isTouch ? e.touches[0].clientY : e.clientY;
-  
-  const x = clientX - rect.left - size / 2;
-  const y = clientY - rect.top - size / 2;
-
-  ripple.style.width = ripple.style.height = `${size}px`;
-  ripple.style.left = `${x}px`;
-  ripple.style.top = `${y}px`;
-  ripple.classList.add('ripple');
-
-  btn.appendChild(ripple);
-  setTimeout(() => ripple.remove(), 600);
-}
-
-document.addEventListener('mousedown', function(e) {
-  const btn = e.target.closest('button');
-  if (!btn || btn.disabled) return;
-  createRipple(e, btn, false);
-});
-
-document.addEventListener('touchstart', function(e) {
-  const btn = e.target.closest('button');
-  if (!btn || btn.disabled) return;
-  createRipple(e, btn, true);
-}, {passive: true});
-
 </script>
 </body>
 </html>
