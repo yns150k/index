@@ -49,12 +49,28 @@
 body { background: var(--bg); color: var(--text); font-family: var(--font-mono); min-height: 100vh; overflow-x: hidden; padding-bottom: env(safe-area-inset-bottom); }
 .grid-bg { position: fixed; inset: 0; opacity: 0.04; pointer-events: none; z-index: 0; background-image: linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px); background-size: 50px 50px; }
 
-#boot { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; }
-.boot-logo { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: #fff; letter-spacing: 4px; animation: pulseGlow 2s infinite ease-in-out; }
-.boot-bar-wrap { width: 160px; height: 3px; background: rgba(255,255,255,0.03); border-radius: 4px; overflow: hidden; }
-.boot-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease-in-out; box-shadow: 0 0 10px var(--accent); }
-#bootStatus { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
+/* ====================== ÉCRAN D'ACCUEIL (INTRO) ====================== */
+#introScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; transition: opacity 0.5s ease; }
+.neon-logo { font-family: var(--font-display); font-size: 42px; font-weight: 900; color: #fff; text-shadow: 0 0 5px #fff, 0 0 15px var(--accent), 0 0 30px var(--accent), 0 0 50px var(--accent); animation: neonPulse 1.5s infinite alternate; margin-bottom: 20px; letter-spacing: 4px; }
+.neon-logo span { color: var(--accent); text-shadow: none; }
+.intro-tagline { font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 40px; max-width: 450px; line-height: 1.8; animation: fadeIn 2s ease-out; }
+.intro-btn { background: rgba(255,30,86,0.05); border: 2px solid var(--accent); color: #fff; padding: 18px 40px; font-family: var(--font-display); font-size: 14px; font-weight: 900; letter-spacing: 3px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 20px var(--accent-glow) inset, 0 0 20px var(--accent-glow); text-transform: uppercase; border-radius: 4px; outline: none; }
+.intro-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 40px var(--accent); transform: scale(1.05); }
+.intro-btn:active { transform: scale(0.98); }
 
+@keyframes neonPulse {
+  0% { text-shadow: 0 0 5px #fff, 0 0 10px var(--accent), 0 0 20px var(--accent); }
+  100% { text-shadow: 0 0 10px #fff, 0 0 20px var(--accent), 0 0 40px var(--accent), 0 0 80px var(--accent); }
+}
+
+/* ====================== ÉCRAN DE BOOT ====================== */
+#boot { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 15px; transition: opacity 0.4s ease; }
+.boot-logo { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: #fff; letter-spacing: 4px; animation: pulseGlow 2s infinite ease-in-out; }
+.boot-bar-wrap { width: 200px; height: 4px; background: rgba(255,255,255,0.03); border-radius: 4px; overflow: hidden; }
+.boot-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease-out; box-shadow: 0 0 10px var(--accent); }
+#bootStatus { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; text-align: center; max-width: 280px; line-height: 1.5; }
+
+/* ====================== ÉCRAN DE VERROUILLAGE ====================== */
 #lockScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 900; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
 .lock-box { width: 100%; max-width: 350px; background: var(--surface); border: 1px solid var(--border); padding: 30px 20px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 30px rgba(255,30,86,0.05); border-radius: 4px; }
 .main-logo-anim { font-family: var(--font-display); font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; position: relative; display: inline-block; animation: cyberScan 3s infinite ease-in-out; }
@@ -145,7 +161,7 @@ main { padding: 16px; position: relative; z-index: 2; }
 .info-val { color: var(--text); word-break: break-all; user-select: text; }
 
 .loader { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 30px 0; color: var(--accent); font-size: 10px; font-weight: bold; }
-.spinner { width: 20px; height: 20px; border: 2px solid rgba(255,30,86,0.1); border-top-color: var(--accent); animation: spin 0.4s linear infinite; }
+.spinner { width: 20px; height: 20px; border: 2px solid rgba(255,30,86,0.1); border-top-color: var(--accent); animation: spin 0.4s linear infinite; border-radius: 50%; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .no-results { background: var(--surface); border: 1px solid var(--border); padding: 25px; text-align: center; }
 .no-results h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 4px; color: var(--accent); }
@@ -208,46 +224,31 @@ main { padding: 16px; position: relative; z-index: 2; }
   position: relative;
   overflow: hidden;
 }
-.family-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 0 30px var(--accent-glow);
-}
-.family-name {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-.family-birth {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 6px;
-}
-.family-bubble {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  background: var(--accent);
-  color: #000;
-  font-size: 10px;
-  font-weight: 900;
-  padding: 4px 12px;
-  border-radius: 9999px;
-  letter-spacing: 0.8px;
-  box-shadow: 0 0 15px var(--accent-glow);
-}
+.family-card:hover { transform: translateY(-4px); box-shadow: 0 0 30px var(--accent-glow); }
+.family-name { font-family: var(--font-display); font-size: 18px; font-weight: 900; letter-spacing: 1px; }
+.family-birth { font-size: 12px; color: var(--muted); margin-top: 6px; }
+.family-bubble { position: absolute; top: 14px; right: 14px; background: var(--accent); color: #000; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 9999px; letter-spacing: 0.8px; box-shadow: 0 0 15px var(--accent-glow); }
 .timer-container { font-size: 32px; font-weight: 900; color: var(--accent); text-shadow: 0 0 20px var(--accent-glow); text-align: center; margin: 20px 0; }
 .revoke-btn { background: #ff1e56; color: #fff; border: none; padding: 14px 24px; border-radius: 4px; font-weight: 900; cursor: pointer; width: 100%; margin-top: 20px; transition: all 0.3s; }
 .revoke-btn:hover { box-shadow: 0 0 25px #ff1e56; transform: scale(1.05); }
+.btn-small-revoke { background: var(--accent); color: #000; border: none; padding: 6px 10px; border-radius: 4px; font-weight: 900; font-size: 10px; cursor: pointer; transition: 0.2s; }
+.btn-small-revoke:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--accent-glow); background: #ff4a73; color: #fff; }
+
 </style>
 </head>
 <body>
 <div class="grid-bg"></div>
 
+<div id="introScreen">
+  <div class="neon-logo">TRACEUR<span>_PRO</span></div>
+  <div class="intro-tagline">Le meilleur moteur de recherche d'informations personnelles français.</div>
+  <button class="intro-btn" onclick="startBootSequence()">INITIALISER LE SYSTÈME</button>
+</div>
+
 <div id="boot">
   <div class="boot-logo">TRACEUR<span>_PRO</span></div>
   <div class="boot-bar-wrap"><div class="boot-bar" id="bootBar"></div></div>
-  <div id="bootStatus">Lancement du système...</div>
+  <div id="bootStatus">CONNEXION AU SERVEUR...</div>
 </div>
 
 <div id="lockScreen" style="display:none">
@@ -325,23 +326,31 @@ main { padding: 16px; position: relative; z-index: 2; }
   </div>
 </div>
 
-<!-- PANEL ADMIN -->
 <div class="overlay" id="adminOverlay" style="display:none; align-items:center; justify-content:center;">
   <div class="admin-panel">
     <div class="admin-header">
       <div class="main-logo-anim" style="font-size:22px; margin:0;">ADMIN<span>_PANEL</span></div>
-      <button class="admin-close" onclick="closeAdminPanel()">✕</button>
+      <button class="admin-close" onclick="closeAdminPanel()" style="background:none; border:none; color:var(--accent); font-size:24px; cursor:pointer;">✕</button>
     </div>
     <div class="admin-tab-bar" id="adminTabs"></div>
     <div class="admin-content" id="adminContent"></div>
   </div>
 </div>
 
-<!-- FAMILY OVERLAY - PAGE DANS LA PAGE (exactement comme tu l'as demandé) -->
-<div class="overlay" id="familyOverlay" style="display:none; align-items:center; justify-content:center;">
+<div class="overlay" id="userDetailModal" style="display:none;">
+  <div class="modal-panel" style="max-width: 600px;">
+    <div class="modal-header">
+      <div class="main-logo-anim" style="font-size:18px; margin:0;">GESTION<span>_UTILISATEUR</span></div>
+      <button onclick="closeUserModal()" style="background:none; border:none; color:var(--accent); font-size:24px; cursor:pointer;">✕</button>
+    </div>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+</div>
+
+<div class="overlay" id="familyOverlay" style="display:none;">
   <div class="family-panel">
     <div class="family-header">
-      <div class="main-logo-anim" style="font-size:21px;">FICHE CONSOLIDÉE + LIENS FAMILIAUX</div>
+      <div class="main-logo-anim" style="font-size:21px; margin:0;">LIENS<span>_FAMILIAUX</span></div>
       <button onclick="closeFamilyOverlay()" style="font-size:28px;color:var(--accent);background:none;border:none;cursor:pointer;">✕</button>
     </div>
     <div class="family-content" id="familyContent"></div>
@@ -401,18 +410,69 @@ document.getElementById("keyInput").addEventListener("input", (e) => {
   e.target.value = val;
 });
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const bar = document.getElementById("bootBar");
-  bar.style.width = "100%";
-  setTimeout(async () => {
-    document.getElementById("boot").style.opacity = "0";
-    setTimeout(() => document.getElementById("boot").style.display = "none", 200);
-    await checkSession(null);
-  }, 400);
+// INITIALISATION DE BASE AU CHARGEMENT DE LA PAGE
+document.addEventListener("DOMContentLoaded", () => {
   initProfileAvatar();
   buildTabs();
   renderFields();
+  // On ne charge plus checkSession tout de suite, on attend le clic sur le bouton de l'intro
 });
+
+// NOUVELLE FONCTION DE DÉMARRAGE ET DE PING SERVEUR
+function startBootSequence() {
+  document.getElementById("introScreen").style.opacity = "0";
+  setTimeout(() => {
+    document.getElementById("introScreen").style.display = "none";
+    document.getElementById("boot").style.display = "flex";
+    pingServerLoop();
+  }, 500);
+}
+
+async function pingServerLoop() {
+  const bar = document.getElementById("bootBar");
+  const status = document.getElementById("bootStatus");
+  status.textContent = "RÉVEIL DU SERVEUR (CELA PEUT PRENDRE JUSQU'À 50s)...";
+  
+  let attempts = 0;
+  let progress = 0;
+  
+  // Animation visuelle de la barre pour faire patienter
+  const progressInterval = setInterval(() => {
+    progress += (95 - progress) * 0.05; // Monte progressivement vers 95%
+    bar.style.width = `${progress}%`;
+  }, 1000);
+
+  while (true) {
+    attempts++;
+    try {
+      // Un simple fetch pour vérifier si le serveur répond. 
+      // Même s'il renvoie une erreur 400 (car on n'envoie pas de code valide), le simple fait de répondre prouve qu'il est éveillé.
+      const res = await fetch(`${BASE}/api/auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ telegramId: "PING", code: null })
+      });
+      
+      // Si la requête aboutit, le serveur est up
+      clearInterval(progressInterval);
+      bar.style.width = "100%";
+      status.textContent = "SERVEUR EN LIGNE. INITIALISATION...";
+      
+      setTimeout(async () => {
+        document.getElementById("boot").style.opacity = "0";
+        setTimeout(() => document.getElementById("boot").style.display = "none", 400);
+        await checkSession(null); // On lance la vérification de session standard
+      }, 600);
+      break;
+      
+    } catch(e) {
+      // Si on attrape une erreur (généralement réseau/timeout car le serveur dort)
+      status.textContent = `RÉVEIL DU SERVEUR EN COURS... (TENTATIVE ${attempts})`;
+    }
+    // On attend 3 secondes avant de réessayer
+    await new Promise(r => setTimeout(r, 3000));
+  }
+}
 
 function toggleDropdown(event) {
   event.stopPropagation();
@@ -675,7 +735,7 @@ function mergeProfilesIntoOneFiche(profiles) {
   return merged;
 }
 
-/* ====================== FAMILY OVERLAY - PAGE DANS LA PAGE (exactement comme tu l'as demandé) ====================== */
+/* ====================== FAMILY OVERLAY ====================== */
 async function approfondirRecherche(index) {
   const basePerson = allResults[index];
   const similars = allResults.filter((p, i) => i !== index &&
@@ -685,7 +745,6 @@ async function approfondirRecherche(index) {
 
   let familyHTML = `<h3 style="margin-bottom:20px;color:var(--accent);">PERSONNES LIÉES (${similars.length + 1})</h3><div class="family-list">`;
   
-  // Personne principale
   familyHTML += `
     <div class="family-card" onclick="showPersonFicheFromFamily(-1)">
       <div class="family-name">${[basePerson.prenom, basePerson.nom_famille].filter(Boolean).join(" ")}</div>
@@ -693,7 +752,6 @@ async function approfondirRecherche(index) {
       <div class="family-bubble">PRINCIPAL</div>
     </div>`;
 
-  // Liens familiaux
   similars.forEach((p, i) => {
     const fullName = [p.prenom, p.nom_famille].filter(Boolean).join(" ");
     const birth = p.date_naissance || p.annee_naissance || '—';
@@ -738,7 +796,7 @@ function closeFamilyOverlay() {
   document.getElementById("familyOverlay").style.display = "none";
 }
 
-/* ====================== PANEL ADMIN ====================== */
+/* ====================== PANEL ADMIN ET RÉVOCATION ====================== */
 function openAdminPanel() {
   if (!isAdmin) return;
   document.getElementById("adminOverlay").style.display = "flex";
@@ -801,7 +859,7 @@ function renderStatsTab(data) {
       <div class="admin-stat-card">
         <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Requêtes API</div>
         <div style="font-size:32px;font-weight:900;color:#00e5ff;">${data.apiRequests || 0} <span style="font-size:14px;">/ 1000</span></div>
-        <div class="confidence-bar" style="width:100%;margin-top:8px;"><div class="confidence-fill" style="width:${pct}%"></div></div>
+        <div class="confidence-bar" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.05);height:4px;"><div class="confidence-fill" style="width:${pct}%;background:#00e5ff;height:100%;"></div></div>
       </div>
       <div class="admin-stat-card">
         <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Clés à vie</div>
@@ -812,18 +870,41 @@ function renderStatsTab(data) {
   `;
 }
 
+// LOGIQUE POUR LA RÉVOCATION DIRECTE
+async function revokeUserKey(telegramId) {
+  if (confirm(`RÉVOCATION IMMÉDIATE : Bannir et supprimer la clé de l'utilisateur ${telegramId} ?`)) {
+    try {
+      // NOTE: Assure-toi d'avoir une route serveur correspondante : router.post('/admin/revoke') dans ton backend !
+      const res = await fetch(`${BASE}/api/admin/revoke`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
+        body: JSON.stringify({ targetId: telegramId })
+      });
+      if (res.ok) {
+        alert(`Clé de ${telegramId} révoquée avec succès.`);
+        closeUserModal();
+        loadAdminData(currentAdminTab); // Recharge le tableau
+      } else {
+        alert("Erreur lors de la révocation de la clé (Vérifiez le serveur).");
+      }
+    } catch(e) {
+      alert("Erreur réseau de communication avec l'API Admin.");
+    }
+  }
+}
+
 async function showActivatedKeys() {
   const content = document.getElementById("adminContent");
   content.innerHTML = `<div class="loader"><div class="spinner"></div>CHARGEMENT LISTE...</div>`;
   const res = await fetch(`${BASE}/api/admin/data`, { headers: { "x-telegram-id": TELEGRAM_ID } });
   const data = await res.json();
-  let html = `<h3>CLÉS ACTIVÉES (${data.users.length})</h3><table class="admin-table"><thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>ACTIVATION</th><th>EXPIRATION</th></tr></thead><tbody>`;
+  let html = `<h3>CLÉS ACTIVÉES (${data.users.length})</h3><table class="admin-table"><thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>EXPIRATION</th><th>ACTION</th></tr></thead><tbody>`;
   data.users.forEach(u => {
-    html += `<tr onclick="showUserDetail('${u.telegramId}')" style="cursor:pointer;">
-      <td>${u.telegramId}</td>
-      <td>${u.keyLabel}</td>
-      <td>${u.activatedAt ? new Date(u.activatedAt).toLocaleString('fr-FR') : '-'}</td>
-      <td>${u.expiresAt === "lifetime" ? "À VIE" : new Date(u.expiresAt).toLocaleString('fr-FR')}</td>
+    html += `<tr style="cursor:pointer;">
+      <td onclick="showUserDetail('${u.telegramId}')">${u.telegramId}</td>
+      <td onclick="showUserDetail('${u.telegramId}')">${u.keyLabel}</td>
+      <td onclick="showUserDetail('${u.telegramId}')">${u.expiresAt === "lifetime" ? "À VIE" : new Date(u.expiresAt).toLocaleString('fr-FR')}</td>
+      <td><button class="btn-small-revoke" onclick="event.stopPropagation(); revokeUserKey('${u.telegramId}')">🗑️ BANNIR</button></td>
     </tr>`;
   });
   html += `</tbody></table>`;
@@ -835,14 +916,14 @@ async function showActiveUsers() {
   content.innerHTML = `<div class="loader"><div class="spinner"></div>CHARGEMENT UTILISATEURS ACTIFS...</div>`;
   const res = await fetch(`${BASE}/api/admin/data`, { headers: { "x-telegram-id": TELEGRAM_ID } });
   const data = await res.json();
-  let html = `<h3>UTILISATEURS ACTIFS (${data.usersCount})</h3><table class="admin-table"><thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>TEMPS RESTANT</th><th>ACTIVATION</th></tr></thead><tbody>`;
+  let html = `<h3>UTILISATEURS ACTIFS (${data.usersCount})</h3><table class="admin-table"><thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>TEMPS RESTANT</th><th>ACTION</th></tr></thead><tbody>`;
   data.users.forEach(u => {
     const remaining = u.expiresAt === "lifetime" ? "ILLIMITÉ" : Math.max(0, Math.floor((new Date(u.expiresAt) - Date.now()) / 86400000)) + " jours";
-    html += `<tr onclick="showUserDetail('${u.telegramId}')">
-      <td>${u.telegramId}</td>
-      <td>${u.keyLabel}</td>
-      <td>${remaining}</td>
-      <td>${u.activatedAt ? new Date(u.activatedAt).toLocaleString('fr-FR') : '-'}</td>
+    html += `<tr style="cursor:pointer;">
+      <td onclick="showUserDetail('${u.telegramId}')">${u.telegramId}</td>
+      <td onclick="showUserDetail('${u.telegramId}')">${u.keyLabel}</td>
+      <td onclick="showUserDetail('${u.telegramId}')">${remaining}</td>
+      <td><button class="btn-small-revoke" onclick="event.stopPropagation(); revokeUserKey('${u.telegramId}')">🗑️ BANNIR</button></td>
     </tr>`;
   });
   html += `</tbody></table>`;
@@ -858,12 +939,12 @@ async function showUserDetail(telegramId) {
   content.innerHTML = `
     <div id="modalTitle" style="font-size:18px;margin-bottom:15px">Utilisateur <span style="color:var(--accent)">${telegramId}</span></div>
     <div class="timer-container" id="userTimer" style="font-size:32px;font-weight:900;color:var(--accent);text-shadow:0 0 20px var(--accent-glow);text-align:center;margin:20px 0;">TEMPS RESTANT : --:--:--</div>
-    <h4 style="margin:20px 0 10px 0">Historique de recherches</h4>
+    <h4 style="margin:20px 0 10px 0">Historique de recherches (Bêta)</h4>
     <div id="userHistoryList" style="max-height:300px;overflow-y:auto;background:#0a0a12;padding:10px;border-radius:4px;"></div>
-    <button onclick="revokeUserKey('${telegramId}')" class="revoke-btn" style="margin-top:25px;background:#ff1e56;color:#fff;border:none;padding:14px;font-weight:900;width:100%;border-radius:4px;">RÉVOQUER LA CLÉ (BAN IMMÉDIAT)</button>
+    <button onclick="revokeUserKey('${telegramId}')" class="revoke-btn">RÉVOQUER LA CLÉ (BAN IMMÉDIAT)</button>
   `;
 
-  let remaining = 3600;
+  let remaining = 3600; // Fake duration pour la modal
   const timerEl = document.getElementById("userTimer");
   const interval = setInterval(() => {
     if (remaining <= 0) { clearInterval(interval); timerEl.textContent = "EXPIRÉ"; return; }
@@ -879,25 +960,17 @@ function closeUserModal() {
   document.getElementById("userDetailModal").style.display = "none";
 }
 
-function revokeUserKey(telegramId) {
-  if (confirm(`Révoquer définitivement la clé de l'utilisateur ${telegramId} ?`)) {
-    alert(`Clé de ${telegramId} révoquée avec succès.`);
-    closeUserModal();
-    loadAdminData(currentAdminTab);
-  }
-}
-
 function renderUsersTab(data) {
   const content = document.getElementById("adminContent");
   let rows = "";
   if (data.users && data.users.length) {
     rows = data.users.map(u => {
       const remaining = u.expiresAt === "lifetime" ? "ILLIMITÉ" : Math.max(0, Math.floor((new Date(u.expiresAt) - Date.now()) / 86400000)) + " jours";
-      return `<tr onclick="showUserDetail('${u.telegramId}')">
-        <td>${u.telegramId}</td>
-        <td>${u.keyLabel}</td>
-        <td>${remaining}</td>
-        <td>${u.activatedAt ? new Date(u.activatedAt).toLocaleString('fr-FR') : '-'}</td>
+      return `<tr style="cursor:pointer;">
+        <td onclick="showUserDetail('${u.telegramId}')">${u.telegramId}</td>
+        <td onclick="showUserDetail('${u.telegramId}')">${u.keyLabel}</td>
+        <td onclick="showUserDetail('${u.telegramId}')">${remaining}</td>
+        <td><button class="btn-small-revoke" onclick="event.stopPropagation(); revokeUserKey('${u.telegramId}')">🗑️ BANNIR</button></td>
       </tr>`;
     }).join("");
   } else {
@@ -905,7 +978,7 @@ function renderUsersTab(data) {
   }
   content.innerHTML = `
     <table class="admin-table">
-      <thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>TEMPS RESTANT</th><th>ACTIVATION</th></tr></thead>
+      <thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>TEMPS RESTANT</th><th>ACTION</th></tr></thead>
       <tbody>${rows}</tbody>
     </table>
   `;
@@ -946,15 +1019,16 @@ function renderGeneratorTab() {
     {type:'admin', label:'CLÉ ADMIN'}
   ];
   const cards = types.map(t => `
-    <div onclick="selectKeyType('${t.type}')" class="selectable-card ${selectedKeyType === t.type ? 'active' : ''}">
+    <div onclick="selectKeyType('${t.type}')" class="selectable-card ${selectedKeyType === t.type ? 'active' : ''}" style="padding:14px;border:1px solid rgba(255,255,255,0.1);border-radius:6px;text-align:center;cursor:pointer;font-family:var(--font-display);font-weight:700;font-size:11px;background:${selectedKeyType === t.type ? 'var(--accent)' : 'transparent'};color:${selectedKeyType === t.type ? '#000' : 'var(--text)'};">
       ${t.label}
     </div>
   `).join("");
+  
   const content = document.getElementById("adminContent");
   content.innerHTML = `
     <h3 style="margin-bottom:20px;font-family:var(--font-display);color:var(--accent);">GÉNÉRER UNE NOUVELLE CLÉ</h3>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">${cards}</div>
-    <button id="generateBtn" onclick="validateAndGenerate()" style="margin-top:30px;width:100%;padding:18px;background:var(--accent);color:#000;font-family:var(--font-display);font-weight:900;font-size:15px;letter-spacing:2px;border:none;border-radius:8px;box-shadow:0 0 25px var(--accent-glow);">GÉNÉRER LA CLÉ</button>
+    <button id="generateBtn" onclick="validateAndGenerate()" style="margin-top:30px;width:100%;padding:18px;background:var(--accent);color:#000;font-family:var(--font-display);font-weight:900;font-size:15px;letter-spacing:2px;border:none;border-radius:8px;box-shadow:0 0 25px var(--accent-glow);cursor:pointer;">GÉNÉRER LA CLÉ</button>
     <div id="generatedKeyDisplay" style="margin-top:25px;display:none;background:#000;border:2px solid var(--accent);border-radius:8px;padding:20px;text-align:center;word-break:break-all;font-family:var(--font-mono);font-size:19px;letter-spacing:7px;box-shadow:0 0 30px var(--accent-glow);"></div>
   `;
 }
@@ -984,7 +1058,7 @@ async function validateAndGenerate() {
       display.innerHTML = `
         <div style="color:var(--accent);font-size:14px;margin-bottom:12px;">✅ CLÉ GÉNÉRÉE AVEC SUCCÈS</div>
         <div style="font-size:22px;letter-spacing:8px;margin-bottom:20px;">${result.key}</div>
-        <button onclick="copyKey('${result.key}')" style="background:var(--accent);color:#000;border:none;padding:14px 24px;border-radius:6px;font-weight:900;width:100%;">📋 COPIER LA CLÉ</button>
+        <button onclick="copyKey('${result.key}')" style="background:var(--accent);color:#000;border:none;padding:14px 24px;border-radius:6px;font-weight:900;width:100%;cursor:pointer;">📋 COPIER LA CLÉ</button>
       `;
       display.style.display = "block";
     }
@@ -994,18 +1068,12 @@ async function validateAndGenerate() {
     btn.innerHTML = "GÉNÉRER LA CLÉ";
     btn.disabled = false;
     selectedKeyType = null;
-    setTimeout(() => renderGeneratorTab(), 800);
   }
 }
 
 function copyKey(key) {
   navigator.clipboard.writeText(key).then(() => alert("✅ Clé copiée dans le presse-papiers !"));
 }
-
-function closeFamilyOverlay() {
-  document.getElementById("familyOverlay").style.display = "none";
-}
-
 </script>
 </body>
 </html>
