@@ -50,17 +50,49 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-mono);
 .grid-bg { position: fixed; inset: 0; opacity: 0.04; pointer-events: none; z-index: 0; background-image: linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px); background-size: 50px 50px; }
 
 /* ====================== ÉCRAN D'ACCUEIL (INTRO) ====================== */
-#introScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; transition: opacity 0.5s ease; }
+#introScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; transition: opacity 0.4s ease; }
 .neon-logo { font-family: var(--font-display); font-size: 42px; font-weight: 900; color: #fff; text-shadow: 0 0 5px #fff, 0 0 15px var(--accent), 0 0 30px var(--accent), 0 0 50px var(--accent); animation: neonPulse 1.5s infinite alternate; margin-bottom: 20px; letter-spacing: 4px; }
-.neon-logo span { color: var(--accent); text-shadow: none; }
+.neon-logo span { color: var(--accent); } /* Retrait du text-shadow: none pour que tout brille */
 .intro-tagline { font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 40px; max-width: 450px; line-height: 1.8; animation: fadeIn 2s ease-out; }
-.intro-btn { background: rgba(255,30,86,0.05); border: 2px solid var(--accent); color: #fff; padding: 18px 40px; font-family: var(--font-display); font-size: 14px; font-weight: 900; letter-spacing: 3px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 20px var(--accent-glow) inset, 0 0 20px var(--accent-glow); text-transform: uppercase; border-radius: 4px; outline: none; }
-.intro-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 40px var(--accent); transform: scale(1.05); }
-.intro-btn:active { transform: scale(0.98); }
+
+/* Bouton Intro Réaliste */
+.intro-btn { 
+  background: rgba(255,30,86,0.05); 
+  border: 2px solid var(--accent); 
+  color: #fff; 
+  padding: 18px 40px; 
+  font-family: var(--font-display); 
+  font-size: 14px; 
+  font-weight: 900; 
+  letter-spacing: 3px; 
+  cursor: pointer; 
+  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1); /* Transition rapide pour l'effet bouton */
+  box-shadow: 0 4px 0 var(--accent), 0 0 20px var(--accent-glow) inset, 0 8px 20px rgba(0,0,0,0.5); 
+  text-transform: uppercase; 
+  border-radius: 6px; 
+  outline: none; 
+}
+.intro-btn:hover { 
+  background: rgba(255,30,86,0.15); 
+  box-shadow: 0 4px 0 var(--accent), 0 0 30px var(--accent-glow) inset, 0 8px 30px var(--accent-glow); 
+}
+/* Effet d'enfoncement mécanique au clic */
+.intro-btn:active { 
+  transform: translateY(4px); 
+  box-shadow: 0 0px 0 var(--accent), 0 0 10px var(--accent-glow) inset, 0 0px 10px rgba(0,0,0,0.8); 
+  background: rgba(255,30,86,0.3);
+}
 
 @keyframes neonPulse {
   0% { text-shadow: 0 0 5px #fff, 0 0 10px var(--accent), 0 0 20px var(--accent); }
   100% { text-shadow: 0 0 10px #fff, 0 0 20px var(--accent), 0 0 40px var(--accent), 0 0 80px var(--accent); }
+}
+
+/* Ajustements pour mobile */
+@media (max-width: 600px) {
+  .neon-logo { font-size: 28px; letter-spacing: 2px; margin-bottom: 15px; }
+  .intro-tagline { font-size: 9px; margin-bottom: 30px; letter-spacing: 2px; padding: 0 10px; }
+  .intro-btn { font-size: 12px; padding: 14px 20px; width: 90%; max-width: 300px; letter-spacing: 2px; }
 }
 
 /* ====================== ÉCRAN DE BOOT ====================== */
@@ -197,11 +229,7 @@ main { padding: 16px; position: relative; z-index: 2; }
   align-items: center;
   justify-content: space-between;
 }
-.admin-content, .family-content, .modal-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px;
-}
+.admin-content, .family-content, .modal-content { flex: 1; overflow-y: auto; padding: 24px; }
 .admin-tab-bar { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
 .admin-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
 .admin-stat-card { background: var(--card); border: 1px solid rgba(255,255,255,0.08); padding: 16px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
@@ -210,20 +238,9 @@ main { padding: 16px; position: relative; z-index: 2; }
 .admin-table th, .admin-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 11px; }
 .admin-table th { background: rgba(255,30,86,0.08); color: var(--accent); font-weight: 700; text-transform: uppercase; }
 .admin-table tr:hover { background: rgba(255,30,86,0.05); }
-.key-gen-btn { width: 100%; padding: 12px 10px; margin-bottom: 8px; background: #111; border: 1px solid var(--accent); color: var(--text); font-family: var(--font-display); font-weight: 900; font-size: 11px; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
-.key-gen-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
 
 .family-list { display: flex; flex-direction: column; gap: 16px; }
-.family-card {
-  background: var(--card);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 10px;
-  padding: 18px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
+.family-card { background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 18px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
 .family-card:hover { transform: translateY(-4px); box-shadow: 0 0 30px var(--accent-glow); }
 .family-name { font-family: var(--font-display); font-size: 18px; font-weight: 900; letter-spacing: 1px; }
 .family-birth { font-size: 12px; color: var(--muted); margin-top: 6px; }
@@ -242,13 +259,69 @@ main { padding: 16px; position: relative; z-index: 2; }
 <div id="introScreen">
   <div class="neon-logo">TRACEUR<span>_PRO</span></div>
   <div class="intro-tagline">Le meilleur moteur de recherche d'informations personnelles français.</div>
-  <button class="intro-btn" onclick="startBootSequence()">INITIALISER LE SYSTÈME</button>
+  <button class="intro-btn" onmousedown="startBootSequence()" ontouchstart="startBootSequence()">INITIALISER LE SYSTÈME</button>
 </div>
 
 <div id="boot">
   <div class="boot-logo">TRACEUR<span>_PRO</span></div>
   <div class="boot-bar-wrap"><div class="boot-bar" id="bootBar"></div></div>
   <div id="bootStatus">CONNEXION AU SERVEUR...</div>
+</div>
+
+<div id="mainAppContainer" style="display:none;">
+  <header>
+    <div class="header-left">
+      <h1>TRACEUR<span>_PRO</span></h1>
+    </div>
+    <div class="header-right">
+      <span id="headerStatus" class="status-indicator"></span>
+      <button class="profile-btn" id="profileBtn" onclick="toggleDropdown(event)">
+        <div id="profileAvatar" class="profile-avatar"></div>
+      </button>
+      <div class="profile-dropdown" id="profileDropdown" onclick="event.stopPropagation()">
+        <div>
+          <div class="dropdown-user-title">Statut de l'accès</div>
+          <div class="dropdown-timer-text" id="dropdownTimer">TERM: --h --m --s</div>
+        </div>
+        <div>
+          <div class="dropdown-bar-wrap">
+            <div class="dropdown-bar-fill" id="dropdownBarFill"></div>
+          </div>
+        </div>
+        <a href="#" class="dropdown-extend-btn">Prolonger l'accès</a>
+        <div class="theme-selector">
+          <div class="theme-title">Thème de l'interface</div>
+          <div class="theme-options">
+            <button class="theme-opt-btn active" id="th-cyber" onclick="setTheme('cyber')">Cyber</button>
+            <button class="theme-opt-btn" id="th-furtif" onclick="setTheme('furtif')">Furtif</button>
+            <button class="theme-opt-btn" id="th-ocean" onclick="setTheme('ocean')">Océan</button>
+          </div>
+        </div>
+        <div id="adminSection" style="display:none; margin-top:12px;">
+          <button onclick="openAdminPanel()" style="width:100%; padding:14px; background:var(--accent); color:#000; font-family:var(--font-display); font-weight:900; font-size:13px; letter-spacing:2px; border:none; border-radius:4px; box-shadow:0 0 15px var(--accent-glow);">PANNEL ADMIN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="status-bar">
+    <span><span class="dot"></span>RECHERCHE ACTIVE</span>
+    <span id="statusTime">SYS: --:--:--</span>
+  </div>
+
+  <main>
+    <div class="section-title">CRITÈRES DISPONIBLES</div>
+    <div class="tabs" id="tabs"></div>
+    <div class="criteria-bar" id="criteriaBar">
+      <h3>CRITÈRES SÉLECTIONNÉS</h3>
+      <div class="criteria-list" id="criteriaList"></div>
+    </div>
+    <div class="section-title">INFORMATIONS SUR LA CIBLE</div>
+    <div class="fields-grid" id="fieldsGrid"></div>
+    <button class="search-btn" id="searchBtn" disabled onclick="launchSearch()">LANCER LA RECHERCHE</button>
+    <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">Réinitialiser la recherche</button>
+    <div class="results-section" id="resultsSection" style="display:none"></div>
+  </main>
 </div>
 
 <div id="lockScreen" style="display:none">
@@ -260,60 +333,6 @@ main { padding: 16px; position: relative; z-index: 2; }
     <div class="lock-error" id="lockError">Clé incorrecte ou expirée</div>
   </div>
 </div>
-
-<header>
-  <div class="header-left">
-    <h1>TRACEUR<span>_PRO</span></h1>
-  </div>
-  <div class="header-right">
-    <span id="headerStatus" class="status-indicator"></span>
-    <button class="profile-btn" id="profileBtn" onclick="toggleDropdown(event)">
-      <div id="profileAvatar" class="profile-avatar"></div>
-    </button>
-    <div class="profile-dropdown" id="profileDropdown" onclick="event.stopPropagation()">
-      <div>
-        <div class="dropdown-user-title">Statut de l'accès</div>
-        <div class="dropdown-timer-text" id="dropdownTimer">TERM: --h --m --s</div>
-      </div>
-      <div>
-        <div class="dropdown-bar-wrap">
-          <div class="dropdown-bar-fill" id="dropdownBarFill"></div>
-        </div>
-      </div>
-      <a href="#" class="dropdown-extend-btn">Prolonger l'accès</a>
-      <div class="theme-selector">
-        <div class="theme-title">Thème de l'interface</div>
-        <div class="theme-options">
-          <button class="theme-opt-btn active" id="th-cyber" onclick="setTheme('cyber')">Cyber</button>
-          <button class="theme-opt-btn" id="th-furtif" onclick="setTheme('furtif')">Furtif</button>
-          <button class="theme-opt-btn" id="th-ocean" onclick="setTheme('ocean')">Océan</button>
-        </div>
-      </div>
-      <div id="adminSection" style="display:none; margin-top:12px;">
-        <button onclick="openAdminPanel()" style="width:100%; padding:14px; background:var(--accent); color:#000; font-family:var(--font-display); font-weight:900; font-size:13px; letter-spacing:2px; border:none; border-radius:4px; box-shadow:0 0 15px var(--accent-glow);">PANNEL ADMIN</button>
-      </div>
-    </div>
-  </div>
-</header>
-
-<div class="status-bar">
-  <span><span class="dot"></span>RECHERCHE ACTIVE</span>
-  <span id="statusTime">SYS: --:--:--</span>
-</div>
-
-<main>
-  <div class="section-title">CRITÈRES DISPONIBLES</div>
-  <div class="tabs" id="tabs"></div>
-  <div class="criteria-bar" id="criteriaBar">
-    <h3>CRITÈRES SÉLECTIONNÉS</h3>
-    <div class="criteria-list" id="criteriaList"></div>
-  </div>
-  <div class="section-title">INFORMATIONS SUR LA CIBLE</div>
-  <div class="fields-grid" id="fieldsGrid"></div>
-  <button class="search-btn" id="searchBtn" disabled onclick="launchSearch()">LANCER LA RECHERCHE</button>
-  <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">Réinitialiser la recherche</button>
-  <div class="results-section" id="resultsSection" style="display:none"></div>
-</main>
 
 <div class="overlay" id="overlay" onclick="closeSheet(event)">
   <div class="input-sheet" id="inputSheet">
@@ -374,6 +393,7 @@ let isAdmin = false;
 let currentAdminTab = 0;
 let allResults = [];
 let selectedKeyType = null;
+let bootStarted = false; // Empecher le double clic sur mobile
 
 function initProfileAvatar() {
   const avatarContainer = document.getElementById("profileAvatar");
@@ -410,22 +430,27 @@ document.getElementById("keyInput").addEventListener("input", (e) => {
   e.target.value = val;
 });
 
-// INITIALISATION DE BASE AU CHARGEMENT DE LA PAGE
 document.addEventListener("DOMContentLoaded", () => {
   initProfileAvatar();
   buildTabs();
   renderFields();
-  // On ne charge plus checkSession tout de suite, on attend le clic sur le bouton de l'intro
 });
 
-// NOUVELLE FONCTION DE DÉMARRAGE ET DE PING SERVEUR
-function startBootSequence() {
-  document.getElementById("introScreen").style.opacity = "0";
+// NOUVELLE FONCTION DE DÉMARRAGE AVEC FIX DU "FLASH"
+function startBootSequence(e) {
+  if (e) e.preventDefault(); // Prevents ghost clicks on mobile
+  if (bootStarted) return;
+  bootStarted = true;
+  
+  // On attend 150ms pour laisser l'animation du bouton d'enfoncement s'afficher physiquement
   setTimeout(() => {
-    document.getElementById("introScreen").style.display = "none";
-    document.getElementById("boot").style.display = "flex";
-    pingServerLoop();
-  }, 500);
+    document.getElementById("introScreen").style.opacity = "0";
+    setTimeout(() => {
+      document.getElementById("introScreen").style.display = "none";
+      document.getElementById("boot").style.display = "flex";
+      pingServerLoop();
+    }, 400); // Durée du fondu intro
+  }, 150);
 }
 
 async function pingServerLoop() {
@@ -436,24 +461,20 @@ async function pingServerLoop() {
   let attempts = 0;
   let progress = 0;
   
-  // Animation visuelle de la barre pour faire patienter
   const progressInterval = setInterval(() => {
-    progress += (95 - progress) * 0.05; // Monte progressivement vers 95%
+    progress += (95 - progress) * 0.05; 
     bar.style.width = `${progress}%`;
   }, 1000);
 
   while (true) {
     attempts++;
     try {
-      // Un simple fetch pour vérifier si le serveur répond. 
-      // Même s'il renvoie une erreur 400 (car on n'envoie pas de code valide), le simple fait de répondre prouve qu'il est éveillé.
       const res = await fetch(`${BASE}/api/auth`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ telegramId: "PING", code: null })
       });
       
-      // Si la requête aboutit, le serveur est up
       clearInterval(progressInterval);
       bar.style.width = "100%";
       status.textContent = "SERVEUR EN LIGNE. INITIALISATION...";
@@ -461,15 +482,13 @@ async function pingServerLoop() {
       setTimeout(async () => {
         document.getElementById("boot").style.opacity = "0";
         setTimeout(() => document.getElementById("boot").style.display = "none", 400);
-        await checkSession(null); // On lance la vérification de session standard
+        await checkSession(null);
       }, 600);
       break;
       
     } catch(e) {
-      // Si on attrape une erreur (généralement réseau/timeout car le serveur dort)
       status.textContent = `RÉVEIL DU SERVEUR EN COURS... (TENTATIVE ${attempts})`;
     }
-    // On attend 3 secondes avant de réessayer
     await new Promise(r => setTimeout(r, 3000));
   }
 }
@@ -508,6 +527,7 @@ async function checkSession(providedCode) {
     if (data.valid) {
       document.getElementById("lockScreen").style.display = "none";
       document.getElementById("lockError").style.display = "none";
+      document.getElementById("mainAppContainer").style.display = "block"; // Affiche l'app seulement ici !
       sessionEndTimestamp = data.expiresAt;
       sessionMaxDuration = data.maxDuration || 0;
       isAdmin = !!data.isAdmin;
@@ -515,11 +535,13 @@ async function checkSession(providedCode) {
       startCountdown();
       updateHeaderStatus();
     } else {
+      document.getElementById("mainAppContainer").style.display = "none";
       document.getElementById("lockScreen").style.display = "flex";
       if (providedCode) showLockError(data.error || "CLÉ INVALIDE OU EXPIRÉE");
     }
   } catch(e) {
     console.error(e);
+    document.getElementById("mainAppContainer").style.display = "none";
     document.getElementById("lockScreen").style.display = "flex";
     showLockError("ERREUR DE CONNEXION AU SYSTÈME");
   }
@@ -556,6 +578,7 @@ function startCountdown() {
       clearInterval(timerInterval);
       timerDisplay.textContent = "EXPIRÉ";
       barFill.style.width = "0%";
+      document.getElementById("mainAppContainer").style.display = "none";
       document.getElementById("lockScreen").style.display = "flex";
       showLockError("VOTRE TEMPS EST ÉCOULÉ");
       updateHeaderStatus();
@@ -870,11 +893,9 @@ function renderStatsTab(data) {
   `;
 }
 
-// LOGIQUE POUR LA RÉVOCATION DIRECTE
 async function revokeUserKey(telegramId) {
   if (confirm(`RÉVOCATION IMMÉDIATE : Bannir et supprimer la clé de l'utilisateur ${telegramId} ?`)) {
     try {
-      // NOTE: Assure-toi d'avoir une route serveur correspondante : router.post('/admin/revoke') dans ton backend !
       const res = await fetch(`${BASE}/api/admin/revoke`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
@@ -883,7 +904,7 @@ async function revokeUserKey(telegramId) {
       if (res.ok) {
         alert(`Clé de ${telegramId} révoquée avec succès.`);
         closeUserModal();
-        loadAdminData(currentAdminTab); // Recharge le tableau
+        loadAdminData(currentAdminTab); 
       } else {
         alert("Erreur lors de la révocation de la clé (Vérifiez le serveur).");
       }
@@ -944,7 +965,7 @@ async function showUserDetail(telegramId) {
     <button onclick="revokeUserKey('${telegramId}')" class="revoke-btn">RÉVOQUER LA CLÉ (BAN IMMÉDIAT)</button>
   `;
 
-  let remaining = 3600; // Fake duration pour la modal
+  let remaining = 3600; 
   const timerEl = document.getElementById("userTimer");
   const interval = setInterval(() => {
     if (remaining <= 0) { clearInterval(interval); timerEl.textContent = "EXPIRÉ"; return; }
