@@ -49,77 +49,18 @@
 body { background: var(--bg); color: var(--text); font-family: var(--font-mono); min-height: 100vh; overflow-x: hidden; padding-bottom: env(safe-area-inset-bottom); }
 .grid-bg { position: fixed; inset: 0; opacity: 0.04; pointer-events: none; z-index: 0; background-image: linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px); background-size: 50px 50px; }
 
-/* ====================== ANIMATIONS & INTERACTIONS GLOBALES ====================== */
-button {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-}
-button:not(.intro-btn):not(.profile-btn):active {
-  transform: scale(0.95);
-}
-button:hover:not(:disabled) {
-  filter: brightness(1.15);
-}
-
-/* Effet Ripple (Onde de choc au clic) */
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  transform: scale(0);
-  animation: ripple-anim 0.6s ease-out;
-  background: rgba(255, 255, 255, 0.4);
-  pointer-events: none;
-}
-@keyframes ripple-anim {
-  to { transform: scale(4); opacity: 0; }
-}
-
 /* ====================== ÉCRAN D'ACCUEIL (INTRO) ====================== */
-#introScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; transition: opacity 0.4s ease; }
+#introScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; transition: opacity 0.5s ease; }
 .neon-logo { font-family: var(--font-display); font-size: 42px; font-weight: 900; color: #fff; text-shadow: 0 0 5px #fff, 0 0 15px var(--accent), 0 0 30px var(--accent), 0 0 50px var(--accent); animation: neonPulse 1.5s infinite alternate; margin-bottom: 20px; letter-spacing: 4px; }
-.neon-logo span { color: var(--accent); } 
+.neon-logo span { color: var(--accent); text-shadow: none; }
 .intro-tagline { font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 40px; max-width: 450px; line-height: 1.8; animation: fadeIn 2s ease-out; }
-
-/* Bouton Intro Réaliste */
-.intro-btn { 
-  background: rgba(255,30,86,0.05); 
-  border: 2px solid var(--accent); 
-  color: #fff; 
-  padding: 18px 40px; 
-  font-family: var(--font-display); 
-  font-size: 14px; 
-  font-weight: 900; 
-  letter-spacing: 3px; 
-  cursor: pointer; 
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
-  box-shadow: 0 4px 0 var(--accent), 0 0 20px var(--accent-glow) inset, 0 8px 20px rgba(0,0,0,0.5); 
-  text-transform: uppercase; 
-  border-radius: 6px; 
-  outline: none; 
-}
-.intro-btn:hover { 
-  background: rgba(255,30,86,0.15); 
-  transform: translateY(-2px);
-  box-shadow: 0 6px 0 var(--accent), 0 0 30px var(--accent-glow) inset, 0 12px 30px var(--accent-glow); 
-}
-/* Effet d'enfoncement mécanique au clic */
-.intro-btn:active { 
-  transform: translateY(4px) !important; 
-  box-shadow: 0 0px 0 var(--accent), 0 0 10px var(--accent-glow) inset, 0 0px 10px rgba(0,0,0,0.8); 
-  background: rgba(255,30,86,0.3);
-}
+.intro-btn { background: rgba(255,30,86,0.05); border: 2px solid var(--accent); color: #fff; padding: 18px 40px; font-family: var(--font-display); font-size: 14px; font-weight: 900; letter-spacing: 3px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 20px var(--accent-glow) inset, 0 0 20px var(--accent-glow); text-transform: uppercase; border-radius: 4px; outline: none; }
+.intro-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 40px var(--accent); transform: scale(1.05); }
+.intro-btn:active { transform: scale(0.98); }
 
 @keyframes neonPulse {
   0% { text-shadow: 0 0 5px #fff, 0 0 10px var(--accent), 0 0 20px var(--accent); }
   100% { text-shadow: 0 0 10px #fff, 0 0 20px var(--accent), 0 0 40px var(--accent), 0 0 80px var(--accent); }
-}
-
-@media (max-width: 600px) {
-  .neon-logo { font-size: 28px; letter-spacing: 2px; margin-bottom: 15px; }
-  .intro-tagline { font-size: 9px; margin-bottom: 30px; letter-spacing: 2px; padding: 0 10px; }
-  .intro-btn { font-size: 12px; padding: 14px 20px; width: 90%; max-width: 300px; letter-spacing: 2px; }
 }
 
 /* ====================== ÉCRAN DE BOOT ====================== */
@@ -136,8 +77,8 @@ button:hover:not(:disabled) {
 .lock-title { font-size: 10px; margin-bottom: 12px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
 .lock-input { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 15px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 15px; text-transform: uppercase; transition: all 0.2s; }
 .lock-input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255,30,86,0.2); }
-.lock-btn { width: 100%; padding: 14px; background: var(--accent); border: none; color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 12px; letter-spacing: 1.5px; box-shadow: 0 4px 15px var(--accent-glow); }
-.lock-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--accent-glow); }
+.lock-btn { width: 100%; padding: 14px; background: var(--accent); border: none; color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 12px; letter-spacing: 1.5px; cursor: pointer; box-shadow: 0 4px 15px var(--accent-glow); transition: transform 0.1s; }
+.lock-btn:active { transform: scale(0.98); }
 .lock-error { color: var(--accent); font-size: 10px; margin-top: 12px; text-transform: uppercase; font-weight: bold; display: none; }
 
 header { position: sticky; top: 0; z-index: 950; background: rgba(3,3,5,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
@@ -148,7 +89,7 @@ header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900;
 .status-indicator.actif { background: var(--success); color: #030305; }
 .status-indicator.inactif { background: #ff1e56; color: #fff; }
 .profile-btn { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.2s; }
-.profile-btn:hover, .profile-btn.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); transform: scale(1.05); }
+.profile-btn:hover, .profile-btn.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
 .profile-avatar { width: 18px; height: 18px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; background: var(--accent); color: #000; box-shadow: 0 0 8px var(--accent-glow); }
 .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -159,13 +100,12 @@ header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900;
 .dropdown-timer-text { font-family: var(--font-mono); font-size: 13px; font-weight: bold; color: var(--text); margin-top: -4px; }
 .dropdown-bar-wrap { width: 100%; height: 5px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
 .dropdown-bar-fill { height: 100%; background: var(--accent); width: 0%; transition: width 1s linear; box-shadow: 0 0 8px var(--accent); }
-.dropdown-extend-btn { width: 100%; padding: 10px; background: #222; border: none; color: #666; font-family: var(--font-display); font-size: 10px; font-weight: 900; text-align: center; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; cursor: default; pointer-events: none; transition: background 0.2s; }
+.dropdown-extend-btn { width: 100%; padding: 10px; background: #222; border: none; color: #666; font-family: var(--font-display); font-size: 10px; font-weight: 900; text-align: center; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; cursor: default; pointer-events: none; }
 
 .theme-selector { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
 .theme-title { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
 .theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
-.theme-opt-btn { padding: 6px; font-size: 8.5px; font-family: var(--font-mono); text-transform: uppercase; font-weight: bold; background: #000; border: 1px solid rgba(255,255,255,0.05); color: var(--muted); text-align: center; transition: all 0.2s; }
-.theme-opt-btn:hover:not(.active) { border-color: rgba(255,30,86,0.5); color: #fff; }
+.theme-opt-btn { padding: 6px; font-size: 8.5px; font-family: var(--font-mono); text-transform: uppercase; font-weight: bold; background: #000; border: 1px solid rgba(255,255,255,0.05); color: var(--muted); cursor: pointer; text-align: center; }
 .theme-opt-btn.active { border-color: var(--accent); color: var(--text); background: rgba(255,255,255,0.02); }
 
 #adminSection { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
@@ -175,64 +115,43 @@ header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900;
 main { padding: 16px; position: relative; z-index: 2; }
 .section-title { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; margin: 20px 0 12px 0; display: flex; align-items: center; gap: 8px; }
 .section-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.05); }
-
-/* Animation des onglets */
 .tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; scrollbar-width: none; }
-.tab { padding: 10px 16px; font-size: 11px; font-weight: 700; font-family: var(--font-mono); border: 1px solid rgba(255,255,255,0.05); background: var(--surface); color: var(--muted); white-space: nowrap; text-transform: uppercase; }
-.tab:hover:not(.active) { background: rgba(255,255,255,0.05); color: #fff; transform: translateY(-1px); }
-.tab.active { border-color: var(--accent); color: #fff; background: rgba(255,30,86,0.08); box-shadow: 0 0 10px rgba(255,30,86,0.1); }
-
-/* Animation des boutons de la grille */
+.tab { padding: 10px 16px; font-size: 11px; font-weight: 700; font-family: var(--font-mono); border: 1px solid rgba(255,255,255,0.05); background: var(--surface); color: var(--muted); cursor: pointer; transition: all 0.1s; white-space: nowrap; text-transform: uppercase; }
+.tab.active { border-color: var(--accent); color: #fff; background: rgba(255,30,86,0.08); }
 .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 15px; }
-.field-btn { position: relative; padding: 14px 10px; border: 1px solid rgba(255,255,255,0.04); background: var(--surface); color: #aaa; font-family: var(--font-mono); font-size: 11px; text-align: left; display: flex; align-items: center; gap: 6px; }
-.field-btn:hover { background: rgba(255,30,86,0.08); border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.5); color: #fff; }
+.field-btn { position: relative; padding: 14px 10px; border: 1px solid rgba(255,255,255,0.04); background: var(--surface); color: #aaa; font-family: var(--font-mono); font-size: 11px; text-align: left; display: flex; align-items: center; gap: 6px; cursor: pointer; }
 .field-btn.filled { border-color: var(--accent); background: rgba(255,30,86,0.02); color: #fff; }
 .field-btn .tick { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 5px; height: 5px; background: var(--accent); box-shadow: 0 0 5px var(--accent); }
-.field-icon { display: flex; align-items: center; color: var(--muted); transition: color 0.3s; }
-.field-btn:hover .field-icon { color: #fff; }
+.field-icon { display: flex; align-items: center; color: var(--muted); }
 .field-btn.filled .field-icon { color: var(--accent); }
-
 .criteria-bar { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); padding: 10px; margin-bottom: 15px; display: none; }
-.criteria-bar.visible { display: block; animation: slideUp 0.2s ease-out; }
+.criteria-bar.visible { display: block; }
 .criteria-bar h3 { font-size: 8px; color: var(--muted); margin-bottom: 6px; }
 .criteria-list { display: flex; flex-wrap: wrap; gap: 4px; }
 .criteria-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: #000; border: 1px solid rgba(255,255,255,0.05); font-size: 10px; color: var(--text); }
 .criteria-tag .key { color: var(--accent); }
-.criteria-tag .remove { cursor: pointer; color: var(--muted); font-size: 13px; margin-left: 4px; transition: color 0.2s; }
-.criteria-tag .remove:hover { color: var(--accent); transform: scale(1.2); }
+.criteria-tag .remove { cursor: pointer; color: var(--muted); font-size: 13px; margin-left: 4px; }
 
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); z-index: 100; display: none; align-items: flex-end; }
 .overlay.open { display: flex; }
 .input-sheet { width: 100%; background: var(--surface); border-top: 2px solid var(--accent); padding: 20px 16px calc(20px + env(safe-area-inset-bottom)) 16px; box-shadow: 0 -10px 30px rgba(0,0,0,0.8); animation: slideUp 0.15s ease-out; }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 .input-sheet h3 { font-family: var(--font-display); font-size: 12px; margin-bottom: 12px; letter-spacing: 0.5px; }
-.input-field { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 14px; outline: none; margin-bottom: 15px; transition: all 0.2s; }
-.input-field:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(255,30,86,0.1); }
+.input-field { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 14px; outline: none; margin-bottom: 15px; }
+.input-field:focus { border-color: var(--accent); }
 .sheet-btns { display: flex; gap: 8px; }
-.btn-cancel, .btn-confirm { padding: 14px; font-family: var(--font-mono); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+.btn-cancel, .btn-confirm { padding: 14px; font-family: var(--font-mono); font-size: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
 .btn-cancel { flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.05); color: var(--muted); }
-.btn-cancel:hover { background: rgba(255,255,255,0.05); color: #fff; }
 .btn-confirm { flex: 2; background: var(--accent); border: none; color: #fff; font-weight: 900; box-shadow: 0 0 15px var(--accent-glow); }
-.btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 0 25px var(--accent); }
 
-/* Bouton principal de recherche animé */
-@keyframes btnPulse {
-  0% { box-shadow: 0 0 10px var(--accent-glow); }
-  50% { box-shadow: 0 0 25px var(--accent); }
-  100% { box-shadow: 0 0 10px var(--accent-glow); }
-}
-.search-btn { width: 100%; padding: 16px; border: none; background: var(--accent); color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 13px; letter-spacing: 1.5px; box-shadow: 0 4px 15px var(--accent-glow); }
-.search-btn:not(:disabled) { animation: btnPulse 2s infinite; }
-.search-btn:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--accent); }
+.search-btn { width: 100%; padding: 16px; border: none; background: var(--accent); color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 13px; letter-spacing: 1.5px; cursor: pointer; box-shadow: 0 4px 15px var(--accent-glow); }
 .search-btn:disabled { background: var(--surface); color: var(--muted); border: 1px solid rgba(255,255,255,0.05); box-shadow: none; opacity: 0.4; }
-.clear-btn { width: 100%; padding: 10px; background: transparent; border: none; color: var(--muted); font-family: var(--font-mono); font-size: 11px; margin-top: 8px; text-transform: uppercase; }
-.clear-btn:hover { color: #fff; }
+.clear-btn { width: 100%; padding: 10px; background: transparent; border: none; color: var(--muted); font-family: var(--font-mono); font-size: 11px; cursor: pointer; margin-top: 8px; text-transform: uppercase; }
 
-.results-section { margin-top: 25px; animation: fadeIn 0.4s ease; }
+.results-section { margin-top: 25px; }
 .results-section h2 { font-family: var(--font-display); font-size: 10px; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
 .results-section h2 .count { background: rgba(255,30,86,0.1); color: var(--accent); padding: 2px 6px; border: 1px solid var(--border); }
-.result-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px; transition: transform 0.2s, box-shadow 0.2s; }
-.result-card:hover { border-color: rgba(255,30,86,0.3); transform: translateY(-1px); box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+.result-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 10px; }
 .card-header { padding: 12px 14px; background: rgba(255,255,255,0.01); border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; }
 .card-name { font-family: var(--font-display); font-size: 12px; font-weight: 900; color: #fff; }
 .card-body { padding: 12px 14px; }
@@ -240,13 +159,6 @@ main { padding: 16px; position: relative; z-index: 2; }
 .info-row:last-child { border-bottom: none; }
 .info-key { color: var(--muted); width: 115px; flex-shrink: 0; font-size: 9px; font-weight: 700; text-transform: uppercase; }
 .info-val { color: var(--text); word-break: break-all; user-select: text; }
-
-/* Boutons Approfondir */
-.btn-approfondir {
-  background: var(--accent); color: #000; border: none; padding: 8px 14px;
-  border-radius: 4px; font-size: 10px; font-weight: 900;
-}
-.btn-approfondir:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--accent); background: #fff; }
 
 .loader { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 30px 0; color: var(--accent); font-size: 10px; font-weight: bold; }
 .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,30,86,0.1); border-top-color: var(--accent); animation: spin 0.4s linear infinite; border-radius: 50%; }
@@ -285,40 +197,41 @@ main { padding: 16px; position: relative; z-index: 2; }
   align-items: center;
   justify-content: space-between;
 }
-
-/* Croix animées */
-.admin-close, .modal-header button, .family-header button {
-  background: none; border: none; color: var(--accent); font-size: 24px;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.admin-content, .family-content, .modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
 }
-.admin-close:hover, .modal-header button:hover, .family-header button:hover {
-  transform: rotate(90deg) scale(1.2); color: #fff !important;
-}
-
-.admin-content, .family-content, .modal-content { flex: 1; overflow-y: auto; padding: 24px; }
 .admin-tab-bar { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
 .admin-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
 .admin-stat-card { background: var(--card); border: 1px solid rgba(255,255,255,0.08); padding: 16px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
-.admin-stat-card:hover { transform: translateY(-6px); box-shadow: 0 0 30px var(--accent-glow); border-color: var(--accent); }
-.admin-stat-card:active { transform: scale(0.97); }
-
+.admin-stat-card:hover { transform: translateY(-6px); box-shadow: 0 0 30px var(--accent-glow); }
 .admin-table { width: 100%; border-collapse: collapse; }
 .admin-table th, .admin-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 11px; }
 .admin-table th { background: rgba(255,30,86,0.08); color: var(--accent); font-weight: 700; text-transform: uppercase; }
-.admin-table tr { transition: background 0.2s; }
 .admin-table tr:hover { background: rgba(255,30,86,0.05); }
+.key-gen-btn { width: 100%; padding: 12px 10px; margin-bottom: 8px; background: #111; border: 1px solid var(--accent); color: var(--text); font-family: var(--font-display); font-weight: 900; font-size: 11px; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; }
+.key-gen-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent-glow); }
 
 .family-list { display: flex; flex-direction: column; gap: 16px; }
-.family-card { background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 18px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
-.family-card:hover { transform: translateY(-4px); box-shadow: 0 0 30px var(--accent-glow); border-color: var(--accent); }
-.family-card:active { transform: scale(0.97); }
+.family-card {
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 18px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.family-card:hover { transform: translateY(-4px); box-shadow: 0 0 30px var(--accent-glow); }
 .family-name { font-family: var(--font-display); font-size: 18px; font-weight: 900; letter-spacing: 1px; }
 .family-birth { font-size: 12px; color: var(--muted); margin-top: 6px; }
 .family-bubble { position: absolute; top: 14px; right: 14px; background: var(--accent); color: #000; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 9999px; letter-spacing: 0.8px; box-shadow: 0 0 15px var(--accent-glow); }
 .timer-container { font-size: 32px; font-weight: 900; color: var(--accent); text-shadow: 0 0 20px var(--accent-glow); text-align: center; margin: 20px 0; }
-.revoke-btn { background: #ff1e56; color: #fff; border: none; padding: 14px 24px; border-radius: 4px; font-weight: 900; width: 100%; margin-top: 20px; transition: all 0.3s; }
+.revoke-btn { background: #ff1e56; color: #fff; border: none; padding: 14px 24px; border-radius: 4px; font-weight: 900; cursor: pointer; width: 100%; margin-top: 20px; transition: all 0.3s; }
 .revoke-btn:hover { box-shadow: 0 0 25px #ff1e56; transform: scale(1.05); }
-.btn-small-revoke { background: var(--accent); color: #000; border: none; padding: 6px 10px; border-radius: 4px; font-weight: 900; font-size: 10px; transition: 0.2s; }
+.btn-small-revoke { background: var(--accent); color: #000; border: none; padding: 6px 10px; border-radius: 4px; font-weight: 900; font-size: 10px; cursor: pointer; transition: 0.2s; }
 .btn-small-revoke:hover { transform: scale(1.1); box-shadow: 0 0 15px var(--accent-glow); background: #ff4a73; color: #fff; }
 
 </style>
@@ -329,69 +242,13 @@ main { padding: 16px; position: relative; z-index: 2; }
 <div id="introScreen">
   <div class="neon-logo">TRACEUR<span>_PRO</span></div>
   <div class="intro-tagline">Le meilleur moteur de recherche d'informations personnelles français.</div>
-  <button class="intro-btn" onmousedown="startBootSequence()" ontouchstart="startBootSequence()">INITIALISER LE SYSTÈME</button>
+  <button class="intro-btn" onclick="startBootSequence()">INITIALISER LE SYSTÈME</button>
 </div>
 
 <div id="boot">
   <div class="boot-logo">TRACEUR<span>_PRO</span></div>
   <div class="boot-bar-wrap"><div class="boot-bar" id="bootBar"></div></div>
   <div id="bootStatus">CONNEXION AU SERVEUR...</div>
-</div>
-
-<div id="mainAppContainer" style="display:none;">
-  <header>
-    <div class="header-left">
-      <h1>TRACEUR<span>_PRO</span></h1>
-    </div>
-    <div class="header-right">
-      <span id="headerStatus" class="status-indicator"></span>
-      <button class="profile-btn" id="profileBtn" onclick="toggleDropdown(event)">
-        <div id="profileAvatar" class="profile-avatar"></div>
-      </button>
-      <div class="profile-dropdown" id="profileDropdown" onclick="event.stopPropagation()">
-        <div>
-          <div class="dropdown-user-title">Statut de l'accès</div>
-          <div class="dropdown-timer-text" id="dropdownTimer">TERM: --h --m --s</div>
-        </div>
-        <div>
-          <div class="dropdown-bar-wrap">
-            <div class="dropdown-bar-fill" id="dropdownBarFill"></div>
-          </div>
-        </div>
-        <button class="dropdown-extend-btn">Prolonger l'accès</button>
-        <div class="theme-selector">
-          <div class="theme-title">Thème de l'interface</div>
-          <div class="theme-options">
-            <button class="theme-opt-btn active" id="th-cyber" onclick="setTheme('cyber')">Cyber</button>
-            <button class="theme-opt-btn" id="th-furtif" onclick="setTheme('furtif')">Furtif</button>
-            <button class="theme-opt-btn" id="th-ocean" onclick="setTheme('ocean')">Océan</button>
-          </div>
-        </div>
-        <div id="adminSection" style="display:none; margin-top:12px;">
-          <button onclick="openAdminPanel()" style="width:100%; padding:14px; background:var(--accent); color:#000; font-family:var(--font-display); font-weight:900; font-size:13px; letter-spacing:2px; border:none; border-radius:4px; box-shadow:0 0 15px var(--accent-glow);">PANNEL ADMIN</button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <div class="status-bar">
-    <span><span class="dot"></span>RECHERCHE ACTIVE</span>
-    <span id="statusTime">SYS: --:--:--</span>
-  </div>
-
-  <main>
-    <div class="section-title">CRITÈRES DISPONIBLES</div>
-    <div class="tabs" id="tabs"></div>
-    <div class="criteria-bar" id="criteriaBar">
-      <h3>CRITÈRES SÉLECTIONNÉS</h3>
-      <div class="criteria-list" id="criteriaList"></div>
-    </div>
-    <div class="section-title">INFORMATIONS SUR LA CIBLE</div>
-    <div class="fields-grid" id="fieldsGrid"></div>
-    <button class="search-btn" id="searchBtn" disabled onclick="launchSearch()">LANCER LA RECHERCHE</button>
-    <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">Réinitialiser la recherche</button>
-    <div class="results-section" id="resultsSection" style="display:none"></div>
-  </main>
 </div>
 
 <div id="lockScreen" style="display:none">
@@ -403,6 +260,60 @@ main { padding: 16px; position: relative; z-index: 2; }
     <div class="lock-error" id="lockError">Clé incorrecte ou expirée</div>
   </div>
 </div>
+
+<header>
+  <div class="header-left">
+    <h1>TRACEUR<span>_PRO</span></h1>
+  </div>
+  <div class="header-right">
+    <span id="headerStatus" class="status-indicator"></span>
+    <button class="profile-btn" id="profileBtn" onclick="toggleDropdown(event)">
+      <div id="profileAvatar" class="profile-avatar"></div>
+    </button>
+    <div class="profile-dropdown" id="profileDropdown" onclick="event.stopPropagation()">
+      <div>
+        <div class="dropdown-user-title">Statut de l'accès</div>
+        <div class="dropdown-timer-text" id="dropdownTimer">TERM: --h --m --s</div>
+      </div>
+      <div>
+        <div class="dropdown-bar-wrap">
+          <div class="dropdown-bar-fill" id="dropdownBarFill"></div>
+        </div>
+      </div>
+      <a href="#" class="dropdown-extend-btn">Prolonger l'accès</a>
+      <div class="theme-selector">
+        <div class="theme-title">Thème de l'interface</div>
+        <div class="theme-options">
+          <button class="theme-opt-btn active" id="th-cyber" onclick="setTheme('cyber')">Cyber</button>
+          <button class="theme-opt-btn" id="th-furtif" onclick="setTheme('furtif')">Furtif</button>
+          <button class="theme-opt-btn" id="th-ocean" onclick="setTheme('ocean')">Océan</button>
+        </div>
+      </div>
+      <div id="adminSection" style="display:none; margin-top:12px;">
+        <button onclick="openAdminPanel()" style="width:100%; padding:14px; background:var(--accent); color:#000; font-family:var(--font-display); font-weight:900; font-size:13px; letter-spacing:2px; border:none; border-radius:4px; box-shadow:0 0 15px var(--accent-glow);">PANNEL ADMIN</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="status-bar">
+  <span><span class="dot"></span>RECHERCHE ACTIVE</span>
+  <span id="statusTime">SYS: --:--:--</span>
+</div>
+
+<main>
+  <div class="section-title">CRITÈRES DISPONIBLES</div>
+  <div class="tabs" id="tabs"></div>
+  <div class="criteria-bar" id="criteriaBar">
+    <h3>CRITÈRES SÉLECTIONNÉS</h3>
+    <div class="criteria-list" id="criteriaList"></div>
+  </div>
+  <div class="section-title">INFORMATIONS SUR LA CIBLE</div>
+  <div class="fields-grid" id="fieldsGrid"></div>
+  <button class="search-btn" id="searchBtn" disabled onclick="launchSearch()">LANCER LA RECHERCHE</button>
+  <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">Réinitialiser la recherche</button>
+  <div class="results-section" id="resultsSection" style="display:none"></div>
+</main>
 
 <div class="overlay" id="overlay" onclick="closeSheet(event)">
   <div class="input-sheet" id="inputSheet">
@@ -419,7 +330,7 @@ main { padding: 16px; position: relative; z-index: 2; }
   <div class="admin-panel">
     <div class="admin-header">
       <div class="main-logo-anim" style="font-size:22px; margin:0;">ADMIN<span>_PANEL</span></div>
-      <button class="admin-close" onclick="closeAdminPanel()">✕</button>
+      <button class="admin-close" onclick="closeAdminPanel()" style="background:none; border:none; color:var(--accent); font-size:24px; cursor:pointer;">✕</button>
     </div>
     <div class="admin-tab-bar" id="adminTabs"></div>
     <div class="admin-content" id="adminContent"></div>
@@ -430,7 +341,7 @@ main { padding: 16px; position: relative; z-index: 2; }
   <div class="modal-panel" style="max-width: 600px;">
     <div class="modal-header">
       <div class="main-logo-anim" style="font-size:18px; margin:0;">GESTION<span>_UTILISATEUR</span></div>
-      <button onclick="closeUserModal()">✕</button>
+      <button onclick="closeUserModal()" style="background:none; border:none; color:var(--accent); font-size:24px; cursor:pointer;">✕</button>
     </div>
     <div class="modal-content" id="modalContent"></div>
   </div>
@@ -440,7 +351,7 @@ main { padding: 16px; position: relative; z-index: 2; }
   <div class="family-panel">
     <div class="family-header">
       <div class="main-logo-anim" style="font-size:21px; margin:0;">LIENS<span>_FAMILIAUX</span></div>
-      <button onclick="closeFamilyOverlay()">✕</button>
+      <button onclick="closeFamilyOverlay()" style="font-size:28px;color:var(--accent);background:none;border:none;cursor:pointer;">✕</button>
     </div>
     <div class="family-content" id="familyContent"></div>
   </div>
@@ -463,7 +374,6 @@ let isAdmin = false;
 let currentAdminTab = 0;
 let allResults = [];
 let selectedKeyType = null;
-let bootStarted = false; 
 
 function initProfileAvatar() {
   const avatarContainer = document.getElementById("profileAvatar");
@@ -500,25 +410,22 @@ document.getElementById("keyInput").addEventListener("input", (e) => {
   e.target.value = val;
 });
 
+// INITIALISATION DE BASE AU CHARGEMENT DE LA PAGE
 document.addEventListener("DOMContentLoaded", () => {
   initProfileAvatar();
   buildTabs();
   renderFields();
+  // On ne charge plus checkSession tout de suite, on attend le clic sur le bouton de l'intro
 });
 
-function startBootSequence(e) {
-  if (e) e.preventDefault(); 
-  if (bootStarted) return;
-  bootStarted = true;
-  
+// NOUVELLE FONCTION DE DÉMARRAGE ET DE PING SERVEUR
+function startBootSequence() {
+  document.getElementById("introScreen").style.opacity = "0";
   setTimeout(() => {
-    document.getElementById("introScreen").style.opacity = "0";
-    setTimeout(() => {
-      document.getElementById("introScreen").style.display = "none";
-      document.getElementById("boot").style.display = "flex";
-      pingServerLoop();
-    }, 400);
-  }, 150);
+    document.getElementById("introScreen").style.display = "none";
+    document.getElementById("boot").style.display = "flex";
+    pingServerLoop();
+  }, 500);
 }
 
 async function pingServerLoop() {
@@ -529,20 +436,24 @@ async function pingServerLoop() {
   let attempts = 0;
   let progress = 0;
   
+  // Animation visuelle de la barre pour faire patienter
   const progressInterval = setInterval(() => {
-    progress += (95 - progress) * 0.05; 
+    progress += (95 - progress) * 0.05; // Monte progressivement vers 95%
     bar.style.width = `${progress}%`;
   }, 1000);
 
   while (true) {
     attempts++;
     try {
+      // Un simple fetch pour vérifier si le serveur répond. 
+      // Même s'il renvoie une erreur 400 (car on n'envoie pas de code valide), le simple fait de répondre prouve qu'il est éveillé.
       const res = await fetch(`${BASE}/api/auth`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ telegramId: "PING", code: null })
       });
       
+      // Si la requête aboutit, le serveur est up
       clearInterval(progressInterval);
       bar.style.width = "100%";
       status.textContent = "SERVEUR EN LIGNE. INITIALISATION...";
@@ -550,13 +461,15 @@ async function pingServerLoop() {
       setTimeout(async () => {
         document.getElementById("boot").style.opacity = "0";
         setTimeout(() => document.getElementById("boot").style.display = "none", 400);
-        await checkSession(null);
+        await checkSession(null); // On lance la vérification de session standard
       }, 600);
       break;
       
     } catch(e) {
+      // Si on attrape une erreur (généralement réseau/timeout car le serveur dort)
       status.textContent = `RÉVEIL DU SERVEUR EN COURS... (TENTATIVE ${attempts})`;
     }
+    // On attend 3 secondes avant de réessayer
     await new Promise(r => setTimeout(r, 3000));
   }
 }
@@ -570,12 +483,8 @@ function toggleDropdown(event) {
 }
 
 document.addEventListener("click", () => {
-  const dropdown = document.getElementById("profileDropdown");
-  const btn = document.getElementById("profileBtn");
-  if(dropdown && btn) {
-    dropdown.classList.remove("open");
-    btn.classList.remove("active");
-  }
+  document.getElementById("profileDropdown").classList.remove("open");
+  document.getElementById("profileBtn").classList.remove("active");
 });
 
 function setTheme(themeName) {
@@ -599,7 +508,6 @@ async function checkSession(providedCode) {
     if (data.valid) {
       document.getElementById("lockScreen").style.display = "none";
       document.getElementById("lockError").style.display = "none";
-      document.getElementById("mainAppContainer").style.display = "block"; 
       sessionEndTimestamp = data.expiresAt;
       sessionMaxDuration = data.maxDuration || 0;
       isAdmin = !!data.isAdmin;
@@ -607,13 +515,11 @@ async function checkSession(providedCode) {
       startCountdown();
       updateHeaderStatus();
     } else {
-      document.getElementById("mainAppContainer").style.display = "none";
       document.getElementById("lockScreen").style.display = "flex";
       if (providedCode) showLockError(data.error || "CLÉ INVALIDE OU EXPIRÉE");
     }
   } catch(e) {
     console.error(e);
-    document.getElementById("mainAppContainer").style.display = "none";
     document.getElementById("lockScreen").style.display = "flex";
     showLockError("ERREUR DE CONNEXION AU SYSTÈME");
   }
@@ -625,10 +531,7 @@ async function submitKey() {
     showLockError("FORMAT REQUIS (XXXX-XXXX-XXXX)");
     return;
   }
-  const btn = document.querySelector(".lock-btn");
-  btn.innerHTML = "VERIFICATION...";
   await checkSession(code);
-  btn.innerHTML = "VALIDER";
 }
 
 function showLockError(msg) {
@@ -653,7 +556,6 @@ function startCountdown() {
       clearInterval(timerInterval);
       timerDisplay.textContent = "EXPIRÉ";
       barFill.style.width = "0%";
-      document.getElementById("mainAppContainer").style.display = "none";
       document.getElementById("lockScreen").style.display = "flex";
       showLockError("VOTRE TEMPS EST ÉCOULÉ");
       updateHeaderStatus();
@@ -812,7 +714,7 @@ function renderResults(results) {
     return `<div class="result-card">
       <div class="card-header">
         <span class="card-name">${name}</span>
-        <button class="btn-approfondir" onclick="approfondirRecherche(${index})">APPROFONDIR</button>
+        <button onclick="approfondirRecherche(${index})" style="background:var(--accent);color:#000;border:none;padding:8px 14px;border-radius:4px;font-size:10px;font-weight:900;cursor:pointer;">APPROFONDIR</button>
       </div>
       <div class="card-body">${rows || 'DONNÉES INDISPONIBLES'}</div>
     </div>`;
@@ -886,7 +788,7 @@ function showPersonFicheFromFamily(familyIndex) {
       <div class="card-header"><span class="card-name">${name}</span></div>
       <div class="card-body">${rows}</div>
     </div>
-    <button class="btn-approfondir" onclick="approfondirRecherche(0)" style="margin-top:25px;width:100%;padding:16px;border-radius:6px;font-size:12px;">RETOUR AUX LIENS FAMILIAUX</button>
+    <button onclick="approfondirRecherche(0)" style="margin-top:25px;width:100%;padding:16px;background:var(--accent);color:#000;border:none;border-radius:6px;font-weight:900;">RETOUR AUX LIENS FAMILIAUX</button>
   `;
 }
 
@@ -968,9 +870,11 @@ function renderStatsTab(data) {
   `;
 }
 
+// LOGIQUE POUR LA RÉVOCATION DIRECTE
 async function revokeUserKey(telegramId) {
   if (confirm(`RÉVOCATION IMMÉDIATE : Bannir et supprimer la clé de l'utilisateur ${telegramId} ?`)) {
     try {
+      // NOTE: Assure-toi d'avoir une route serveur correspondante : router.post('/admin/revoke') dans ton backend !
       const res = await fetch(`${BASE}/api/admin/revoke`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
@@ -979,7 +883,7 @@ async function revokeUserKey(telegramId) {
       if (res.ok) {
         alert(`Clé de ${telegramId} révoquée avec succès.`);
         closeUserModal();
-        loadAdminData(currentAdminTab); 
+        loadAdminData(currentAdminTab); // Recharge le tableau
       } else {
         alert("Erreur lors de la révocation de la clé (Vérifiez le serveur).");
       }
@@ -1040,7 +944,7 @@ async function showUserDetail(telegramId) {
     <button onclick="revokeUserKey('${telegramId}')" class="revoke-btn">RÉVOQUER LA CLÉ (BAN IMMÉDIAT)</button>
   `;
 
-  let remaining = 3600; 
+  let remaining = 3600; // Fake duration pour la modal
   const timerEl = document.getElementById("userTimer");
   const interval = setInterval(() => {
     if (remaining <= 0) { clearInterval(interval); timerEl.textContent = "EXPIRÉ"; return; }
@@ -1115,16 +1019,16 @@ function renderGeneratorTab() {
     {type:'admin', label:'CLÉ ADMIN'}
   ];
   const cards = types.map(t => `
-    <button onclick="selectKeyType('${t.type}')" class="selectable-card ${selectedKeyType === t.type ? 'active' : ''}" style="padding:14px;border:1px solid rgba(255,255,255,0.1);border-radius:6px;text-align:center;font-family:var(--font-display);font-weight:700;font-size:11px;background:${selectedKeyType === t.type ? 'var(--accent)' : 'transparent'};color:${selectedKeyType === t.type ? '#000' : 'var(--text)'};">
+    <div onclick="selectKeyType('${t.type}')" class="selectable-card ${selectedKeyType === t.type ? 'active' : ''}" style="padding:14px;border:1px solid rgba(255,255,255,0.1);border-radius:6px;text-align:center;cursor:pointer;font-family:var(--font-display);font-weight:700;font-size:11px;background:${selectedKeyType === t.type ? 'var(--accent)' : 'transparent'};color:${selectedKeyType === t.type ? '#000' : 'var(--text)'};">
       ${t.label}
-    </button>
+    </div>
   `).join("");
   
   const content = document.getElementById("adminContent");
   content.innerHTML = `
     <h3 style="margin-bottom:20px;font-family:var(--font-display);color:var(--accent);">GÉNÉRER UNE NOUVELLE CLÉ</h3>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">${cards}</div>
-    <button id="generateBtn" class="search-btn" onclick="validateAndGenerate()" style="margin-top:30px; border-radius:8px;">GÉNÉRER LA CLÉ</button>
+    <button id="generateBtn" onclick="validateAndGenerate()" style="margin-top:30px;width:100%;padding:18px;background:var(--accent);color:#000;font-family:var(--font-display);font-weight:900;font-size:15px;letter-spacing:2px;border:none;border-radius:8px;box-shadow:0 0 25px var(--accent-glow);cursor:pointer;">GÉNÉRER LA CLÉ</button>
     <div id="generatedKeyDisplay" style="margin-top:25px;display:none;background:#000;border:2px solid var(--accent);border-radius:8px;padding:20px;text-align:center;word-break:break-all;font-family:var(--font-mono);font-size:19px;letter-spacing:7px;box-shadow:0 0 30px var(--accent-glow);"></div>
   `;
 }
@@ -1154,7 +1058,7 @@ async function validateAndGenerate() {
       display.innerHTML = `
         <div style="color:var(--accent);font-size:14px;margin-bottom:12px;">✅ CLÉ GÉNÉRÉE AVEC SUCCÈS</div>
         <div style="font-size:22px;letter-spacing:8px;margin-bottom:20px;">${result.key}</div>
-        <button class="btn-approfondir" onclick="copyKey('${result.key}')" style="width:100%; padding:14px; border-radius:6px; font-size:12px;">📋 COPIER LA CLÉ</button>
+        <button onclick="copyKey('${result.key}')" style="background:var(--accent);color:#000;border:none;padding:14px 24px;border-radius:6px;font-weight:900;width:100%;cursor:pointer;">📋 COPIER LA CLÉ</button>
       `;
       display.style.display = "block";
     }
@@ -1170,39 +1074,6 @@ async function validateAndGenerate() {
 function copyKey(key) {
   navigator.clipboard.writeText(key).then(() => alert("✅ Clé copiée dans le presse-papiers !"));
 }
-
-// ====================== EFFET RIPPLE GLOBAL (SOURIS & TACTILE) ======================
-function createRipple(e, btn, isTouch = false) {
-  const ripple = document.createElement('span');
-  const rect = btn.getBoundingClientRect();
-  const size = Math.max(rect.width, rect.height);
-  
-  const clientX = isTouch ? e.touches[0].clientX : e.clientX;
-  const clientY = isTouch ? e.touches[0].clientY : e.clientY;
-  
-  const x = clientX - rect.left - size / 2;
-  const y = clientY - rect.top - size / 2;
-
-  ripple.style.width = ripple.style.height = `${size}px`;
-  ripple.style.left = `${x}px`;
-  ripple.style.top = `${y}px`;
-  ripple.classList.add('ripple');
-
-  btn.appendChild(ripple);
-  setTimeout(() => ripple.remove(), 600);
-}
-
-document.addEventListener('mousedown', function(e) {
-  const btn = e.target.closest('button');
-  if (!btn || btn.disabled) return;
-  createRipple(e, btn, false);
-});
-
-document.addEventListener('touchstart', function(e) {
-  const btn = e.target.closest('button');
-  if (!btn || btn.disabled) return;
-  createRipple(e, btn, true);
-}, {passive: true});
 </script>
 </body>
 </html>
