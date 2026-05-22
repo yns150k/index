@@ -26,7 +26,7 @@
   --card: #0f0f0f;
   --border: #3a3a3a;
   --accent: #ffffff;
-  --accent-glow: rgba(255, 255, 255, 0.25);
+  --accent-glow: rgba(255, 30, 86, 0.25);
   --text: #e0e0e0;
   --muted: #777777;
   --success: #888888;
@@ -43,120 +43,87 @@
   --success: #00e676;
 }
 .main-logo-anim span, header h1 span, .boot-logo span {
-  color: var(--accent) !important;
+  color: #ff1e56 !important;
 }
-* { 
-  box-sizing: border-box; 
-  margin: 0; 
-  padding: 0;
-  -webkit-tap-highlight-color: transparent; 
-  user-select: none; 
+* { box-sizing: border-box; margin: 0; padding: 0;
+  -webkit-tap-highlight-color: transparent; user-select: none; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-mono); min-height: 100vh; overflow-x: hidden; padding-bottom: env(safe-area-inset-bottom);
 }
-body { 
-  background: var(--bg); 
-  color: var(--text); 
-  font-family: var(--font-mono); 
-  min-height: 100vh; 
-  overflow-x: hidden; 
-  padding-bottom: env(safe-area-inset-bottom);
-}
-.grid-bg { 
-  position: fixed; 
-  inset: 0; 
-  opacity: 0.04; 
-  pointer-events: none; 
-  z-index: 0;
-  background-image: linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px); 
-  background-size: 50px 50px;
+.grid-bg { position: fixed; inset: 0; opacity: 0.04; pointer-events: none; z-index: 0;
+  background-image: linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px); background-size: 50px 50px;
 }
 
 /* ====================== ANIMATIONS & INTERACTIONS GLOBALES ====================== */
 button {
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background 0.2s ease, filter 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  touch-action: manipulation; /* Optimisation mobile tactile */
+  /* Correction Responsive Texte */
+  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  word-break: break-word;
 }
-
-/* Animation d'enfoncement mécanique */
-button:active:not(:disabled) {
-  transform: scale(0.96) translateY(2px) !important;
-  filter: brightness(0.9);
+button:not(.intro-btn):not(.profile-btn):not(.tab):active {
+  transform: scale(0.96) translateY(1px);
 }
 button:hover:not(:disabled) {
   filter: brightness(1.15);
 }
 
-/* Effet Ripple (Onde de choc au clic) */
+/* Effet Balayage Lumineux (Shine) pour les boutons principaux */
+.btn-shine::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-20deg);
+  animation: shine-sweep 3s infinite cubic-bezier(0.25, 0.8, 0.25, 1);
+  pointer-events: none;
+}
+@keyframes shine-sweep {
+  0% { left: -100%; }
+  20% { left: 200%; }
+  100% { left: 200%; }
+}
+
+/* Effet Ripple Adouci et Premium */
 .ripple {
   position: absolute;
   border-radius: 50%;
   transform: scale(0);
-  animation: ripple-anim 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  background: rgba(255, 255, 255, 0.3);
+  animation: ripple-anim 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 70%);
   pointer-events: none;
 }
 @keyframes ripple-anim {
-  to { transform: scale(4); opacity: 0; }
+  to { transform: scale(3); opacity: 0; }
 }
 
 /* ====================== ÉCRAN D'ACCUEIL (INTRO) ====================== */
-#introScreen { 
-  position: fixed; 
-  inset: 0;
-  background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); 
-  z-index: 9999; 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
-  text-align: center;
-  padding: 20px; 
-  transition: opacity 0.4s ease; 
-}
-.neon-logo { 
-  font-family: var(--font-display); 
-  font-size: clamp(32px, 8vw, 42px); /* Typographie fluide */
-  font-weight: 900; 
-  color: #fff;
-  text-shadow: 0 0 5px #fff, 0 0 15px var(--accent), 0 0 30px var(--accent), 0 0 50px var(--accent);
-  animation: neonPulse 1.5s infinite alternate; 
-  margin-bottom: 20px; 
-  letter-spacing: 4px; 
-}
+#introScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; transition: opacity 0.4s ease; }
+.neon-logo { font-family: var(--font-display); font-size: 42px; font-weight: 900; color: #fff; text-shadow: 0 0 5px #fff, 0 0 15px var(--accent), 0 0 30px var(--accent), 0 0 50px var(--accent); animation: neonPulse 1.5s infinite alternate; margin-bottom: 20px; letter-spacing: 4px; }
 .neon-logo span { color: var(--accent); } 
-.intro-tagline { 
-  font-family: var(--font-mono);
-  font-size: 11px; 
-  color: var(--muted); 
-  text-transform: uppercase; 
-  letter-spacing: 3px; 
-  margin-bottom: 40px; 
-  max-width: 450px; 
-  line-height: 1.8; 
-  animation: fadeIn 2s ease-out;
-  padding: 0 10px;
-}
+.intro-tagline { font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 40px; max-width: 450px; line-height: 1.8; animation: fadeIn 2s ease-out; }
 
 /* Bouton Intro Réaliste */
 .intro-btn { 
   background: rgba(255,30,86,0.05); 
   border: 2px solid var(--accent); 
   color: #fff; 
-  padding: 18px 5%;
-  width: 90%;
-  max-width: 350px;
+  padding: 18px 40px;
   font-family: var(--font-display); 
-  font-size: clamp(12px, 4vw, 14px); 
+  font-size: 14px; 
   font-weight: 900; 
   letter-spacing: 3px; 
-  cursor: pointer; 
   box-shadow: 0 4px 0 var(--accent), 0 0 20px var(--accent-glow) inset, 0 8px 20px rgba(0,0,0,0.5); 
   text-transform: uppercase; 
-  border-radius: 8px; 
+  border-radius: 6px; 
   outline: none;
-  word-wrap: break-word;
 }
 .intro-btn:hover { 
   background: rgba(255,30,86,0.15); 
@@ -164,7 +131,7 @@ button:hover:not(:disabled) {
   box-shadow: 0 6px 0 var(--accent), 0 0 30px var(--accent-glow) inset, 0 12px 30px var(--accent-glow);
 }
 .intro-btn:active { 
-  transform: translateY(4px) scale(0.98) !important;
+  transform: translateY(4px) !important;
   box-shadow: 0 0px 0 var(--accent), 0 0 10px var(--accent-glow) inset, 0 0px 10px rgba(0,0,0,0.8); 
   background: rgba(255,30,86,0.3);
 }
@@ -174,233 +141,215 @@ button:hover:not(:disabled) {
   100% { text-shadow: 0 0 10px #fff, 0 0 20px var(--accent), 0 0 40px var(--accent), 0 0 80px var(--accent); }
 }
 
-/* ====================== ÉCRAN DE BOOT & LOCK ====================== */
-#boot { 
-  position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: none;
-  flex-direction: column; align-items: center; justify-content: center; gap: 15px; transition: opacity 0.4s ease; 
+@media (max-width: 600px) {
+  .neon-logo { font-size: 28px; letter-spacing: 2px; margin-bottom: 15px; }
+  .intro-tagline { font-size: 9px; margin-bottom: 30px; letter-spacing: 2px; padding: 0 10px; }
+  .intro-btn { font-size: 12px; padding: 14px 20px; width: 90%; max-width: 300px; letter-spacing: 2px; }
 }
+
+/* ====================== ÉCRAN DE BOOT ====================== */
+#boot { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 15px; transition: opacity 0.4s ease; }
 .boot-logo { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: #fff; letter-spacing: 4px; animation: pulseGlow 2s infinite ease-in-out; }
-.boot-bar-wrap { width: 80%; max-width: 250px; height: 4px; background: rgba(255,255,255,0.03); border-radius: 4px; overflow: hidden; }
+.boot-bar-wrap { width: 200px; height: 4px; background: rgba(255,255,255,0.03); border-radius: 4px; overflow: hidden; }
 .boot-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease-out; box-shadow: 0 0 10px var(--accent); }
-#bootStatus { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; text-align: center; max-width: 280px; line-height: 1.5; padding: 0 10px;}
+#bootStatus { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; text-align: center; max-width: 280px; line-height: 1.5; }
 
-#lockScreen { 
-  position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%);
-  z-index: 900; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; 
+@keyframes pulseGlow {
+  0%, 100% { text-shadow: 0 0 10px var(--accent-glow); opacity: 0.8; }
+  50% { text-shadow: 0 0 25px var(--accent); opacity: 1; }
 }
-.lock-box { 
-  width: 100%; max-width: 350px; background: var(--surface); border: 1px solid var(--border); 
-  padding: 30px 20px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 30px rgba(255,30,86,0.05); border-radius: 8px; 
-}
-.main-logo-anim { 
-  font-family: var(--font-display); font-size: clamp(20px, 6vw, 24px); font-weight: 900; color: #fff; 
-  letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; position: relative; display: inline-block; animation: cyberScan 3s infinite ease-in-out; 
-}
+
+/* ====================== ÉCRAN DE VERROUILLAGE ====================== */
+#lockScreen { position: fixed; inset: 0; background: radial-gradient(circle at center, #100b14 0%, var(--bg) 100%); z-index: 900; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+.lock-box { width: 100%; max-width: 350px; background: var(--surface); border: 1px solid var(--border); padding: 30px 20px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.7), 0 0 30px rgba(255,30,86,0.05); border-radius: 8px; }
+.main-logo-anim { font-family: var(--font-display); font-size: 24px; font-weight: 900; color: #fff; letter-spacing: 3px; margin-bottom: 25px; text-transform: uppercase; position: relative; display: inline-block; animation: neonPulse 2.5s infinite alternate; }
 .lock-title { font-size: 10px; margin-bottom: 12px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
-.lock-input { 
-  width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 16px; color: #fff; 
-  font-family: var(--font-mono); font-size: 16px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 15px; text-transform: uppercase; transition: all 0.2s; 
-}
-.lock-input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255,30,86,0.2); }
-.lock-btn { 
-  width: 100%; padding: 16px; background: var(--accent); border: none; border-radius: 6px; color: #fff; 
-  font-family: var(--font-display); font-weight: 900; font-size: 12px; letter-spacing: 1.5px; box-shadow: 0 4px 15px var(--accent-glow); 
-}
-.lock-error { color: var(--accent); font-size: 10px; margin-top: 12px; text-transform: uppercase; font-weight: bold; display: none; }
+.lock-input { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 14px; color: #fff; font-family: var(--font-mono); font-size: 15px; text-align: center; letter-spacing: 3px; outline: none; margin-bottom: 15px; text-transform: uppercase; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 4px; }
+.lock-input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255,30,86,0.3); transform: scale(1.02); }
+.lock-btn { width: 100%; padding: 14px; background: var(--accent); border: none; color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 12px; letter-spacing: 1.5px; box-shadow: 0 4px 15px var(--accent-glow); border-radius: 4px; }
+.lock-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--accent-glow); }
+.lock-error { color: var(--accent); font-size: 10px; margin-top: 12px; text-transform: uppercase; font-weight: bold; display: none; animation: shake 0.4s; }
 
-/* ====================== HEADER & STATUS ====================== */
-header { 
-  position: sticky; top: 0; z-index: 950; background: rgba(3,3,5,0.95); backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,0.05); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; 
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
 }
+
+header { position: sticky; top: 0; z-index: 950; background: rgba(3,3,5,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
 .header-left { display: flex; align-items: center; gap: 10px; }
-header h1 { font-family: var(--font-display); font-size: clamp(14px, 4vw, 15px); font-weight: 900; letter-spacing: 1px; }
+header h1 { font-family: var(--font-display); font-size: 15px; font-weight: 900; letter-spacing: 1px; }
 .header-right { position: relative; display: flex; align-items: center; gap: 12px; }
-.status-indicator { 
-  font-size: 9px; font-weight: 700; padding: 5px 10px; border-radius: 9999px; letter-spacing: 1px; text-transform: uppercase;
-  box-shadow: 0 0 8px currentColor; white-space: nowrap; 
-}
+.status-indicator { font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 9999px; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 0 8px currentColor; white-space: nowrap; }
 .status-indicator.actif { background: var(--success); color: #030305; }
 .status-indicator.inactif { background: #ff1e56; color: #fff; }
-
-/* Profile Dropdown */
-.profile-btn { 
-  background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 50%; cursor: pointer; 
-  display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.2s; 
-}
-.profile-btn:hover, .profile-btn.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); transform: scale(1.05); }
-.profile-avatar { width: 22px; height: 22px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: var(--accent); color: #000; box-shadow: 0 0 8px var(--accent-glow); }
+.profile-btn { background: var(--surface); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+.profile-btn:hover, .profile-btn.active { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); transform: scale(1.1); }
+.profile-avatar { width: 18px; height: 18px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; background: var(--accent); color: #000; box-shadow: 0 0 8px var(--accent-glow); }
 .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-.profile-dropdown { 
-  position: absolute; top: calc(100% + 15px); right: 0; width: 280px; max-width: 90vw; background: var(--surface); border: 1px solid var(--border); 
-  padding: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.8); display: none; flex-direction: column; gap: 12px; border-radius: 8px; z-index: 1000; 
+.profile-dropdown { position: absolute; top: calc(100% + 10px); right: 0; width: 260px; background: var(--surface); border: 1px solid var(--border); padding: 16px; box-shadow: 0 10px 35px rgba(0,0,0,0.8); display: none; flex-direction: column; gap: 12px; border-radius: 8px; z-index: 1000; }
+.profile-dropdown.open { display: flex; animation: slideDownFade 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); }
+
+@keyframes slideDownFade { 
+  from { opacity: 0; transform: translateY(-10px) scale(0.98); } 
+  to { opacity: 1; transform: translateY(0) scale(1); } 
 }
-.profile-dropdown.open { display: flex; animation: dropIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-@keyframes dropIn { from { opacity: 0; transform: translateY(-10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
 .dropdown-user-title { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-.dropdown-timer-text { font-family: var(--font-mono); font-size: 13px; font-weight: bold; color: var(--text); margin-top: 4px; }
-.dropdown-bar-wrap { width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+.dropdown-timer-text { font-family: var(--font-mono); font-size: 13px; font-weight: bold; color: var(--text); margin-top: -4px; }
+.dropdown-bar-wrap { width: 100%; height: 5px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
 .dropdown-bar-fill { height: 100%; background: var(--accent); width: 0%; transition: width 1s linear; box-shadow: 0 0 8px var(--accent); }
-.dropdown-extend-btn { 
-  width: 100%; padding: 12px; background: #222; border-radius: 6px; border: none; color: #666; font-family: var(--font-display); 
-  font-size: 10px; font-weight: 900; text-align: center; text-transform: uppercase; letter-spacing: 1px; cursor: default; pointer-events: none; 
-}
+.dropdown-extend-btn { width: 100%; padding: 10px; background: #222; border: none; color: #666; font-family: var(--font-display); font-size: 10px; font-weight: 900; text-align: center; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; cursor: default; pointer-events: none; transition: background 0.2s; border-radius: 4px; }
 
-.theme-selector { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
-.theme-title { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.theme-selector { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
+.theme-title { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
 .theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.theme-opt-btn { 
-  padding: 8px 4px; font-size: 9px; font-family: var(--font-mono); text-transform: uppercase; font-weight: bold; background: #000; 
-  border: 1px solid rgba(255,255,255,0.05); border-radius: 4px; color: var(--muted); text-align: center; transition: all 0.2s; 
-}
-.theme-opt-btn.active { border-color: var(--accent); color: var(--text); background: rgba(255,255,255,0.05); }
+.theme-opt-btn { padding: 8px 6px; font-size: 8.5px; font-family: var(--font-mono); text-transform: uppercase; font-weight: bold; background: #000; border: 1px solid rgba(255,255,255,0.05); color: var(--muted); text-align: center; transition: all 0.3s; border-radius: 4px; }
+.theme-opt-btn:hover:not(.active) { border-color: rgba(255,30,86,0.5); color: #fff; transform: translateY(-1px); }
+.theme-opt-btn.active { border-color: var(--accent); color: var(--text); background: rgba(255,255,255,0.02); box-shadow: 0 0 10px rgba(255,30,86,0.1); }
 
-.status-bar { 
-  font-size: 9px; color: var(--muted); padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); 
-  display: flex; justify-content: space-between; background: #010102; letter-spacing: 0.5px; 
-}
-.status-bar .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--success); box-shadow: 0 0 6px var(--success); margin-right: 6px; }
+#adminSection { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
+.status-bar { font-size: 9px; color: var(--muted); padding: 8px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); display: flex; justify-content: space-between; background: #010102; letter-spacing: 0.5px; }
+.status-bar .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--success); box-shadow: 0 0 6px var(--success); margin-right: 5px; animation: blink 2s infinite; }
 
-/* ====================== MAIN APP & GRIDS ====================== */
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
 main { padding: 16px; position: relative; z-index: 2; }
-.section-title { 
-  font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; 
-  margin: 24px 0 16px 0; display: flex; align-items: center; gap: 8px; 
-}
+.section-title { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; margin: 20px 0 12px 0; display: flex; align-items: center; gap: 8px; }
 .section-title::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.05); }
 
-/* Animation et flexibilité des onglets */
-.tabs { 
-  display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 12px; scrollbar-width: none; 
-  -webkit-overflow-scrolling: touch;
-}
+/* Animation des onglets & Fix Mobile */
+.tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 10px; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; flex-wrap: nowrap; }
 .tabs::-webkit-scrollbar { display: none; }
-.tab { 
-  padding: 12px 18px; font-size: 11px; font-weight: 700; font-family: var(--font-mono); border: 1px solid rgba(255,255,255,0.05); 
-  background: var(--surface); color: var(--muted); white-space: nowrap; flex-shrink: 0; text-transform: uppercase; border-radius: 6px;
-}
-.tab.active { 
-  border-color: var(--accent); color: #fff; background: rgba(255,30,86,0.08); box-shadow: 0 0 12px rgba(255,30,86,0.15); 
+.tab { flex-shrink: 0; padding: 12px 18px; font-size: 11px; font-weight: 700; font-family: var(--font-mono); border: 1px solid rgba(255,255,255,0.05); background: var(--surface); color: var(--muted); white-space: nowrap; text-transform: uppercase; border-radius: 6px; }
+.tab:hover:not(.active) { background: rgba(255,255,255,0.05); color: #fff; transform: translateY(-2px); }
+.tab.active { border-color: var(--accent); color: #fff; background: rgba(255,30,86,0.08); box-shadow: 0 4px 15px rgba(255,30,86,0.15); transform: scale(1.02); }
+
+/* Animation des boutons de la grille & Fix Débordement */
+.fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+.field-btn { position: relative; padding: 14px 30px 14px 12px; border: 1px solid rgba(255,255,255,0.04); background: var(--surface); color: #aaa; font-family: var(--font-mono); font-size: 11px; display: flex; align-items: center; gap: 8px; flex-direction: row; text-align: left; white-space: normal; line-height: 1.3; border-radius: 6px; }
+.field-btn:hover { background: rgba(255,30,86,0.08); border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.5); color: #fff; }
+.field-btn.filled { border-color: var(--accent); background: rgba(255,30,86,0.05); color: #fff; box-shadow: inset 0 0 10px rgba(255,30,86,0.1); }
+.field-btn .tick { position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.field-icon { display: flex; align-items: center; justify-content: center; color: var(--muted); transition: color 0.3s; flex-shrink: 0; width: 16px; }
+.field-btn span:not(.field-icon):not(.tick) { flex: 1; }
+.field-btn:hover .field-icon { color: #fff; transform: scale(1.1); }
+.field-btn.filled .field-icon { color: var(--accent); }
+
+@keyframes popIn {
+  0% { transform: translateY(-50%) scale(0); }
+  100% { transform: translateY(-50%) scale(1); }
 }
 
-/* Grille de critères - Ajustement texte pour mobile */
-.fields-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 20px; }
-.field-btn { 
-  position: relative; padding: 14px 12px; border: 1px solid rgba(255,255,255,0.04); border-radius: 6px; background: var(--surface); 
-  color: #aaa; font-family: var(--font-mono); font-size: 11px; text-align: left; display: flex; align-items: center; gap: 8px; 
-  min-height: 48px; white-space: normal; line-height: 1.3;
-}
-.field-btn.filled { border-color: var(--accent); background: rgba(255,30,86,0.05); color: #fff; box-shadow: inset 0 0 10px rgba(255,30,86,0.1); }
-.field-btn .tick { 
-  position: absolute; top: 50%; right: 10px; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; 
-  background: var(--accent); box-shadow: 0 0 6px var(--accent); 
-}
-.field-icon { display: flex; align-items: center; color: var(--muted); transition: color 0.3s; flex-shrink: 0; }
-.field-btn.filled .field-icon { color: var(--accent); }
+.criteria-bar { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); padding: 12px; margin-bottom: 15px; display: none; border-radius: 6px; }
+.criteria-bar.visible { display: block; animation: slideUpFade 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+.criteria-bar h3 { font-size: 8px; color: var(--muted); margin-bottom: 8px; letter-spacing: 1px; }
+.criteria-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.criteria-tag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: #000; border: 1px solid rgba(255,255,255,0.08); font-size: 10px; color: var(--text); border-radius: 4px; animation: popInTag 0.2s ease-out; }
+.criteria-tag .key { color: var(--accent); font-weight: bold; }
+.criteria-tag .remove { cursor: pointer; color: var(--muted); font-size: 14px; margin-left: 2px; transition: all 0.2s; display: flex; align-items: center; }
+.criteria-tag .remove:hover { color: var(--accent); transform: scale(1.3) rotate(90deg); }
+
+@keyframes popInTag { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 100; display: none; align-items: flex-end; }
+.overlay.open { display: flex; animation: fadeIn 0.2s ease-out; }
+.input-sheet { width: 100%; background: var(--surface); border-top: 2px solid var(--accent); padding: 24px 20px calc(24px + env(safe-area-inset-bottom)) 20px; box-shadow: 0 -10px 40px rgba(0,0,0,0.9); animation: slideUp 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 16px 16px 0 0; }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes slideUpFade { from { transform: translateY(15px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.input-sheet h3 { font-family: var(--font-display); font-size: 13px; margin-bottom: 16px; letter-spacing: 0.5px; }
+.input-field { width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); padding: 16px; color: #fff; font-family: var(--font-mono); font-size: 15px; outline: none; margin-bottom: 18px; transition: all 0.3s; border-radius: 6px; }
+.input-field:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255,30,86,0.2); transform: translateY(-2px); }
+.sheet-btns { display: flex; gap: 10px; }
+.btn-cancel, .btn-confirm { padding: 16px; font-family: var(--font-mono); font-size: 12px; font-weight: 700; text-transform: uppercase; border-radius: 6px; }
+.btn-cancel { flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--muted); }
+.btn-cancel:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.btn-confirm { flex: 2; background: var(--accent); border: none; color: #fff; font-weight: 900; box-shadow: 0 4px 15px var(--accent-glow); }
+.btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 6px 25px var(--accent); }
 
 /* Bouton principal de recherche animé */
 @keyframes btnPulse {
   0% { box-shadow: 0 0 10px var(--accent-glow); }
-  50% { box-shadow: 0 0 25px var(--accent); }
+  50% { box-shadow: 0 0 25px var(--accent), 0 0 10px var(--accent) inset; }
   100% { box-shadow: 0 0 10px var(--accent-glow); }
 }
-.search-btn { 
-  width: 100%; padding: 18px; border: none; border-radius: 8px; background: var(--accent); color: #fff; 
-  font-family: var(--font-display); font-weight: 900; font-size: 14px; letter-spacing: 1.5px; box-shadow: 0 4px 15px var(--accent-glow); 
-  margin-top: 10px;
-}
-.search-btn:not(:disabled) { animation: btnPulse 2.5s infinite; }
-.search-btn:disabled { background: var(--surface); color: var(--muted); border: 1px solid rgba(255,255,255,0.05); box-shadow: none; opacity: 0.5; }
-.clear-btn { 
-  width: 100%; padding: 14px; background: transparent; border: none; color: var(--muted); font-family: var(--font-mono); 
-  font-size: 11px; margin-top: 8px; text-transform: uppercase; border-radius: 6px;
-}
-.clear-btn:hover { background: rgba(255,255,255,0.05); color: #fff; }
+.search-btn { width: 100%; padding: 18px; border: none; background: var(--accent); color: #fff; font-family: var(--font-display); font-weight: 900; font-size: 14px; letter-spacing: 2px; box-shadow: 0 4px 15px var(--accent-glow); border-radius: 6px; }
+.search-btn:not(:disabled) { animation: btnPulse 2s infinite cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+.search-btn:not(:disabled):hover { transform: translateY(-3px); box-shadow: 0 8px 25px var(--accent); }
+.search-btn:disabled { background: var(--surface); color: var(--muted); border: 1px solid rgba(255,255,255,0.05); box-shadow: none; opacity: 0.5; cursor: not-allowed; animation: none; }
+.clear-btn { width: 100%; padding: 12px; background: transparent; border: none; color: var(--muted); font-family: var(--font-mono); font-size: 11px; margin-top: 10px; text-transform: uppercase; border-radius: 6px; transition: color 0.3s, background 0.3s; }
+.clear-btn:hover { color: #fff; background: rgba(255,255,255,0.03); }
 
-/* ====================== RÉSULTATS & MODALS ====================== */
-.overlay { 
-  position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 2000; 
-  display: none; align-items: flex-end; justify-content: center;
-}
-.overlay.open { display: flex; animation: fadeInOverlay 0.2s ease; }
-@keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
-
-.input-sheet { 
-  width: 100%; max-width: 600px; background: var(--surface); border-top: 2px solid var(--accent); border-radius: 16px 16px 0 0;
-  padding: 24px 20px calc(24px + env(safe-area-inset-bottom)) 20px; box-shadow: 0 -10px 40px rgba(0,0,0,0.8); 
-  animation: slideUpSpring 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-}
-@keyframes slideUpSpring { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-.input-sheet h3 { font-family: var(--font-display); font-size: 13px; margin-bottom: 16px; letter-spacing: 0.5px; }
-.input-field { 
-  width: 100%; background: #000; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 16px; 
-  color: #fff; font-family: var(--font-mono); font-size: 15px; outline: none; margin-bottom: 20px; transition: all 0.2s; 
-}
-.input-field:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(255,30,86,0.15); }
-.sheet-btns { display: flex; gap: 12px; }
-.btn-cancel, .btn-confirm { padding: 16px; border-radius: 8px; font-family: var(--font-mono); font-size: 12px; font-weight: 700; text-transform: uppercase; }
-.btn-cancel { flex: 1; background: transparent; border: 1px solid rgba(255,255,255,0.05); color: var(--muted); }
-.btn-cancel:hover { background: rgba(255,255,255,0.08); color: #fff; }
-.btn-confirm { flex: 2; background: var(--accent); border: none; color: #fff; font-weight: 900; box-shadow: 0 0 15px var(--accent-glow); }
-
-.criteria-bar { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 14px; margin-bottom: 20px; display: none; }
-.criteria-bar.visible { display: block; animation: slideDown 0.2s ease-out; }
-@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-.criteria-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.criteria-tag { 
-  display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 4px;
-  background: #000; border: 1px solid rgba(255,255,255,0.08); font-size: 11px; color: var(--text); 
-}
-.criteria-tag .key { color: var(--accent); }
-.criteria-tag .remove { cursor: pointer; color: var(--muted); font-size: 14px; margin-left: 4px; padding: 2px; transition: color 0.2s; }
-.criteria-tag .remove:hover { color: var(--accent); transform: scale(1.2); }
-
-/* Structure commune pour les overlays Admin & Modal (centrés) */
-.admin-panel, .family-panel, .modal-panel {
-  width: 95%; max-width: 900px; background: var(--surface); border: 2px solid var(--accent); border-radius: 12px;
-  box-shadow: 0 0 60px var(--accent-glow); animation: popSpring 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;
-}
-@keyframes popSpring { 0% { transform: scale(0.9) translateY(20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
-
-.admin-header, .family-header, .modal-header {
-  padding: 20px 24px; background: rgba(255,30,86,0.08); border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.admin-close, .modal-header button, .family-header button {
-  background: none; border: none; color: var(--accent); font-size: 26px; padding: 5px; cursor: pointer; transition: transform 0.3s;
-}
-.admin-close:hover, .modal-header button:hover, .family-header button:hover { transform: rotate(90deg) scale(1.2); color: #fff; }
-.admin-content, .family-content, .modal-content { flex: 1; overflow-y: auto; padding: 24px; -webkit-overflow-scrolling: touch; }
-
-/* Result Cards */
-.results-section { margin-top: 30px; animation: fadeIn 0.4s ease; }
+.results-section { margin-top: 30px; animation: fadeIn 0.5s ease; padding-bottom: 20px; }
 .results-section h2 { font-family: var(--font-display); font-size: 11px; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-.results-section h2 .count { background: rgba(255,30,86,0.1); color: var(--accent); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); }
-.result-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 16px; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden; }
-.card-header { padding: 16px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;}
-.card-name { font-family: var(--font-display); font-size: 13px; font-weight: 900; color: #fff; }
-.card-body { padding: 16px; }
-.info-row { display: flex; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 12px; }
+.results-section h2 .count { background: rgba(255,30,86,0.15); color: var(--accent); padding: 4px 8px; border: 1px solid var(--border); border-radius: 4px; }
+.result-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 12px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); border-radius: 8px; overflow: hidden; }
+.result-card:hover { border-color: rgba(255,30,86,0.4); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px rgba(255,30,86,0.1); }
+.card-header { padding: 14px 16px; background: rgba(255,255,255,0.02); border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: space-between; }
+.card-name { font-family: var(--font-display); font-size: 13px; font-weight: 900; color: #fff; letter-spacing: 0.5px; }
+.card-body { padding: 14px 16px; }
+.info-row { display: flex; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.02); font-size: 12px; align-items: center; }
 .info-row:last-child { border-bottom: none; }
-.info-key { color: var(--muted); width: 120px; flex-shrink: 0; font-size: 10px; font-weight: 700; text-transform: uppercase; }
-.info-val { color: var(--text); word-break: break-all; user-select: text; }
+.info-key { color: var(--muted); width: 120px; flex-shrink: 0; font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.info-val { color: var(--text); word-break: break-word; user-select: text; flex: 1; }
 
-.btn-approfondir { background: var(--accent); color: #000; border: none; padding: 10px 16px; border-radius: 6px; font-size: 10px; font-weight: 900; letter-spacing: 1px;}
+/* Boutons Approfondir */
+.btn-approfondir { background: var(--accent); color: #000; border: none; padding: 10px 16px; border-radius: 4px; font-size: 10px; font-weight: 900; transition: all 0.3s; letter-spacing: 1px; }
+.btn-approfondir:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 4px 15px var(--accent-glow); background: #fff; }
 
-.loader { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 40px 0; color: var(--accent); font-size: 11px; font-weight: bold; }
-.spinner { width: 24px; height: 24px; border: 3px solid rgba(255,30,86,0.1); border-top-color: var(--accent); animation: spin 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; border-radius: 50%; }
+.loader { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; padding: 40px 0; color: var(--accent); font-size: 11px; font-weight: bold; letter-spacing: 1px; }
+.spinner { width: 24px; height: 24px; border: 3px solid rgba(255,30,86,0.1); border-top-color: var(--accent); animation: spin 0.6s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite; border-radius: 50%; }
 @keyframes spin { to { transform: rotate(360deg); } }
+.no-results { background: var(--surface); border: 1px solid var(--border); padding: 30px; text-align: center; border-radius: 8px; animation: popIn 0.3s ease-out; }
+.no-results h3 { font-family: var(--font-display); font-size: 14px; margin-bottom: 8px; color: var(--accent); letter-spacing: 1px; }
+.no-results p { font-size: 11px; color: var(--muted); line-height: 1.5; }
 
-/* Fix table admin responsive */
-.admin-table { width: 100%; border-collapse: collapse; }
-.admin-table th, .admin-table td { padding: 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 12px; }
-.admin-table th { background: rgba(255,30,86,0.08); color: var(--accent); font-weight: 700; text-transform: uppercase; white-space: nowrap;}
-.table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 10px; }
+/* ====================== ADMIN & FAMILY OVERLAY STYLES ====================== */
+#adminOverlay { z-index: 2000; align-items: center; justify-content: center; }
+#familyOverlay { z-index: 2100; align-items: center; justify-content: center; background: rgba(0,0,0,0.92); }
+#userDetailModal { z-index: 2200; align-items: center; justify-content: center; }
 
+.admin-panel, .family-panel, .modal-panel { width: 95%; max-width: 980px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 50px rgba(0,0,0,0.8), 0 0 30px var(--accent-glow); animation: adminPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; }
+@keyframes adminPop { 0% { transform: scale(0.9) translateY(20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+.family-panel { animation: familyPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes familyPop { 0% { transform: scale(0.85) translateY(40px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+
+.admin-header, .family-header, .modal-header { padding: 20px 24px; background: rgba(255,30,86,0.08); border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between; }
+
+/* Croix animées */
+.admin-close, .modal-header button, .family-header button { background: none; border: none; color: var(--accent); font-size: 26px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; }
+.admin-close:hover, .modal-header button:hover, .family-header button:hover { transform: rotate(90deg) scale(1.1); color: #fff !important; background: rgba(255,30,86,0.2); }
+
+.admin-content, .family-content, .modal-content { flex: 1; overflow-y: auto; padding: 24px; }
+.admin-tab-bar { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.admin-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.admin-stat-card { background: var(--card); border: 1px solid rgba(255,255,255,0.08); padding: 20px; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; gap: 8px; }
+.admin-stat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.5), 0 0 20px var(--accent-glow); border-color: var(--accent); }
+.admin-stat-card:active { transform: scale(0.97); }
+
+.admin-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.admin-table th, .admin-table td { padding: 14px 16px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 11.5px; }
+.admin-table th { background: rgba(255,30,86,0.05); color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.admin-table tr { transition: background 0.2s; }
+.admin-table tr:hover { background: rgba(255,30,86,0.08); }
+
+.family-list { display: flex; flex-direction: column; gap: 16px; }
+.family-card { background: var(--card); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 20px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
+.family-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 20px var(--accent-glow); border-color: var(--accent); }
+.family-card:active { transform: scale(0.97); }
+.family-name { font-family: var(--font-display); font-size: 16px; font-weight: 900; letter-spacing: 1px; color: #fff; }
+.family-birth { font-size: 12px; color: var(--muted); margin-top: 8px; }
+.family-bubble { position: absolute; top: 16px; right: 16px; background: var(--accent); color: #000; font-size: 9.5px; font-weight: 900; padding: 6px 14px; border-radius: 9999px; letter-spacing: 1px; box-shadow: 0 0 15px var(--accent-glow); }
+
+.timer-container { font-size: 36px; font-weight: 900; color: var(--accent); text-shadow: 0 0 25px var(--accent-glow); text-align: center; margin: 24px 0; font-family: var(--font-mono); }
+.revoke-btn { background: #ff1e56; color: #fff; border: none; padding: 16px 24px; border-radius: 6px; font-weight: 900; font-size: 13px; letter-spacing: 1px; width: 100%; margin-top: 24px; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255, 30, 86, 0.3); }
+.revoke-btn:hover { box-shadow: 0 8px 25px #ff1e56; transform: translateY(-2px); }
+.btn-small-revoke { background: var(--accent); color: #000; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 900; font-size: 10px; transition: all 0.3s; letter-spacing: 0.5px; }
+.btn-small-revoke:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 4px 15px var(--accent-glow); background: #fff; color: #ff1e56; }
 </style>
 </head>
 <body>
@@ -408,8 +357,8 @@ main { padding: 16px; position: relative; z-index: 2; }
 
 <div id="introScreen">
   <div class="neon-logo">TRACEUR<span>_PRO</span></div>
-  <div class="intro-tagline">Système de recherche et d'analyse de données avancées.</div>
-  <button class="intro-btn" onmousedown="startBootSequence()" ontouchstart="startBootSequence()">INITIALISER LE SYSTÈME</button>
+  <div class="intro-tagline">Le meilleur moteur de recherche d'informations personnelles français.</div>
+  <button class="intro-btn btn-shine" onmousedown="startBootSequence()" ontouchstart="startBootSequence()">INITIALISER LE SYSTÈME</button>
 </div>
 
 <div id="boot">
@@ -449,8 +398,8 @@ main { padding: 16px; position: relative; z-index: 2; }
             <button class="theme-opt-btn" id="th-ocean" onclick="setTheme('ocean')">Océan</button>
           </div>
         </div>
-        <div id="adminSection" style="display:none; margin-top:16px;">
-          <button onclick="openAdminPanel()" style="width:100%; padding:14px; background:var(--accent); color:#000; font-family:var(--font-display); font-weight:900; font-size:12px; letter-spacing:2px; border:none; border-radius:6px; box-shadow:0 0 15px var(--accent-glow);">PANNEL ADMIN</button>
+        <div id="adminSection" style="display:none; margin-top:12px;">
+          <button class="btn-shine" onclick="openAdminPanel()" style="width:100%; padding:14px; background:var(--accent); color:#000; font-family:var(--font-display); font-weight:900; font-size:13px; letter-spacing:2px; border:none; border-radius:4px; box-shadow:0 0 15px var(--accent-glow);">PANNEL ADMIN</button>
         </div>
       </div>
     </div>
@@ -465,13 +414,13 @@ main { padding: 16px; position: relative; z-index: 2; }
     <div class="section-title">CRITÈRES DISPONIBLES</div>
     <div class="tabs" id="tabs"></div>
     <div class="criteria-bar" id="criteriaBar">
-      <h3 style="font-size: 10px; color: var(--muted); text-transform: uppercase;">CRITÈRES SÉLECTIONNÉS</h3>
+      <h3>CRITÈRES SÉLECTIONNÉS</h3>
       <div class="criteria-list" id="criteriaList"></div>
     </div>
     <div class="section-title">INFORMATIONS SUR LA CIBLE</div>
     <div class="fields-grid" id="fieldsGrid"></div>
     
-    <button class="search-btn" id="searchBtn" disabled onclick="launchSearch()">LANCER LA RECHERCHE</button>
+    <button class="search-btn btn-shine" id="searchBtn" disabled onclick="launchSearch()">LANCER LA RECHERCHE</button>
     <button class="clear-btn" id="clearBtn" style="display:none" onclick="clearAll()">Réinitialiser la recherche</button>
     <div class="results-section" id="resultsSection" style="display:none"></div>
   </main>
@@ -482,32 +431,50 @@ main { padding: 16px; position: relative; z-index: 2; }
     <div class="main-logo-anim">TRACEUR<span>_PRO</span></div>
     <div class="lock-title">SAISIR VOTRE CLÉ D'ACTIVATION</div>
     <input class="lock-input" id="keyInput" maxlength="14" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
-    <button class="lock-btn" onclick="submitKey()">VALIDER</button>
+    <button class="lock-btn btn-shine" onclick="submitKey()">VALIDER</button>
     <div class="lock-error" id="lockError">Clé incorrecte ou expirée</div>
   </div>
 </div>
 
 <div class="overlay" id="overlay" onclick="closeSheet(event)">
-  <div class="input-sheet" id="inputSheet">
+  <div class="input-sheet" id="inputSheet" onclick="event.stopPropagation()">
     <h3>RECHERCHER PAR &gt; <span id="sheetLabel" style="color:var(--accent)"></span></h3>
     <input class="input-field" id="sheetInput" autocomplete="off" autocorrect="off" spellcheck="false"/>
     <div class="sheet-btns">
       <button class="btn-cancel" onclick="closeSheet()">Annuler</button>
-      <button class="btn-confirm" onclick="confirmValue()">Valider</button>
+      <button class="btn-confirm btn-shine" onclick="confirmValue()">Valider</button>
     </div>
   </div>
 </div>
 
-<div class="overlay" id="adminOverlay" style="align-items:center; justify-content:center;">
-  <div class="admin-panel">
+<div class="overlay" id="adminOverlay" style="display:none;">
+  <div class="admin-panel" onclick="event.stopPropagation()">
     <div class="admin-header">
-      <div class="main-logo-anim" style="font-size:22px; margin:0;">ADMIN<span>_PANEL</span></div>
+      <div class="main-logo-anim" style="font-size:22px; margin:0; animation: none;">ADMIN<span>_PANEL</span></div>
       <button class="admin-close" onclick="closeAdminPanel()">✕</button>
     </div>
-    <div class="admin-content" style="padding: 16px;">
-      <div class="tabs" id="adminTabs" style="margin-bottom: 20px;"></div>
-      <div id="adminContent"></div>
+    <div class="admin-tab-bar" id="adminTabs" style="padding: 0 24px;"></div>
+    <div class="admin-content" id="adminContent"></div>
+  </div>
+</div>
+
+<div class="overlay" id="userDetailModal" style="display:none;">
+  <div class="modal-panel" style="max-width: 600px;" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="main-logo-anim" style="font-size:18px; margin:0; animation:none;">GESTION<span>_UTILISATEUR</span></div>
+      <button onclick="closeUserModal()">✕</button>
     </div>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+</div>
+
+<div class="overlay" id="familyOverlay" style="display:none;">
+  <div class="family-panel" onclick="event.stopPropagation()">
+    <div class="family-header">
+      <div class="main-logo-anim" style="font-size:21px; margin:0; animation:none;">LIENS<span>_FAMILIAUX</span></div>
+      <button onclick="closeFamilyOverlay()">✕</button>
+    </div>
+    <div class="family-content" id="familyContent"></div>
   </div>
 </div>
 
@@ -564,6 +531,7 @@ document.getElementById("keyInput").addEventListener("input", (e) => {
   else if (val.length > 8) val = val.slice(0,4) + '-' + val.slice(4,8) + '-' + val.slice(8,12);
   e.target.value = val;
 });
+
 document.addEventListener("DOMContentLoaded", () => {
   initProfileAvatar();
   buildTabs();
@@ -596,6 +564,7 @@ async function pingServerLoop() {
     progress += (95 - progress) * 0.05; 
     bar.style.width = `${progress}%`;
   }, 1000);
+
   while (true) {
     attempts++;
     try {
@@ -701,6 +670,7 @@ function startCountdown() {
   if (timerInterval) clearInterval(timerInterval);
   const timerDisplay = document.getElementById("dropdownTimer");
   const barFill = document.getElementById("dropdownBarFill");
+  
   function updateTimer() {
     if (sessionEndTimestamp === "lifetime") {
       timerDisplay.textContent = "RESTANT: ILLIMITÉ";
@@ -726,6 +696,7 @@ function startCountdown() {
     let timeStr = days > 0 ? `${days}j ` : "";
     timeStr += `${String(hrs).padStart(2,'0')}h ${String(min).padStart(2,'0')}m ${String(sec).padStart(2,'0')}s`;
     timerDisplay.textContent = "RESTANT: " + timeStr;
+    
     if (sessionMaxDuration > 0) {
       const pct = (remaining / sessionMaxDuration) * 100;
       barFill.style.width = `${Math.max(0, Math.min(100, pct))}%`;
@@ -753,11 +724,21 @@ const ICON = {
 };
 
 const CATEGORIES = [
-  { id:"identite", label:"Identité", fields:[ {k:"nom_famille", ico:ICON.id, l:"Nom"}, {k:"prenom", ico:ICON.id, l:"Prénom"}, {k:"nom_naissance", ico:ICON.id, l:"Nom Naissance"}, {k:"nom_affichage", ico:ICON.id, l:"Pseudonyme"}, {k:"date_naissance", ico:ICON.birth, l:"Date Nais."}, {k:"annee_naissance", ico:ICON.birth, l:"Année Nais."}, {k:"ville_naissance", ico:ICON.birth, l:"Ville Nais."}, {k:"genre", ico:ICON.dot, l:"Genre (M/F)"} ]},
-  { id:"contact", label:"Contact", fields:[ {k:"telephone", ico:ICON.phone, l:"Téléphone"}, {k:"email", ico:ICON.mail, l:"Email"}, {k:"nom_utilisateur", ico:ICON.chat, l:"Username"}, {k:"adresse_ip", ico:ICON.ip, l:"Adresse IP"} ]},
-  { id:"localisation", label:"Localisation", fields:[ {k:"adresse", ico:ICON.loc, l:"Adresse Civile"}, {k:"code_postal", ico:ICON.loc, l:"Code Postal"}, {k:"ville", ico:ICON.loc, l:"Ville"}, {k:"region", ico:ICON.loc, l:"Région"}, {k:"departement", ico:ICON.loc, l:"Département"}, {k:"pays", ico:ICON.loc, l:"Pays"} ]},
-  { id:"gaming", label:"Réseaux", fields:[ {k:"steam_id", ico:ICON.game, l:"Steam ID"}, {k:"fivem_license", ico:ICON.game, l:"FiveM ID"}, {k:"discord_id", ico:ICON.chat, l:"Discord ID"}, {k:"xbox_live", ico:ICON.game, l:"Xbox Live"}, {k:"live_id", ico:ICON.game, l:"Live ID"}, {k:"fivem_license2", ico:ICON.game, l:"FiveM ID 2"} ]},
-  { id:"avance", label:"Options", fields:[ {k:"nir", ico:ICON.lock, l:"Numéro unique"}, {k:"iban", ico:ICON.bank, l:"IBAN"}, {k:"bic", ico:ICON.bank, l:"BIC"}, {k:"vin_plaque", ico:ICON.car, l:"Plaque / VIN"}, {k:"siret", ico:ICON.biz, l:"Num. Entreprise"}, {k:"siren", ico:ICON.biz, l:"Registre Pro"} ]}
+  { id:"identite", label:"Identité", fields:[
+    {k:"nom_famille", ico:ICON.id, l:"Nom"}, {k:"prenom", ico:ICON.id, l:"Prénom"}, {k:"nom_naissance", ico:ICON.id, l:"Nom Naissance"}, {k:"nom_affichage", ico:ICON.id, l:"Pseudonyme"}, {k:"date_naissance", ico:ICON.birth, l:"Date Nais."}, {k:"annee_naissance", ico:ICON.birth, l:"Année Nais."}, {k:"ville_naissance", ico:ICON.birth, l:"Ville Nais."}, {k:"genre", ico:ICON.dot, l:"Genre (M/F)"}
+  ]},
+  { id:"contact", label:"Contact", fields:[
+    {k:"telephone", ico:ICON.phone, l:"Téléphone"}, {k:"email", ico:ICON.mail, l:"Email"}, {k:"nom_utilisateur", ico:ICON.chat, l:"Username"}, {k:"adresse_ip", ico:ICON.ip, l:"Adresse IP"}
+  ]},
+  { id:"localisation", label:"Localisation", fields:[
+    {k:"adresse", ico:ICON.loc, l:"Adresse Civile"}, {k:"code_postal", ico:ICON.loc, l:"Code Postal"}, {k:"ville", ico:ICON.loc, l:"Ville"}, {k:"region", ico:ICON.loc, l:"Région"}, {k:"departement", ico:ICON.loc, l:"Département"}, {k:"pays", ico:ICON.loc, l:"Pays"}
+  ]},
+  { id:"gaming", label:"Réseaux", fields:[
+    {k:"steam_id", ico:ICON.game, l:"Steam ID"}, {k:"fivem_license", ico:ICON.game, l:"FiveM ID"}, {k:"discord_id", ico:ICON.chat, l:"Discord ID"}, {k:"xbox_live", ico:ICON.game, l:"Xbox Live"}, {k:"live_id", ico:ICON.game, l:"Live ID"}, {k:"fivem_license2", ico:ICON.game, l:"FiveM ID 2"}
+  ]},
+  { id:"avance", label:"Options", fields:[
+    {k:"nir", ico:ICON.lock, l:"Numéro unique"}, {k:"iban", ico:ICON.bank, l:"IBAN"}, {k:"bic", ico:ICON.bank, l:"BIC"}, {k:"vin_plaque", ico:ICON.car, l:"Plaque / VIN"}, {k:"siret", ico:ICON.biz, l:"Num. Entreprise"}, {k:"siren", ico:ICON.biz, l:"Registre Pro"}
+  ]}
 ];
 
 const FIELD_MAP = {};
@@ -814,10 +795,11 @@ function renderCriteriaBar() {
   const keys = Object.keys(criteria);
   if (!keys.length) { bar.classList.remove("visible"); return; }
   bar.classList.add("visible");
-  document.getElementById("criteriaList").innerHTML = keys.map(k => `<span class="criteria-tag"><span class="key">${FIELD_MAP[k].l}</span>: ${criteria[k]}<span class="remove" onclick="removeCriteria('${k}')">×</span></span>`).join("");
+  document.getElementById("criteriaList").innerHTML = keys.map(k => `<span class="criteria-tag"><span class="key">${FIELD_MAP[k].l}</span>: ${criteria[k]}<span class="remove" onclick="removeCriteria('${k}')">✕</span></span>`).join("");
 }
 
 function removeCriteria(k) { delete criteria[k]; updateUI(); }
+
 function clearAll() { criteria = {}; document.getElementById("resultsSection").style.display = "none"; updateUI(); }
 
 async function launchSearch() {
@@ -828,7 +810,11 @@ async function launchSearch() {
   try {
     const r = await fetch(`${BASE}/api/search`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true",
+        "x-telegram-id": TELEGRAM_ID
+      },
       body: JSON.stringify(criteria)
     });
     if (r.status === 403) {
@@ -848,10 +834,7 @@ function renderResults(results) {
   const sec = document.getElementById("resultsSection");
   allResults = results || [];
   if (!allResults.length) {
-    sec.innerHTML = `<div class="no-results" style="background: var(--surface); border: 1px solid var(--border); padding: 30px; text-align: center; border-radius: 8px;">
-      <h3 style="color: var(--accent); font-family: var(--font-display); margin-bottom: 8px;">AUCUN DOSSIER TROUVÉ</h3>
-      <p style="color: var(--muted); font-size: 11px;">Aucune correspondance disponible pour ces critères.</p>
-    </div>`;
+    sec.innerHTML = `<div class="no-results"><h3>AUCUN DOSSIER TROUVÉ</h3><p>Aucune correspondance disponible pour ces critères.</p></div>`;
     return;
   }
   const skip = new Set(["_sources","_confidence","_id"]);
@@ -864,19 +847,365 @@ function renderResults(results) {
     return `<div class="result-card">
       <div class="card-header">
         <span class="card-name">${name}</span>
-        <button class="btn-approfondir" onclick="approfondirRecherche(${index})">APPROFONDIR</button>
+        <button class="btn-approfondir btn-shine" onclick="approfondirRecherche(${index})">APPROFONDIR</button>
       </div>
       <div class="card-body">${rows || 'DONNÉES INDISPONIBLES'}</div>
     </div>`;
   }).join("");
-  sec.innerHTML = `<h2>DOSSIERS IDENTIFIÉS <span class="count">${allResults.length}</span></h2>${cards}`;
+  sec.innerHTML = `<h2>DOSSIERS IDENTIFIÉS <span class="count">${allResults.length}/10</span></h2>${cards}`;
 }
 
-function approfondirRecherche(index) {
-  alert("Logique d'approfondissement (A relier à votre code de liens familiaux existant)");
+function mergeProfilesIntoOneFiche(profiles) {
+  const merged = {};
+  profiles.forEach(profile => {
+    Object.entries(profile).forEach(([key, value]) => {
+      if (!value || key.startsWith("_")) return;
+      if (!merged[key] || String(value).length > String(merged[key] || "").length) {
+        merged[key] = value;
+      }
+    });
+  });
+  return merged;
 }
 
-/* ====================== EFFET RIPPLE GLOBAL (SOURIS & TACTILE) ====================== */
+/* ====================== FAMILY OVERLAY ====================== */
+async function approfondirRecherche(index) {
+  const basePerson = allResults[index];
+  const similars = allResults.filter((p, i) => i !== index &&
+    (p.nom_famille === basePerson.nom_famille ||
+     (p.prenom && basePerson.prenom && p.prenom.toLowerCase().includes(basePerson.prenom.toLowerCase().slice(0,3))))
+  );
+  let familyHTML = `<h3 style="margin-bottom:20px;color:var(--accent);">PERSONNES LIÉES (${similars.length + 1})</h3><div class="family-list">`;
+  familyHTML += `
+    <div class="family-card" onclick="showPersonFicheFromFamily(-1)">
+      <div class="family-name">${[basePerson.prenom, basePerson.nom_famille].filter(Boolean).join(" ")}</div>
+      <div class="family-birth">Né(e) le ${basePerson.date_naissance || basePerson.annee_naissance || '—'}</div>
+      <div class="family-bubble">PRINCIPAL</div>
+    </div>`;
+  similars.forEach((p, i) => {
+    const fullName = [p.prenom, p.nom_famille].filter(Boolean).join(" ");
+    const birth = p.date_naissance || p.annee_naissance || '—';
+    familyHTML += `
+      <div class="family-card" onclick="showPersonFicheFromFamily(${i})">
+        <div class="family-name">${fullName}</div>
+        <div class="family-birth">Né(e) le ${birth}</div>
+        <div class="family-bubble" style="background:#fff;">LIEN</div>
+      </div>`;
+  });
+  familyHTML += `</div>`;
+
+  document.getElementById("familyContent").innerHTML = familyHTML;
+  document.getElementById("familyOverlay").style.display = "flex";
+}
+
+function showPersonFicheFromFamily(familyIndex) {
+  let person;
+  if (familyIndex === -1) {
+    person = allResults[0];
+  } else {
+    const similars = allResults.filter((p, i) => i !== 0);
+    person = similars[familyIndex];
+  }
+
+  const name = [person.prenom, person.nom_famille].filter(Boolean).join(" ").toUpperCase();
+  const rows = Object.entries(person)
+    .filter(([k]) => !k.startsWith("_"))
+    .map(([k,v]) => `<div class="info-row"><span class="info-key">${k.replace(/_/g," ").toUpperCase()}</span><span class="info-val">${v}</span></div>`).join("");
+  document.getElementById("familyContent").innerHTML = `
+    <h2 style="margin-bottom:20px;color:var(--accent);">FICHE DÉTAILLÉE : ${name}</h2>
+    <div class="result-card" style="box-shadow: 0 0 25px rgba(255, 30, 86, 0.1);">
+      <div class="card-header"><span class="card-name">${name}</span></div>
+      <div class="card-body">${rows}</div>
+    </div>
+    <button class="btn-approfondir btn-shine" onclick="approfondirRecherche(0)" style="margin-top:25px;width:100%;padding:18px;border-radius:6px;font-size:12px;">RETOUR AUX LIENS FAMILIAUX</button>
+  `;
+}
+
+function closeFamilyOverlay() {
+  document.getElementById("familyOverlay").style.display = "none";
+}
+
+/* ====================== PANEL ADMIN ET RÉVOCATION ====================== */
+function openAdminPanel() {
+  if (!isAdmin) return;
+  document.getElementById("adminOverlay").style.display = "flex";
+  buildAdminTabs();
+  loadAdminData(0);
+}
+
+function closeAdminPanel() {
+  document.getElementById("adminOverlay").style.display = "none";
+}
+
+function buildAdminTabs() {
+  const tabsHTML = `
+    <button class="tab ${currentAdminTab===0?'active':''}" onclick="switchAdminTab(0)">STATISTIQUES</button>
+    <button class="tab ${currentAdminTab===1?'active':''}" onclick="switchAdminTab(1)">UTILISATEURS</button>
+    <button class="tab ${currentAdminTab===2?'active':''}" onclick="switchAdminTab(2)">HISTORIQUE</button>
+    <button class="tab ${currentAdminTab===3?'active':''}" onclick="switchAdminTab(3)">GÉNÉRATEUR</button>
+  `;
+  document.getElementById("adminTabs").innerHTML = tabsHTML;
+}
+
+async function loadAdminData(tabIndex) {
+  currentAdminTab = tabIndex;
+  buildAdminTabs();
+  const content = document.getElementById("adminContent");
+  content.innerHTML = `<div class="loader"><div class="spinner"></div><div>CHARGEMENT DES DONNÉES...</div></div>`;
+  try {
+    const res = await fetch(`${BASE}/api/admin/data`, {
+      method: "GET",
+      headers: { "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID }
+    });
+    if (!res.ok) throw new Error("Accès refusé");
+    const adminData = await res.json();
+    if (tabIndex === 0) renderStatsTab(adminData);
+    else if (tabIndex === 1) renderUsersTab(adminData);
+    else if (tabIndex === 2) renderHistoryTab(adminData);
+    else if (tabIndex === 3) renderGeneratorTab(adminData);
+  } catch(e) {
+    content.innerHTML = `<div class="no-results"><h3>ERREUR ADMIN</h3><p>Impossible de charger les données administrateur.</p></div>`;
+  }
+}
+
+function switchAdminTab(tabIndex) {
+  loadAdminData(tabIndex);
+}
+
+function renderStatsTab(data) {
+  const content = document.getElementById("adminContent");
+  const pct = Math.min(100, Math.round((data.apiRequests || 0) / 1000 * 100));
+  content.innerHTML = `
+    <div class="admin-stat-grid">
+      <div class="admin-stat-card" onclick="showActivatedKeys()">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Clés activées</div>
+        <div style="font-size:36px;font-weight:900;color:var(--accent);">${data.activatedKeys || 0}</div>
+      </div>
+      <div class="admin-stat-card" onclick="showActiveUsers()">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Utilisateurs actifs</div>
+        <div style="font-size:36px;font-weight:900;color:var(--success);">${data.usersCount || 0}</div>
+      </div>
+      <div class="admin-stat-card">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Requêtes API</div>
+        <div style="font-size:36px;font-weight:900;color:#00e5ff;">${data.apiRequests || 0} <span style="font-size:14px;">/ 1000</span></div>
+        <div class="confidence-bar" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.05);height:4px;border-radius:2px;overflow:hidden;"><div style="width:${pct}%;background:#00e5ff;height:100%;"></div></div>
+      </div>
+      <div class="admin-stat-card">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;">Clés à vie</div>
+        <div style="font-size:36px;font-weight:900;color:#fff;">${data.lifetimeKeys || 0}</div>
+      </div>
+    </div>
+    <div style="margin-top:30px;font-size:10px;color:var(--muted);">Dernière mise à jour : ${new Date().toLocaleTimeString('fr-FR')}</div>
+  `;
+}
+
+async function revokeUserKey(telegramId) {
+  if (confirm(`RÉVOCATION IMMÉDIATE : Bannir et supprimer la clé de l'utilisateur ${telegramId} ?`)) {
+    try {
+      const res = await fetch(`${BASE}/api/admin/revoke`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
+        body: JSON.stringify({ targetId: telegramId })
+      });
+      if (res.ok) {
+        alert(`Clé de ${telegramId} révoquée avec succès.`);
+        closeUserModal();
+        loadAdminData(currentAdminTab);
+      } else {
+        alert("Erreur lors de la révocation de la clé (Vérifiez le serveur).");
+      }
+    } catch(e) {
+      alert("Erreur réseau de communication avec l'API Admin.");
+    }
+  }
+}
+
+async function showActivatedKeys() {
+  const content = document.getElementById("adminContent");
+  content.innerHTML = `<div class="loader"><div class="spinner"></div>CHARGEMENT LISTE...</div>`;
+  const res = await fetch(`${BASE}/api/admin/data`, { headers: { "x-telegram-id": TELEGRAM_ID } });
+  const data = await res.json();
+  let html = `<h3 style="margin-bottom:15px; color:var(--accent);">CLÉS ACTIVÉES (${data.users.length})</h3><div style="overflow-x:auto;"><table class="admin-table"><thead><tr><th>ID</th><th>CLÉ</th><th>EXPIRATION</th><th>ACTION</th></tr></thead><tbody>`;
+  data.users.forEach(u => {
+    html += `<tr style="cursor:pointer;" onclick="showUserDetail('${u.telegramId}')">
+      <td>${u.telegramId}</td>
+      <td>${u.keyLabel}</td>
+      <td>${u.expiresAt === "lifetime" ? "À VIE" : new Date(u.expiresAt).toLocaleString('fr-FR')}</td>
+      <td><button class="btn-small-revoke" onclick="event.stopPropagation(); revokeUserKey('${u.telegramId}')">🗑️ BANNIR</button></td>
+    </tr>`;
+  });
+  html += `</tbody></table></div>`;
+  content.innerHTML = html;
+}
+
+async function showActiveUsers() {
+  const content = document.getElementById("adminContent");
+  content.innerHTML = `<div class="loader"><div class="spinner"></div>CHARGEMENT UTILISATEURS ACTIFS...</div>`;
+  const res = await fetch(`${BASE}/api/admin/data`, { headers: { "x-telegram-id": TELEGRAM_ID } });
+  const data = await res.json();
+  let html = `<h3 style="margin-bottom:15px; color:var(--success);">UTILISATEURS ACTIFS (${data.usersCount})</h3><div style="overflow-x:auto;"><table class="admin-table"><thead><tr><th>ID</th><th>CLÉ</th><th>TEMPS RESTANT</th><th>ACTION</th></tr></thead><tbody>`;
+  data.users.forEach(u => {
+    const remaining = u.expiresAt === "lifetime" ? "ILLIMITÉ" : Math.max(0, Math.floor((new Date(u.expiresAt) - Date.now()) / 86400000)) + " jours";
+    html += `<tr style="cursor:pointer;" onclick="showUserDetail('${u.telegramId}')">
+      <td>${u.telegramId}</td>
+      <td>${u.keyLabel}</td>
+      <td>${remaining}</td>
+      <td><button class="btn-small-revoke" onclick="event.stopPropagation(); revokeUserKey('${u.telegramId}')">🗑️ BANNIR</button></td>
+    </tr>`;
+  });
+  html += `</tbody></table></div>`;
+  content.innerHTML = html;
+}
+
+async function showUserDetail(telegramId) {
+  const modal = document.getElementById("userDetailModal");
+  const content = document.getElementById("modalContent");
+  content.innerHTML = `<div class="loader"><div class="spinner"></div>CHARGEMENT DÉTAIL...</div>`;
+  modal.style.display = "flex";
+  content.innerHTML = `
+    <div id="modalTitle" style="font-size:18px;margin-bottom:15px">Utilisateur <span style="color:var(--accent)">${telegramId}</span></div>
+    <div class="timer-container" id="userTimer">--:--:--</div>
+    <h4 style="margin:20px 0 10px 0; color:var(--muted);">Historique de recherches</h4>
+    <div id="userHistoryList" style="max-height:250px;overflow-y:auto;background:rgba(0,0,0,0.5);padding:15px;border-radius:8px; border:1px solid rgba(255,255,255,0.05);"></div>
+    <button onclick="revokeUserKey('${telegramId}')" class="revoke-btn btn-shine">RÉVOQUER LA CLÉ (BAN IMMÉDIAT)</button>
+  `;
+  let remaining = 3600; 
+  const timerEl = document.getElementById("userTimer");
+  const interval = setInterval(() => {
+    if (remaining <= 0) { clearInterval(interval); timerEl.textContent = "EXPIRÉ"; return; }
+    remaining--;
+    const h = Math.floor(remaining / 3600);
+    const m = Math.floor((remaining % 3600) / 60);
+    const s = remaining % 60;
+    timerEl.textContent = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+  }, 1000);
+}
+
+function closeUserModal() {
+  document.getElementById("userDetailModal").style.display = "none";
+}
+
+function renderUsersTab(data) {
+  const content = document.getElementById("adminContent");
+  let rows = "";
+  if (data.users && data.users.length) {
+    rows = data.users.map(u => {
+      const remaining = u.expiresAt === "lifetime" ? "ILLIMITÉ" : Math.max(0, Math.floor((new Date(u.expiresAt) - Date.now()) / 86400000)) + " jours";
+      return `<tr style="cursor:pointer;" onclick="showUserDetail('${u.telegramId}')">
+        <td>${u.telegramId}</td>
+        <td>${u.keyLabel}</td>
+        <td>${remaining}</td>
+        <td><button class="btn-small-revoke" onclick="event.stopPropagation(); revokeUserKey('${u.telegramId}')">🗑️ BANNIR</button></td>
+      </tr>`;
+    }).join("");
+  } else {
+    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);">Aucun utilisateur</td></tr>`;
+  }
+  content.innerHTML = `
+    <div style="overflow-x:auto;">
+      <table class="admin-table">
+        <thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>TEMPS RESTANT</th><th>ACTION</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderHistoryTab(data) {
+  const content = document.getElementById("adminContent");
+  let rows = "";
+  if (data.history && data.history.length) {
+    rows = data.history.slice(0, 30).map(h => {
+      const crit = Object.entries(h.criteria || {}).map(([k,v]) => `<span style="color:var(--accent)">${k}:</span> ${v}`).join("<br>");
+      return `<tr>
+        <td style="font-size:11px; font-weight:bold;">${h.telegramId}</td>
+        <td style="font-size:10px; color:var(--muted);">${new Date(h.timestamp).toLocaleString('fr-FR')}</td>
+        <td style="font-size:11px; max-width:200px; line-height:1.4;">${crit || '-'}</td>
+        <td style="font-size:12px; font-weight:bold; text-align:center;">${h.results || 0}</td>
+      </tr>`;
+    }).join("");
+  } else {
+    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:30px;">Aucun historique de recherche</td></tr>`;
+  }
+  content.innerHTML = `
+    <div style="overflow-x:auto;">
+      <table class="admin-table">
+        <thead><tr><th>UTILISATEUR</th><th>DATE</th><th>RECHERCHE</th><th>RÉSULTATS</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderGeneratorTab() {
+  const types = [
+    {type:'1semaine', label:'1 SEMAINE'},
+    {type:'1mois', label:'1 MOIS'},
+    {type:'3mois', label:'3 MOIS'},
+    {type:'5min', label:'5 MINUTES'},
+    {type:'15min', label:'15 MINUTES'},
+    {type:'lifetime', label:'À VIE'},
+    {type:'admin', label:'CLÉ ADMIN'}
+  ];
+  const cards = types.map(t => `
+    <button onclick="selectKeyType('${t.type}')" class="selectable-card ${selectedKeyType === t.type ? 'active' : ''}" style="padding:16px; border:2px solid ${selectedKeyType === t.type ? 'var(--accent)' : 'rgba(255,255,255,0.1)'}; border-radius:8px; text-align:center; font-family:var(--font-display); font-weight:900; font-size:12px; background:${selectedKeyType === t.type ? 'rgba(255,30,86,0.1)' : 'var(--surface)'}; color:${selectedKeyType === t.type ? '#fff' : 'var(--muted)'}; transition:all 0.2s; box-shadow:${selectedKeyType === t.type ? '0 0 15px var(--accent-glow)' : 'none'}; transform:${selectedKeyType === t.type ? 'scale(1.05)' : 'none'};">
+      ${t.label}
+    </button>
+  `).join("");
+  const content = document.getElementById("adminContent");
+  content.innerHTML = `
+    <h3 style="margin-bottom:20px;font-family:var(--font-display);color:var(--accent);">GÉNÉRER UNE NOUVELLE CLÉ</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;">${cards}</div>
+    <button id="generateBtn" class="search-btn btn-shine" onclick="validateAndGenerate()" style="margin-top:30px; border-radius:8px; padding:20px;">GÉNÉRER LA CLÉ</button>
+    <div id="generatedKeyDisplay" style="margin-top:25px;display:none;background:#000;border:2px solid var(--accent);border-radius:12px;padding:24px;text-align:center;word-break:break-all;font-family:var(--font-mono);font-size:19px;letter-spacing:4px;box-shadow:0 0 30px var(--accent-glow); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);"></div>
+  `;
+}
+
+function selectKeyType(type) {
+  selectedKeyType = type;
+  renderGeneratorTab();
+}
+
+async function validateAndGenerate() {
+  if (!selectedKeyType) {
+    alert("⚠️ Sélectionne d'abord un type de durée pour la clé.");
+    return;
+  }
+  const btn = document.getElementById("generateBtn");
+  btn.innerHTML = `<div class="spinner" style="width:22px;height:22px;margin:auto;"></div>`;
+  btn.disabled = true;
+  try {
+    const res = await fetch(`${BASE}/api/admin/generate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
+      body: JSON.stringify({ type: selectedKeyType })
+    });
+    const result = await res.json();
+    if (result.key) {
+      const display = document.getElementById("generatedKeyDisplay");
+      display.innerHTML = `
+        <div style="color:var(--accent);font-size:12px;font-weight:bold;margin-bottom:16px;letter-spacing:1px;">✅ CLÉ GÉNÉRÉE AVEC SUCCÈS</div>
+        <div style="font-size:24px;letter-spacing:6px;margin-bottom:24px;color:#fff;">${result.key}</div>
+        <button class="btn-approfondir btn-shine" onclick="copyKey('${result.key}')" style="width:100%; padding:16px; border-radius:6px; font-size:13px;">📋 COPIER LA CLÉ</button>
+      `;
+      display.style.display = "block";
+    }
+  } catch(e) {
+    alert("Erreur réseau lors de la génération de la clé.");
+  } finally {
+    btn.innerHTML = "GÉNÉRER LA CLÉ";
+    btn.disabled = false;
+    selectedKeyType = null;
+  }
+}
+
+function copyKey(key) {
+  navigator.clipboard.writeText(key).then(() => {
+    alert("✅ Clé copiée dans le presse-papiers !");
+  });
+}
+
+// ====================== EFFET RIPPLE GLOBAL (SOURIS & TACTILE) ======================
 function createRipple(e, btn, isTouch = false) {
   const ripple = document.createElement('span');
   const rect = btn.getBoundingClientRect();
@@ -902,6 +1231,7 @@ document.addEventListener('mousedown', function(e) {
   if (!btn || btn.disabled) return;
   createRipple(e, btn, false);
 });
+
 document.addEventListener('touchstart', function(e) {
   const btn = e.target.closest('button');
   if (!btn || btn.disabled) return;
