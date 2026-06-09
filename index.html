@@ -70,7 +70,6 @@ button {
   word-break: break-word;
 }
 
-/* Feedback tactile ultra-satisfaisant sur mobile (Telegram WebApp) */
 button:active:not(:disabled) {
   transform: scale(0.94) translateY(2px);
   filter: brightness(0.92);
@@ -831,10 +830,8 @@ const CATEGORIES = [
 const FIELD_MAP = {};
 CATEGORIES.forEach(c => c.fields.forEach(f => FIELD_MAP[f.k] = f));
 
-/* ====================== ALGORITHME LIENS FAMILIAUX ====================== */
 function getProbableRelation(basePerson, person) {
   if (!basePerson || !person) return "PROBABLE LIEN";
-
   const getBirthYear = (p) => {
     if (p.date_naissance) {
       const yearMatch = p.date_naissance.match(/(\d{4})/);
@@ -850,10 +847,8 @@ function getProbableRelation(basePerson, person) {
   if (!baseYear || !personYear) return "PROBABLE LIEN FAMILIAL";
 
   const ageDiff = baseYear - personYear;
-
   const baseGenre = (basePerson.genre || "").toLowerCase().trim();
   const personGenre = (person.genre || "").toLowerCase().trim();
-
   const basePrenom = (basePerson.prenom || "").toLowerCase();
   const personPrenom = (person.prenom || "").toLowerCase();
 
@@ -878,10 +873,7 @@ function getProbableRelation(basePerson, person) {
     return "PROBABLE ENFANT";
   }
 
-  if (Math.abs(ageDiff) > 55) {
-    return "PROBABLE LIEN ÉLOIGNÉ";
-  }
-
+  if (Math.abs(ageDiff) > 55) return "PROBABLE LIEN ÉLOIGNÉ";
   return "PROBABLE LIEN FAMILIAL";
 }
 
@@ -940,7 +932,6 @@ function renderCriteriaBar() {
 }
 
 function removeCriteria(k) { delete criteria[k]; updateUI(); }
-
 function clearAll() { criteria = {}; document.getElementById("resultsSection").style.display = "none"; updateUI(); }
 
 async function launchSearch() {
@@ -951,23 +942,31 @@ async function launchSearch() {
   try {
     const r = await fetch(`${BASE}/api/search`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": "true",
-        "x-telegram-id": TELEGRAM_ID
-      },
+      headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
       body: JSON.stringify(criteria)
     });
+    
     if (r.status === 403) {
       clearInterval(timerInterval);
       document.getElementById("lockScreen").style.display = "flex";
       showLockError("ACCÈS EXPIRÉ OU NON AUTORISÉ");
       return;
     }
+    
     const data = await r.json();
+
+    // Modification CRITIQUE ici : Afficher l'erreur exacte venant du serveur
+    if (!r.ok || data.error) {
+      sec.innerHTML = `<div class="no-results" style="border-color: #ff1e56;">
+        <h3 style="color: #ff1e56;">ERREUR DE RECHERCHE</h3>
+        <p>${data.error || 'Erreur inconnue avec l\'API.'}</p>
+      </div>`;
+      return;
+    }
+
     renderResults(data?.data?.results || []);
   } catch(e) {
-    sec.innerHTML = `<div class="no-results"><h3>ERREUR SYSTÈME</h3><p>Impossible de joindre le serveur de recherche.</p></div>`;
+    sec.innerHTML = `<div class="no-results"><h3>ERREUR SYSTÈME</h3><p>Impossible de joindre le serveur de recherche principal.</p></div>`;
   }
 }
 
@@ -996,7 +995,6 @@ function renderResults(results) {
   sec.innerHTML = `<h2>DOSSIERS IDENTIFIÉS <span class="count">${allResults.length}/10</span></h2>${cards}`;
 }
 
-/* ====================== FAMILY OVERLAY ====================== */
 function approfondirRecherche(index) {
   currentApprofondirIndex = index;
   const basePerson = allResults[index];
@@ -1064,7 +1062,6 @@ function closeFamilyOverlay() {
   currentApprofondirIndex = null;
 }
 
-/* ====================== PANEL ADMIN ====================== */
 function openAdminPanel() {
   if (!isAdmin) return;
   document.getElementById("adminOverlay").style.display = "flex";
@@ -1072,9 +1069,7 @@ function openAdminPanel() {
   loadAdminData(0);
 }
 
-function closeAdminPanel() {
-  document.getElementById("adminOverlay").style.display = "none";
-}
+function closeAdminPanel() { document.getElementById("adminOverlay").style.display = "none"; }
 
 function buildAdminTabs() {
   const tabsHTML = `
@@ -1092,10 +1087,7 @@ async function loadAdminData(tabIndex) {
   const content = document.getElementById("adminContent");
   content.innerHTML = `<div class="loader"><div class="spinner"></div><div>CHARGEMENT DES DONNÉES...</div></div>`;
   try {
-    const res = await fetch(`${BASE}/api/admin/data`, {
-      method: "GET",
-      headers: { "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID }
-    });
+    const res = await fetch(`${BASE}/api/admin/data`, { headers: { "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID } });
     if (!res.ok) throw new Error("Accès refusé");
     const adminData = await res.json();
     if (tabIndex === 0) renderStatsTab(adminData);
@@ -1107,9 +1099,7 @@ async function loadAdminData(tabIndex) {
   }
 }
 
-function switchAdminTab(tabIndex) {
-  loadAdminData(tabIndex);
-}
+function switchAdminTab(tabIndex) { loadAdminData(tabIndex); }
 
 function renderStatsTab(data) {
   const content = document.getElementById("adminContent");
@@ -1150,17 +1140,8 @@ function renderUsersTab(data) {
         <td><button class="btn-small-revoke" onclick="event.stopPropagation(); revokeUserKey('${u.telegramId}')">🗑️ BANNIR</button></td>
       </tr>`;
     }).join("");
-  } else {
-    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);">Aucun utilisateur</td></tr>`;
-  }
-  content.innerHTML = `
-    <div style="overflow-x:auto;">
-      <table class="admin-table">
-        <thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>TEMPS RESTANT</th><th>ACTION</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>
-  `;
+  } else { rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);">Aucun utilisateur</td></tr>`; }
+  content.innerHTML = `<div style="overflow-x:auto;"><table class="admin-table"><thead><tr><th>TELEGRAM ID</th><th>CLÉ</th><th>TEMPS RESTANT</th><th>ACTION</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
 function renderHistoryTab(data) {
@@ -1176,28 +1157,14 @@ function renderHistoryTab(data) {
         <td style="font-size:12px; font-weight:bold; text-align:center;">${h.results || 0}</td>
       </tr>`;
     }).join("");
-  } else {
-    rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:30px;">Aucun historique de recherche</td></tr>`;
-  }
-  content.innerHTML = `
-    <div style="overflow-x:auto;">
-      <table class="admin-table">
-        <thead><tr><th>UTILISATEUR</th><th>DATE</th><th>RECHERCHE</th><th>RÉSULTATS</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>
-  `;
+  } else { rows = `<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:30px;">Aucun historique de recherche</td></tr>`; }
+  content.innerHTML = `<div style="overflow-x:auto;"><table class="admin-table"><thead><tr><th>UTILISATEUR</th><th>DATE</th><th>RECHERCHE</th><th>RÉSULTATS</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
 function renderGeneratorTab() {
   const types = [
-    {type:'1semaine', label:'1 SEMAINE'},
-    {type:'1mois', label:'1 MOIS'},
-    {type:'3mois', label:'3 MOIS'},
-    {type:'5min', label:'5 MINUTES'},
-    {type:'15min', label:'15 MINUTES'},
-    {type:'lifetime', label:'À VIE'},
-    {type:'admin', label:'CLÉ ADMIN'}
+    {type:'1semaine', label:'1 SEMAINE'}, {type:'1mois', label:'1 MOIS'}, {type:'3mois', label:'3 MOIS'},
+    {type:'5min', label:'5 MINUTES'}, {type:'15min', label:'15 MINUTES'}, {type:'lifetime', label:'À VIE'}, {type:'admin', label:'CLÉ ADMIN'}
   ];
   const cards = types.map(t => `
     <button onclick="selectKeyType('${t.type}')" class="selectable-card ${selectedKeyType === t.type ? 'active' : ''}" style="padding:14px 8px; border:2px solid ${selectedKeyType === t.type ? 'var(--accent)' : 'rgba(255,255,255,0.1)'}; border-radius:8px; text-align:center; font-family:var(--font-display); font-weight:900; font-size:11.5px; background:${selectedKeyType === t.type ? 'rgba(255,30,86,0.1)' : 'var(--surface)'}; color:${selectedKeyType === t.type ? '#000' : 'var(--muted)'}; transition:all 0.2s; box-shadow:${selectedKeyType === t.type ? '0 0 15px var(--accent-glow)' : 'none'}; transform:${selectedKeyType === t.type ? 'scale(1.05)' : 'none'};">
@@ -1214,83 +1181,42 @@ function renderGeneratorTab() {
   `;
 }
 
-function selectKeyType(type) {
-  selectedKeyType = type;
-  renderGeneratorTab();
-}
+function selectKeyType(type) { selectedKeyType = type; renderGeneratorTab(); }
 
 async function validateAndGenerate() {
-  if (!selectedKeyType) {
-    alert("⚠️ Sélectionne d'abord un type de durée pour la clé.");
-    return;
-  }
+  if (!selectedKeyType) { alert("⚠️ Sélectionne d'abord un type de durée pour la clé."); return; }
   const btn = document.getElementById("generateBtn");
   btn.innerHTML = `<div class="spinner" style="width:22px;height:22px;margin:auto;"></div>`;
   btn.disabled = true;
   try {
-    const res = await fetch(`${BASE}/api/admin/generate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
-      body: JSON.stringify({ type: selectedKeyType })
-    });
+    const res = await fetch(`${BASE}/api/admin/generate`, { method: "POST", headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID }, body: JSON.stringify({ type: selectedKeyType }) });
     const result = await res.json();
     if (result.key) {
       const display = document.getElementById("generatedKeyDisplay");
-      display.innerHTML = `
-        <div style="color:var(--accent);font-size:12px;font-weight:bold;margin-bottom:16px;letter-spacing:1px;">✅ CLÉ GÉNÉRÉE AVEC SUCCÈS</div>
-        <div style="font-size:23px;letter-spacing:5px;margin-bottom:20px;color:#fff;">${result.key}</div>
-        <button class="btn-approfondir" onclick="copyKey('${result.key}')" style="width:100%; padding:14px; border-radius:6px; font-size:12px;">📋 COPIER LA CLÉ</button>
-      `;
+      display.innerHTML = `<div style="color:var(--accent);font-size:12px;font-weight:bold;margin-bottom:16px;letter-spacing:1px;">✅ CLÉ GÉNÉRÉE AVEC SUCCÈS</div><div style="font-size:23px;letter-spacing:5px;margin-bottom:20px;color:#fff;">${result.key}</div><button class="btn-approfondir" onclick="copyKey('${result.key}')" style="width:100%; padding:14px; border-radius:6px; font-size:12px;">📋 COPIER LA CLÉ</button>`;
       display.style.display = "block";
     }
-  } catch(e) {
-    alert("Erreur réseau lors de la génération de la clé.");
-  } finally {
-    btn.innerHTML = "GÉNÉRER LA CLÉ";
-    btn.disabled = false;
-    selectedKeyType = null;
-  }
+  } catch(e) { alert("Erreur réseau lors de la génération de la clé."); } finally { btn.innerHTML = "GÉNÉRER LA CLÉ"; btn.disabled = false; selectedKeyType = null; }
 }
 
-function copyKey(key) {
-  navigator.clipboard.writeText(key).then(() => {
-    alert("✅ Clé copiée dans le presse-papiers !");
-  });
-}
+function copyKey(key) { navigator.clipboard.writeText(key).then(() => { alert("✅ Clé copiée dans le presse-papiers !"); }); }
 
 async function cleanExpiredKeys() {
   if (confirm("Supprimer toutes les clés expirées / non actives du système ?")) {
     try {
-      await fetch(`${BASE}/api/admin/clean`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID }
-      });
+      await fetch(`${BASE}/api/admin/clean`, { method: "POST", headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID } });
       alert("✅ Clés expirées / non actives nettoyées avec succès.");
       loadAdminData(currentAdminTab);
-    } catch(e) {
-      alert("Erreur lors du nettoyage.");
-    }
+    } catch(e) { alert("Erreur lors du nettoyage."); }
   }
 }
 
 async function revokeUserKey(telegramId) {
   if (confirm(`RÉVOCATION IMMÉDIATE : Bannir et supprimer la clé de l'utilisateur ${telegramId} ?`)) {
     try {
-      const res = await fetch(`${BASE}/api/admin/revoke`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID },
-        body: JSON.stringify({ targetId: telegramId })
-      });
-      if (res.ok) {
-        alert(`Clé de ${telegramId} révoquée avec succès.`);
-        closeUserModal();
-        loadAdminData(currentAdminTab);
-      } else {
-        alert("Erreur lors de la révocation de la clé.");
-      }
-    } catch(e) {
-      alert("Erreur réseau.");
-    }
+      const res = await fetch(`${BASE}/api/admin/revoke`, { method: "POST", headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true", "x-telegram-id": TELEGRAM_ID }, body: JSON.stringify({ targetId: telegramId }) });
+      if (res.ok) { alert(`Clé de ${telegramId} révoquée avec succès.`); closeUserModal(); loadAdminData(currentAdminTab); } else { alert("Erreur lors de la révocation de la clé."); }
+    } catch(e) { alert("Erreur réseau."); }
   }
 }
 
@@ -1302,9 +1228,7 @@ async function showActivatedKeys() {
   let html = `<h3 style="margin-bottom:15px; color:var(--accent);">CLÉS ACTIVÉES (${data.users.length})</h3><div style="overflow-x:auto;"><table class="admin-table"><thead><tr><th>ID</th><th>CLÉ</th><th>EXPIRATION</th><th>ACTION</th></tr></thead><tbody>`;
   data.users.forEach(u => {
     html += `<tr style="cursor:pointer;" onclick="showUserDetail('${u.telegramId}')">
-      <td>${u.telegramId}</td>
-      <td>${u.keyLabel}</td>
-      <td>${u.expiresAt === "lifetime" ? "À VIE" : new Date(u.expiresAt).toLocaleString('fr-FR')}</td>
+      <td>${u.telegramId}</td><td>${u.keyLabel}</td><td>${u.expiresAt === "lifetime" ? "À VIE" : new Date(u.expiresAt).toLocaleString('fr-FR')}</td>
       <td><button class="btn-small-revoke" onclick="event.stopPropagation(); revokeUserKey('${u.telegramId}')">🗑️ BANNIR</button></td>
     </tr>`;
   });
@@ -1321,9 +1245,7 @@ async function showActiveUsers() {
   data.users.forEach(u => {
     const remaining = u.expiresAt === "lifetime" ? "ILLIMITÉ" : Math.max(0, Math.floor((new Date(u.expiresAt) - Date.now()) / 86400000)) + " jours";
     html += `<tr style="cursor:pointer;" onclick="showUserDetail('${u.telegramId}')">
-      <td>${u.telegramId}</td>
-      <td>${u.keyLabel}</td>
-      <td>${remaining}</td>
+      <td>${u.telegramId}</td><td>${u.keyLabel}</td><td>${remaining}</td>
       <td><button class="btn-small-revoke" onclick="event.stopPropagation(); revokeUserKey('${u.telegramId}')">🗑️ BANNIR</button></td>
     </tr>`;
   });
@@ -1344,10 +1266,7 @@ async function showUserDetail(telegramId) {
     <button onclick="revokeUserKey('${telegramId}')" class="revoke-btn">RÉVOQUER LA CLÉ (BAN IMMÉDIAT)</button>
   `;
 }
-
-function closeUserModal() {
-  document.getElementById("userDetailModal").style.display = "none";
-}
+function closeUserModal() { document.getElementById("userDetailModal").style.display = "none"; }
 </script>
 </body>
 </html>
